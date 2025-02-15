@@ -203,7 +203,7 @@ class _Page3State extends State<Page3> {
                               border: InputBorder.none,
                             ),
                           ),
-                        ),
+                        ),  //this is size box;
                         const SizedBox(height: 10),
                         const Padding(
                           padding: EdgeInsets.only(left: 160),
