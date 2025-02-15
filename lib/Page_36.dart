@@ -53,7 +53,7 @@ class _Page36State extends State<Page36> {
 
             },
             icon: const Icon(Icons.arrow_back_ios)),
-        title: Text(
+        title: const Text(
           'Custom Template',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
