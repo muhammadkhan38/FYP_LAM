@@ -147,7 +147,7 @@ class _Page67State extends State<Page67> {
               const SizedBox(height: 10,),
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const EmploymentAgreement()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const EmploymentAgreement()));
                 },
                 child: Container(
                   width: size.width-35, // Container width

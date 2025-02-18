@@ -41,6 +41,8 @@ dependencies:
   flutter_svg: ^2.0.9
   connectivity_plus: ^4.0.1
   shared_preferences: ^2.3.5
+  signature: ^5.4.1
+  path_provider: ^2.1.2
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +87,7 @@ flutter:
     - assets/atm card image.svg
     - assets/Ai image.svg
     - assets/18 20 15 12 10 9 image.svg
+
 #    - assets/logo2.png
 
 

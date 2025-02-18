@@ -6,6 +6,7 @@ class CustomTextFormField extends StatelessWidget {
   final String hintText;
   final IconData icon;
   final VoidCallback? onTap;
+
   final String? Function(String?)? validator;
   //final ontaps;
 

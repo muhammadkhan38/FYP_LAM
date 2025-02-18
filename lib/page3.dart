@@ -65,7 +65,8 @@ class _Page3State extends State<Page3> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Email does not exist')),
           );
-        } else if (responseBody['message'] == 'Invalid credentials theek da credentials') {
+        } else if (responseBody['message'] ==
+            'Invalid credentials theek da credentials') {
           // Password is incorrect
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Password is incorrect')),
@@ -170,7 +171,7 @@ class _Page3State extends State<Page3> {
                           child: TextFormField(
                             controller: passwordController,
                             obscureText:
-                            !_isPasswordVisible, // Hide/show password
+                                !_isPasswordVisible, // Hide/show password
                             validator: (value) {
                               if (value == null || value.length < 6) {
                                 return 'Password must be at least 6 characters';
@@ -216,34 +217,40 @@ class _Page3State extends State<Page3> {
                         _isLoading
                             ? const CircularProgressIndicator()
                             : TextButton(
-                          onPressed: () {
-                            if (_formKey.currentState?.validate() ??
-                                false) {
-                              login(
-                                usernameController.text,
-                                passwordController.text,
-                              );
-                            }
-                          },
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.lightBlueAccent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                          ),
-                          child: Container(
-                            height: 40,
-                            width: 230,
-                            alignment: Alignment.center,
-                            child: const Text(
-                              'LOGIN',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const Page21()),
+                                  );
+
+                                  if (_formKey.currentState?.validate() ??
+                                      false
+                                  ) {
+                                    login(
+                                      usernameController.text,
+                                      passwordController.text,
+                                    );
+                                  }
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.lightBlueAccent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                ),
+                                child: Container(
+                                  height: 40,
+                                  width: 230,
+                                  alignment: Alignment.center,
+                                  child: const Text(
+                                    'LOGIN',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
                         const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

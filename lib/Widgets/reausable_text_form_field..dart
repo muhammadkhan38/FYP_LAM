@@ -4,8 +4,13 @@ class ReusableListTileWithInput extends StatelessWidget {
   final  richTextTitle;
   final  richTextSubtitle;
   final String hintText;
-  final TextEditingController controller;
+  final keyboardType;
+  final readOnly;
+
   final int maxLengthPerLine;
+  final VoidCallback? onTap;
+  final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   const ReusableListTileWithInput({
     Key? key,
@@ -14,6 +19,10 @@ class ReusableListTileWithInput extends StatelessWidget {
     required this.hintText,
     required this.controller,
     this.maxLengthPerLine = 35,
+    this.onTap,
+     this.keyboardType,
+    this.validator,
+    this.readOnly,
 
   }) : super(key: key);
 
@@ -49,6 +58,7 @@ class ReusableListTileWithInput extends StatelessWidget {
         ),
         child: TextFormField(
           controller: controller,
+          onTap: onTap,
           keyboardType: TextInputType.multiline,
           maxLines: null, // Allows unlimited lines
           decoration: InputDecoration(
@@ -74,6 +84,7 @@ class ReusableListTileWithInput extends StatelessWidget {
               );
             }
           },
+          validator: validator,
         ),
       ),
     );
