@@ -262,7 +262,7 @@ class _Page3State extends State<Page3> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Page4()));
+                                        builder: (context) => Page21()));
                               },
                               child: const Text('Sign Up',
                                   style: TextStyle(
