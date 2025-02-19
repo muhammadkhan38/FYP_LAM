@@ -1,0 +1,2 @@
+C:/Users/DIT/StudioProjects/FYP_LAM/android/app/.cxx/Debug/4h4l731f/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/DIT/StudioProjects/FYP_LAM/android/app/.cxx/Debug/4h4l731f/x86_64/CMakeFiles/rebuild_cache.dir
