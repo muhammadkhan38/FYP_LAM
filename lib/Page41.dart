@@ -13,21 +13,20 @@ class Page41 extends StatefulWidget {
 }
 
 class _Page41State extends State<Page41> {
-  String _email = '';
-  String _name = '';
+  String _name = 'Loading...';
+  String _email = 'Loading...';
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _loadUserInfo();
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _email = prefs.getString('email') ?? '';
-      _name = prefs.getString('name') ?? '';
-
+      _name = prefs.getString('user_name') ?? 'No Name';
+      _email = prefs.getString('user_email') ?? 'No Email';
     });
   }
 
@@ -60,8 +59,12 @@ class _Page41State extends State<Page41> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+          // Adjust the radius
+        ),
         onPressed: () {},
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add,color: Colors.white,size: 35,),
       ),
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.only(topRight: Radius.circular(30),topLeft:Radius.circular(30)),
@@ -118,7 +121,10 @@ class _Page41State extends State<Page41> {
                         children: [
                           const SizedBox(height: 10,),
                           const CircleAvatar(
-                            backgroundImage: AssetImage('assets/qasim.png'),
+                            //radius: 20,
+                         backgroundColor: Colors.white60,
+                         child: Icon(Icons.person,size: 35,),
+                           // backgroundImage: AssetImage('assets/qasim.png'),
                           ),
                           SizedBox(height: 10,),
 
@@ -126,12 +132,12 @@ class _Page41State extends State<Page41> {
 
 
                          // Text('Muhammad khan',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600,color: Colors.white),),
-                          Text(_name,style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600,color: Colors.white),),
-                          SizedBox(height: 5,),
+                          Text(_name, style: TextStyle(fontSize: 10,fontWeight: FontWeight.w600,color: Colors.grey),),
 
+                          SizedBox(height: 5,),
+                          Text(_email,style: TextStyle(fontSize: 10,fontWeight: FontWeight.w600,color: Colors.grey),),
 
                           //Text('Muhammadkhan8338@mail.com',style: TextStyle(fontSize: 10,fontWeight: FontWeight.w600,color: Colors.grey),),
-                          Text(_email,style: TextStyle(fontSize: 10,fontWeight: FontWeight.w600,color: Colors.grey),),
 
 
                           SizedBox(height: 5,),

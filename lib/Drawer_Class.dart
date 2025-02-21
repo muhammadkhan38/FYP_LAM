@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Page3.dart';
 import 'Page56.dart';
@@ -14,6 +15,22 @@ class DrawerClass extends StatefulWidget {
 
 class _DrawerClassState extends State<DrawerClass> {
   bool isLoading = false;
+  String _name = 'Loading...';
+  String _email = 'Loading...';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _name = prefs.getString('user_name') ?? 'No Name';
+      _email = prefs.getString('user_email') ?? 'No Email';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,17 +61,21 @@ class _DrawerClassState extends State<DrawerClass> {
                     ),
                     child: const CircleAvatar(
                           radius: 30,
+                      backgroundColor: Colors.white60,
+                      child: Icon(Icons.person,size: 35,),
                         // backgroundImage: AssetImage('assets/qasim.png'), //Text
                         ),
                   ),
 
-                  const Padding(
+                   Padding(
                     padding: EdgeInsets.only(
                       top: 50,
                       left: 10,
                     ),
                     child: Column(
                       children: [
+                        Text('$_name', style: TextStyle(fontSize: 18)),
+                        Text('$_email', style: TextStyle(fontSize: 18)),
                         //  Text(users[10]['name'].toString(),style: const TextStyle(color: Colors.white,fontSize: 16),),
                         // Text(users[10]['email'].toString(),maxLines: 2,overflow: TextOverflow.fade,style: const TextStyle(color: Colors.white,fontSize: 12,),),
                       ],

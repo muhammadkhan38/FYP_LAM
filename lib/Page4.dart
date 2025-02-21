@@ -54,7 +54,7 @@ class _Page4State extends State<Page4> {
     );
     if (picked != null) {
       setState(() {
-        dobController.text = "${picked.day}/${picked.month}/${picked.year}";
+        dobController.text = "${picked.month}/${picked.day}/${picked.year}";
       });
     }
   }
@@ -102,8 +102,8 @@ class _Page4State extends State<Page4> {
           MaterialPageRoute(builder: (context) => Page5(email: emailController.text)),
         );
       }
-      //else if (response.statusCode == 422 || (responseData['message']?.contains('The email has already been taken') ?? false))
-      else if (response.statusCode == 422 )
+      else if (response.statusCode == 422 || (responseData['message']?.contains('The email has already been taken') ?? false))
+     // else if (response.statusCode == 422 )
       {
         // Email already exists
         ScaffoldMessenger.of(context).showSnackBar(

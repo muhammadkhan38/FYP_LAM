@@ -185,7 +185,9 @@ class _Page38State extends State<Page38> {
                                 Text( firstParty,style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
-                                    color: Color(0xff00C2FF)),),
+                                    color: Color(0xff00C2FF)
+                                ),
+                                ),
                                 const SizedBox(width: 10,),
 
                                 Text(secondParty,style: const TextStyle(
@@ -223,6 +225,8 @@ class _Page38State extends State<Page38> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     child: Column(
+
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(exclusions,style: const TextStyle(
                             fontSize: 14,
@@ -352,8 +356,8 @@ class _Page38State extends State<Page38> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         //color: const Color(0xffF7F7F7),
-                       // color: Colors.grey.shade300,
-                       color: Colors.pinkAccent,
+                       color: Colors.grey.shade300,
+                       //color: Colors.pinkAccent,
                       ),
                       child: Column(
                         children: [
@@ -435,7 +439,7 @@ class _Page38State extends State<Page38> {
 
                               height: 123,
                               backgroundColor: Colors.grey.shade300,
-                            
+
                               dynamicPressureSupported: true,
                             ),
                           ),

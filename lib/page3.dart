@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
 import 'dart:convert'; // To parse JSON responses
 import 'package:connectivity_plus/connectivity_plus.dart'; // Connectivity package
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Page21.dart';
 import 'Page4.dart';
 
@@ -50,6 +51,20 @@ class _Page3State extends State<Page3> {
       print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+
+        // Extract user details
+        String name = responseBody['user']['name'];
+        String email = responseBody['user']['email'];
+
+        // Save in SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_name', name);
+        await prefs.setString('user_email', email);
+
+        print('Login successful, user data saved');
+
+        print(response.body);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const Page21()),
@@ -218,10 +233,6 @@ class _Page3State extends State<Page3> {
                             ? const CircularProgressIndicator()
                             : TextButton(
                                 onPressed: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const Page21()),
-                                  );
 
                                   if (_formKey.currentState?.validate() ??
                                       false
@@ -262,7 +273,7 @@ class _Page3State extends State<Page3> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Page21()));
+                                        builder: (context) => Page4()));
                               },
                               child: const Text('Sign Up',
                                   style: TextStyle(

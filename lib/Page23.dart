@@ -43,6 +43,7 @@ class _Page23State extends State<Page23> {
       backgroundColor: Colors.grey.shade100,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         backgroundColor: Colors.lightBlueAccent,
         onPressed: (){
           showModalBottomSheet(context: context, builder: (BuildContext context){
@@ -114,7 +115,7 @@ class _Page23State extends State<Page23> {
           }
           );
         },
-        child:  const Icon(Icons.add),
+        child:  const Icon(Icons.add,color: Colors.white,size: 35,),
       ),
       bottomNavigationBar:
       ClipRRect(

@@ -14,6 +14,7 @@ class Page36 extends StatefulWidget {
 }
 
 class _Page36State extends State<Page36> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController firstPartyController = TextEditingController();
   final TextEditingController secondPartyController = TextEditingController();
@@ -138,158 +139,198 @@ class _Page36State extends State<Page36> {
         toolbarHeight: 100,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            const Text(
-              "Please Fill the Details",
-              style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  color: Color(0xff000000)),
-            ),
-            const SizedBox(height: 20),
-            ReusableListTileWithInput(
-              richTextTitle: "Enter Reason for your Agreement:",
-              hintText: "Enter reason",
-              controller: titleController,
-              validator: (value) {},
-            ),
-            ReusableListTileWithInput(
-              richTextTitle: "Enter the First Party Name",
-              hintText: "First party",
-              controller: firstPartyController,
-              maxLengthPerLine: 30,
-              validator: (value) {},
-            ),
-            ReusableListTileWithInput(
-              richTextTitle: "Enter the Second Party Name",
-              hintText: "Second party",
-              controller: secondPartyController,
-              maxLengthPerLine: 30,
-              validator: (value) {},
-            ),
-            ReusableListTileWithInput(
-              richTextTitle: "Enter the Date of Agreement",
-              hintText: "Select Date",
-              controller: DateController,
-              onTap: () => _selectDate(context),
-              readOnly: true,
-              validator: (value) {
+        child: Form(
+           key: _formKey,
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              const Text(
+                "Please Fill the Details",
+                style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    color: Color(0xff000000)),
+              ),
+              const SizedBox(height: 20),
+              ReusableListTileWithInput(
+                richTextTitle: "Enter Reason for your Agreement:",
+                hintText: "Enter reason",
+                controller: titleController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please Reason for Agreement';
+                  }
+                  return null;
+                },
+              ),
+              ReusableListTileWithInput(
+                richTextTitle: "Enter the First Party Name",
+                hintText: "First party",
+                controller: firstPartyController,
+                maxLengthPerLine: 30,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please Enter First Party Name';
+                  }
+                  return null;
+                },
+              ),
+              ReusableListTileWithInput(
+                richTextTitle: "Enter the Second Party Name",
+                hintText: "Second party",
+                controller: secondPartyController,
+                maxLengthPerLine: 30,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please Enter Second Party Name';
+                  }
+                  else if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+                    return 'Only alphabetic characters are allowed';
+                  }
+                  return null;
+                },
+              ),
+              ReusableListTileWithInput(
+                richTextTitle: "Enter the Date of Agreement",
+                hintText: "Select Date",
+                controller: DateController,
+                onTap: () => _selectDate(context),
+                readOnly: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select a date';
+                  }
+
+                  return null;
+                },
+              ),
+              const SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                width: size.width - 35,
+                child: ListTile(
+                  leading: const Text(
+                    "Keep Agreement Confidential",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: Colors.black),
+                  ),
+                  trailing: Switch.adaptive(
+                    value: isSwitched,
+                    onChanged: (bool value) {
+                      setState(() {
+                        isSwitched = value;
+                      });
+                    },
+                    activeColor:
+                    isSwitched ? Colors.lightBlue : Colors.lightBlue.shade50,
+                  ),
+                ),
+              ),
+
+          ReusableListTileWithInput(
+                richTextTitle: "Exclusions",
+                richTextSubtitle: "(Optional)",
+                hintText: "Enter exclusions",
+                controller: ExclusionsController,
+                maxLengthPerLine: 30, validator: (value) {  },
+              ),
+              ReusableListTileWithInput(
+
+                richTextTitle: "ROI",
+                richTextSubtitle: "(Optional)",
+                hintText: "Enter return of information",
+                controller: ROIController,
+                maxLengthPerLine: 30,
+              ),
+              ReusableListTileWithInput(
+                richTextTitle: "Consequences of a breach",
+                richTextSubtitle: "(Optional)",
+                hintText: "Enter COB",
+                controller: COBController,
+                maxLengthPerLine: 30, validator: (value) {  },
+              ),
+              ReusableListTileWithInput(
+                richTextTitle: "Jurisdiction",
+                richTextSubtitle: "(Optional)",
+                hintText: "Enter jurisdiction",
+                controller: JurisdictionController,
+                maxLengthPerLine: 30,
+              ),
+              ReusableListTileWithInput(
+                richTextTitle: "Non Competition Clause",
+                richTextSubtitle: "(Optional)",
+                hintText: "Enter claus",
+                controller: clausController,
+                maxLengthPerLine: 30,
+              ),
+              ReusableListTileWithInput(
+                richTextTitle: "Obligations",
+                richTextSubtitle: "(Optional)",
+                hintText: "Enter claus",
+                controller: ObligationsController,
+                maxLengthPerLine: 30, validator: (value) {  },
+              ),
+              ReusableListTileWithInput(
+                richTextTitle: "Remedies",
+                hintText: "Enter claus",
+                controller: RemediesController,
+                maxLengthPerLine: 30, validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please select a date';
+                  return 'Please Enter Remedies';
+                }
+                else if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+                  return 'Only alphabetic characters are allowed';
                 }
                 return null;
+                return null;
+
               },
-            ),
-            const SizedBox(height: 10),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
               ),
-              width: size.width - 35,
-              child: ListTile(
-                leading: const Text(
-                  "Keep Agreement Confidential",
+              const SizedBox(height: 20),
+
+
+
+              TextButton(
+                onPressed: () async {
+                  if (!_formKey.currentState!.validate()) {
+                    return;
+                  }
+                    else{
+                   await _saveDataLocally();
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => Page38()));
+
+                  }
+
+                //  await _sendDataToAPI();
+
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.blueAccent,
+                  backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
+                ),
+                child: const Text(
+                  'Done',
                   style: TextStyle(
-                      fontWeight: FontWeight.w500,
                       fontSize: 14,
-                      color: Colors.black),
-                ),
-                trailing: Switch.adaptive(
-                  value: isSwitched,
-                  onChanged: (bool value) {
-                    setState(() {
-                      isSwitched = value;
-                    });
-                  },
-                  activeColor:
-                  isSwitched ? Colors.lightBlue : Colors.lightBlue.shade50,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700),
                 ),
               ),
-            ),
-
-        ReusableListTileWithInput(
-              richTextTitle: "Exclusions",
-              richTextSubtitle: "(Optional)",
-              hintText: "Enter exclusions",
-              controller: ExclusionsController,
-              maxLengthPerLine: 30, validator: (value) {  },
-            ),
-            ReusableListTileWithInput(
-
-              richTextTitle: "ROI",
-              richTextSubtitle: "(Optional)",
-              hintText: "Enter return of information",
-              controller: ROIController,
-              maxLengthPerLine: 30,
-            ),
-            ReusableListTileWithInput(
-              richTextTitle: "Consequences of a breach",
-              richTextSubtitle: "(Optional)",
-              hintText: "Enter COB",
-              controller: COBController,
-              maxLengthPerLine: 30, validator: (value) {  },
-            ),
-            ReusableListTileWithInput(
-              richTextTitle: "Jurisdiction",
-              richTextSubtitle: "(Optional)",
-              hintText: "Enter jurisdiction",
-              controller: JurisdictionController,
-              maxLengthPerLine: 30,
-            ),
-            ReusableListTileWithInput(
-              richTextTitle: "Non Competition Clause",
-              richTextSubtitle: "(Optional)",
-              hintText: "Enter claus",
-              controller: clausController,
-              maxLengthPerLine: 30,
-            ),
-            ReusableListTileWithInput(
-              richTextTitle: "Obligations",
-              richTextSubtitle: "(Optional)",
-              hintText: "Enter claus",
-              controller: ObligationsController,
-              maxLengthPerLine: 30, validator: (value) {  },
-            ),
-            ReusableListTileWithInput(
-              richTextTitle: "Remedies",
-              hintText: "Enter claus",
-              controller: RemediesController,
-              maxLengthPerLine: 30, validator: (value) {  },
-            ),
-            const SizedBox(height: 20),
-
-
-
-            TextButton(
-              onPressed: () async {
-                await _saveDataLocally();
-              //  await _sendDataToAPI();
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Page38()));
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.blueAccent,
-                backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding:
-                const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
-              ),
-              child: const Text(
-                'Done',
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-            const SizedBox(height: 30),
-          ],
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );
