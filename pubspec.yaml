@@ -87,7 +87,10 @@ flutter:
     - assets/atm card image.svg
     - assets/Ai image.svg
     - assets/18 20 15 12 10 9 image.svg
-    - assets/employment_agreement.json
+    - assets/property_deal_agreement.json
+    - assets/partnership_agreement.json
+    - assets/lease_agreement.json
+    - assets/sales_agreement.json
 
 
 

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Page3.dart';
 import 'Page5.dart';
+import 'Widgets/Reusable Date Picker.dart';
 import 'customtextfieldwidget.dart';
 
 class Page4 extends StatefulWidget {
@@ -44,20 +45,19 @@ class _Page4State extends State<Page4> {
     confirmPasswordController.dispose();
     super.dispose();
   }
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      keyboardType:TextInputType.numberWithOptions(),
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null) {
-      setState(() {
-        dobController.text = "${picked.day}/${picked.month}/${picked.year}";
-      });
-    }
-  }
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(), // ✅ ڈیفالٹ کرنٹ تاریخ ہوگی
+  //     firstDate: DateTime(1900),
+  //     lastDate: DateTime.now(), // ✅ Future Dates Allow نہیں ہوں گی
+  //   );
+  //   if (picked != null) {
+  //     setState(() {
+  //       dobController.text = "${picked.day}/${picked.month}/${picked.year}";
+  //     });
+  //   }
+  // }
   Future<void> registerUser() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -68,7 +68,7 @@ class _Page4State extends State<Page4> {
       emailData = emailController.text;
     });
 
-    String url = 'https://nda.qaadvance.com/api/register';
+    String url = 'https://Nda.yourailist.com/api/register';
 
     try {
       var response = await http.post(
@@ -196,7 +196,7 @@ class _Page4State extends State<Page4> {
                             icon: Icons.person,
                             validator: (value) =>
                             value == null || value.isEmpty ? 'Please enter your name' : null,
-                            obscureText: true,
+                            obscureText: false,
                           ),
                           const SizedBox(height: 10),
                           CustomTextFormField(
@@ -223,17 +223,15 @@ class _Page4State extends State<Page4> {
                             keyboardType: TextInputType.phone,
                             controller: phoneController,
                             hintText: 'Enter Phone Number',
-                            icon: Icons.phone_android, obscureText: true,
-
+                            icon: Icons.phone_android, obscureText: false,
                           ),
                           const SizedBox(height: 10),
                           CustomTextFormField(
-                          //  keyboardType: TextInputType.visiblePassword,
-                            keyboardType:TextInputType.numberWithOptions(),
                             controller: dobController,
                             hintText: 'Date of Birth',
-                            icon: Icons.date_range, obscureText: null,
-                            onTap: () => _selectDate(context),
+                            icon: Icons.date_range,
+                            readOnly: true, // ✅ یوزر خود کچھ نہیں لکھ سکتا
+                            onTap: () => DatePickerUtil.selectDate(context, dobController), // ✅ ری یوزایبل فنکشن کال
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please select a date';
@@ -241,11 +239,8 @@ class _Page4State extends State<Page4> {
                               return null;
                             },
                           ),
-
                           const SizedBox(height: 10),
                           CustomTextFormField(
-
-
                             controller: drivingLicenseController,
                             hintText: 'Driving License Number',
                             icon: Icons.call_to_action_rounded, obscureText: false,
@@ -297,6 +292,13 @@ class _Page4State extends State<Page4> {
                                   ),
                                   borderRadius: BorderRadius.circular(40),
                                 ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    width: 0,
+                                    color: Colors.transparent, // یا Colors.grey.shade100
+                                  ),
+                                  borderRadius: BorderRadius.circular(40), // یہ radius برقرار رکھے گا
+                                ),
                                 fillColor: Colors.grey.shade100,
                                 filled: true,
                                 suffixIcon: IconButton(
@@ -337,14 +339,19 @@ class _Page4State extends State<Page4> {
                               },
 
                               decoration: InputDecoration(
-
                                 enabledBorder: OutlineInputBorder(
-
                                   borderSide: BorderSide(
                                     width: 0,
                                     color: Colors.grey.shade100,
                                   ),
                                   borderRadius: BorderRadius.circular(40),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    width: 0,
+                                    color: Colors.transparent, // یا Colors.grey.shade100
+                                  ),
+                                  borderRadius: BorderRadius.circular(40), // یہ radius برقرار رکھے گا
                                 ),
                                 fillColor: Colors.grey.shade100,
                                 filled: true,
@@ -383,7 +390,7 @@ class _Page4State extends State<Page4> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
-                              fixedSize: const Size(250, 40),
+                              fixedSize: const Size(250, 56),
 
                             ),
                             child: const Text(

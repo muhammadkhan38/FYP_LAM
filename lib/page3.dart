@@ -42,7 +42,7 @@ class _Page3State extends State<Page3> {
 
     try {
       Response response = await post(
-        Uri.parse('https://nda.qaadvance.com/api/login'),
+        Uri.parse('https://Nda.yourailist.com/api/login'),
         body: {'email': email, 'password': password},
       );
 
@@ -148,11 +148,18 @@ class _Page3State extends State<Page3> {
                             },
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                   width: 0,
-                                  color: Colors.grey.shade100,
+                                  color: Colors.transparent, // یا Colors.grey.shade100
                                 ),
                                 borderRadius: BorderRadius.circular(40),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  width: 0,
+                                  color: Colors.transparent, // یا Colors.grey.shade100
+                                ),
+                                borderRadius: BorderRadius.circular(40), // یہ radius برقرار رکھے گا
                               ),
                               fillColor: Colors.grey.shade100,
                               filled: true,
@@ -186,6 +193,13 @@ class _Page3State extends State<Page3> {
                                 ),
                                 borderRadius: BorderRadius.circular(40),
                               ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  width: 0,
+                                  color: Colors.transparent,
+                                ),
+                                borderRadius: BorderRadius.circular(40), // یہ radius برقرار رکھے گا
+                              ),
                               fillColor: Colors.grey.shade100,
                               filled: true,
                               suffixIcon: IconButton(
@@ -205,53 +219,56 @@ class _Page3State extends State<Page3> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 160),
-                          child: Text(
-                            "Forgot Password?",
-                            style: TextStyle(fontSize: 14, color: Colors.black),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 180),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Page4()));
+                            },
+                            child: const Text('Forgot password?',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold,
+                                )),
                           ),
                         ),
                         const SizedBox(height: 20),
                         _isLoading
                             ? const CircularProgressIndicator()
-                            : TextButton(
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const Page21()),
-                                  );
+                            : ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState?.validate() ?? false) {
+                              login(
+                                usernameController.text,
+                                passwordController.text,
+                              );
 
-                                  if (_formKey.currentState?.validate() ??
-                                      false
-                                  ) {
-                                    login(
-                                      usernameController.text,
-                                      passwordController.text,
-                                    );
-                                  }
-                                },
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.lightBlueAccent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                ),
-                                child: Container(
-                                  height: 40,
-                                  width: 230,
-                                  alignment: Alignment.center,
-                                  child: const Text(
-                                    'LOGIN',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                        const SizedBox(height: 20),
+
+
+
+                            }
+
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.lightBlueAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            fixedSize: const Size(298, 56),
+                          ),
+                          child: const Text(
+                            'LOGIN',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -262,7 +279,7 @@ class _Page3State extends State<Page3> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Page21()));
+                                        builder: (context) => Page4()));
                               },
                               child: const Text('Sign Up',
                                   style: TextStyle(

@@ -53,4 +53,5 @@ windows/flutter/generated_plugins.cmake
 linux/flutter/
 macos/Flutter/
 windows/flutter/
-
+android/app/.cxx/*
+android/app/.cxx/

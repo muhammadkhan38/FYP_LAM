@@ -1,0 +1,25 @@
+{
+  "Partnership Agreement": {
+    "Title": "Partnership Agreement",
+    "Date": "[Insert Date]",
+    "Partners": {
+      "partner 1": {
+        "Name": "[Partner 1 Name]",
+        "Address": "[Partner 1 Address]"
+      },
+      "partner 2": {
+        "Name": "[Partner 2 Name]",
+        "Address": "[Partner 2 Address]"
+      }
+    },
+    "Description": {
+      "Whereas": "the Partners agree to form a partnership to conduct the business described herein under the terms and conditions set forth below, the parties hereby agree as follows:",
+      "1. Partnership Name and Purpose": "The name of the partnership shall be [Partnership Name].\nThe purpose of the partnership is to engage in [Describe Business Activities].\n",
+      "2. Contributions": "[Partner 1 Name] shall contribute [Description of Contributions, e.g., Capital, Assets, Skills].\n[Partner 2 Name] shall contribute [Description of Contributions, e.g., Capital, Assets, Skills].\n",
+      "3. Profit and Loss Sharing": "Profits and losses shall be shared in the following proportions:\n•\t[Partner 1 Name]: [Insert Percentage]\n•\t[Partner 2 Name]: [Insert Percentage]\n",
+      "4. Decision-Making": "Major decisions require unanimous consent of the Partners.\nRoutine decisions may be made by majority vote.\n",
+      "5. Termination": "This Agreement may be terminated by:\n•\tMutual agreement of the Partners.\n•\tWithdrawal of a Partner with [Insert Notice Period] written notice.\n•\tBankruptcy or death of a Partner.\n",
+      "6. Dispute Resolution": "Any disputes arising from this Agreement shall be resolved through [Arbitration/Litigation] under the laws of [Insert Jurisdiction].",
+  }
+  }
+}
