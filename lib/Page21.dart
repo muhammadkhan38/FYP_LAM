@@ -3,6 +3,7 @@ import 'package:final_year_project/page34.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'BigText.dart';
 import 'Drawer_Class.dart';
@@ -11,9 +12,28 @@ import 'Page23.dart';
 import 'Page41.dart';
 import 'SmallText.dart';
 
-class Page21 extends StatelessWidget {
+class Page21 extends StatefulWidget {
+
   const Page21({super.key,});
 
+  @override
+  State<Page21> createState() => _Page21State();
+}
+
+class _Page21State extends State<Page21> {
+  String _name = 'Loading...';
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _name = prefs.getString('user_name') ?? 'No Name';
+
+    });
+  }
   @override
   Widget build(BuildContext context) {
      final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -39,14 +59,19 @@ class Page21 extends StatelessWidget {
       backgroundColor: Colors.grey.shade100,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.lightBlueAccent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+            // Adjust the radius
+          ),
+
+          backgroundColor: Colors.lightBlueAccent.shade700,
           onPressed: (){
             showModalBottomSheet(context: context, builder: (BuildContext context){
               return Container(
                 height: 233,
                 width: screenSize.width,
                 decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(70),topRight: Radius.circular(70)),
                   color: Colors.white,
                 ),
                 child: Column(
@@ -110,7 +135,7 @@ class Page21 extends StatelessWidget {
             }
             );
           },
-          child:  const Icon(Icons.add),
+          child:  const Icon(Icons.add,color: Colors.white,size: 35,grade: 40,),
         ),
     bottomNavigationBar:
         ClipRRect(
@@ -124,7 +149,7 @@ class Page21 extends StatelessWidget {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(onPressed: (){},
                       icon: const Icon(CupertinoIcons.house_alt),color: Colors.lightBlueAccent,),
@@ -165,7 +190,9 @@ class Page21 extends StatelessWidget {
                       height: 50,
                       child: CircleAvatar(
                         radius: 50,
-                        backgroundImage: AssetImage('assets/qasim.png'),
+                        backgroundColor: Colors.grey,
+                        child: Icon(Icons.person,size: 35,),
+                      //  backgroundImage: AssetImage('assets/qasim.png'),
                       ),
                     ),
                     title: Row(
@@ -176,7 +203,7 @@ class Page21 extends StatelessWidget {
                       ],
                     ),
                     trailing: const Icon(CupertinoIcons.bell),
-                    subtitle: BigText(text: 'Andrew Smith',size: 18,color: Colors.black,),
+                    subtitle:  Text(_name, style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.black),)
                   ),
                 ),
               ),

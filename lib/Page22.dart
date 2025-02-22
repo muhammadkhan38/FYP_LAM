@@ -34,9 +34,10 @@ class Page22 extends StatelessWidget {
       backgroundColor: Colors.grey.shade100,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         backgroundColor: Colors.blue,
         onPressed: () {},
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add,size: 35,color: Colors.white,),
       ),
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -132,7 +133,7 @@ class Page22 extends StatelessWidget {
                   leading: SizedBox(
                       width: 50,
                       height: 50,
-                      child: Image.asset('assets/page22pic.png')),
+                      child: Icon(Icons.book_online_outlined,size: 60,color: Colors.lightBlue,)),
                   title: const Text(
                     'Template Library',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
