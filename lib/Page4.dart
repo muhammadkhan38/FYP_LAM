@@ -1,7 +1,9 @@
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Page3.dart';
 import 'Page5.dart';
@@ -45,19 +47,7 @@ class _Page4State extends State<Page4> {
     confirmPasswordController.dispose();
     super.dispose();
   }
-  // Future<void> _selectDate(BuildContext context) async {
-  //   final DateTime? picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: DateTime.now(), // ✅ ڈیفالٹ کرنٹ تاریخ ہوگی
-  //     firstDate: DateTime(1900),
-  //     lastDate: DateTime.now(), // ✅ Future Dates Allow نہیں ہوں گی
-  //   );
-  //   if (picked != null) {
-  //     setState(() {
-  //       dobController.text = "${picked.day}/${picked.month}/${picked.year}";
-  //     });
-  //   }
-  // }
+
   Future<void> registerUser() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -218,13 +208,34 @@ class _Page4State extends State<Page4> {
                             }, obscureText: null,
                           ),
                           const SizedBox(height: 10),
-                          CustomTextFormField(
 
-                            keyboardType: TextInputType.phone,
+                          //Enter your phone number text field code
+                          IntlPhoneField(
                             controller: phoneController,
-                            hintText: 'Enter Phone Number',
-                            icon: Icons.phone_android, obscureText: false,
+                            decoration: InputDecoration(
+                              hintText: "Enter Phone Number",
+                              fillColor: Colors.grey.shade100,
+                              filled: true,
+                              hintStyle: const TextStyle(color: Colors.black54),
+                              border: InputBorder.none,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 0, color: Colors.grey.shade100),
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  width: 0,
+                                  color: Colors.transparent, // یا Colors.grey.shade100
+                                ),
+                                borderRadius: BorderRadius.circular(40), // یہ radius برقرار رکھے گا
+                              ),
+                            ),
+                            initialCountryCode: 'US', // ڈیفالٹ ملک کا کوڈ (آپ اپنی مرضی کا رکھ سکتے ہیں)
+                            onChanged: (phone) {
+                              print(phone.completeNumber); // مکمل فون نمبر (ملک کوڈ + نمبر)
+                            },
                           ),
+
                           const SizedBox(height: 10),
                           CustomTextFormField(
                             controller: dobController,
