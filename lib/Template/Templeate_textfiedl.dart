@@ -10,6 +10,10 @@ class CustomTextField extends StatelessWidget {
   final InputBorder? border;
   final TextStyle? hintStyle;
 
+  final VoidCallback? onTap;
+
+  final dynamic readOnly;
+
   const CustomTextField({
     Key? key,
     required this.controller,
@@ -20,12 +24,15 @@ class CustomTextField extends StatelessWidget {
     this.border,
     this.hintStyle,
     this.txtsize,
+    this.onTap,
+    this.readOnly,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      onTap: onTap,
       keyboardType: TextInputType.multiline,
       maxLines: null,
     //  maxLines: maxLines,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 // import 'Template/EmploymentAgreement.dart';
+import 'Template/EmploymentAgreement.dart';
 import 'Template/LeaseAgreement.dart';
 import 'Template/PartnershipAgreement.dart';
 import 'Template/Property_Deal_ Agrement.dart';
@@ -147,7 +148,7 @@ class _Page67State extends State<Page67> {
               const SizedBox(height: 10,),
               GestureDetector(
                 onTap: (){
-                  // Navigator.push(context, MaterialPageRoute(builder: (context)=> EmploymentAgreement()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> EmploymentAgreement()));
                 },
                 child: Container(
                   width: size.width-35, // Container width

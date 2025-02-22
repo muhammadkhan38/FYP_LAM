@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:signature/signature.dart';
 
+import '../Widgets/Reusable Date Picker.dart';
 import 'Templeate_textfiedl.dart';
 
 class EmploymentAgreement extends StatefulWidget {
@@ -11,6 +12,8 @@ class EmploymentAgreement extends StatefulWidget {
 }
 
 class _EmploymentAgreementState extends State<EmploymentAgreement> {
+  Map<String, TextEditingController> descriptionController = {};
+  Map<String, TextEditingController> valuecontrollers = {};
   final SignatureController _controller = SignatureController(
     penStrokeWidth: 3,
     penColor: Colors.black,
@@ -33,57 +36,42 @@ class _EmploymentAgreementState extends State<EmploymentAgreement> {
     super.dispose();
   }
   Map<String, dynamic>? agreementData;
+  Map<String, String>? description;
+
   bool isEditing = false; // To track edit mode
 
   TextEditingController titleController = TextEditingController();
   TextEditingController employerNameController = TextEditingController();
   TextEditingController employeeNameController = TextEditingController();
   TextEditingController dateController = TextEditingController();
-  TextEditingController resposnibility = TextEditingController();
-  TextEditingController Compensation_and_Benefits = TextEditingController();
-  TextEditingController Work_Schedule = TextEditingController();
-  TextEditingController Confidentiality = TextEditingController();
-  TextEditingController Intellectual_Property = TextEditingController();
-  TextEditingController Non_Competition_and_Non_Solicitation = TextEditingController();
-  TextEditingController Term_and_Termination = TextEditingController();
-  TextEditingController Dispute_Resolution = TextEditingController();
-  TextEditingController Entire_Agreement = TextEditingController();
-  TextEditingController Severability = TextEditingController();
+
+
+
+
 
   @override
   void initState() {
-    super.initState();
     loadAgreementJson();
+    super.initState();
   }
-
   Future<void> loadAgreementJson() async {
     String jsonString = await rootBundle.loadString('assets/employment_agreement.json');
     setState(() {
       agreementData = jsonDecode(jsonString);
 
-      // Correcting the keys to match the JSON structure
-      titleController.text = agreementData!['Agreement']['title'];
-      employerNameController.text = agreementData!['Agreement']['parties']['Employer']['name'];
-      employeeNameController.text = agreementData!['Agreement']['parties']['Employee']['name'];
-      dateController.text = agreementData!['Agreement']['date'];
+      // Extract the description map
+      Map<String, dynamic> descriptionMap = agreementData!['Agreement']['Description'];
 
-      resposnibility.text = agreementData!['Agreement']['Description']["Position_and_Responsibilities"];
-      Compensation_and_Benefits.text = agreementData!['Agreement']['Description']["Compensation_and_Benefits"];
-      Confidentiality.text = agreementData!['Agreement']['Description']["Confidentiality"];
-      Work_Schedule.text = agreementData!['Agreement']['Description']["Work_Schedule"];
-      Intellectual_Property.text = agreementData!['Agreement']['Description']["Intellectual_Property"];
-      Non_Competition_and_Non_Solicitation.text = agreementData!['Agreement']['Description']["Non_Competition_and_Non_Solicitation"];
-
-
-      Term_and_Termination.text = agreementData!['Agreement']['Description']["Term_and_Termination"];
-      Dispute_Resolution.text = agreementData!['Agreement']['Description']["Dispute_Resolution"];
-      Entire_Agreement.text = agreementData!['Agreement']['Description']["Entire_Agreement"];
-      Severability.text = agreementData!['Agreement']['Description']["Severability"];
-
-
-
+      // Initialize controllers for each key-value pair
+      descriptionMap.forEach((key, value) {
+        descriptionController[key] = TextEditingController(text: key.toString());
+        descriptionController[value] = TextEditingController(text: value.toString());
+      //  valuecontrollers[value] = TextEditingController(text: value.toString());
+      });
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +94,7 @@ class _EmploymentAgreementState extends State<EmploymentAgreement> {
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
+
 
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -135,6 +124,7 @@ class _EmploymentAgreementState extends State<EmploymentAgreement> {
                             style: TextStyle(
                                 fontSize: 10, fontWeight: FontWeight.w500, color: Colors.grey),
                           ),
+
                           Text(
                             'Party 2',
                             style: TextStyle(
@@ -175,8 +165,10 @@ class _EmploymentAgreementState extends State<EmploymentAgreement> {
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        padding: const EdgeInsets.symmetric(horizontal: 100),
                         child: CustomTextField(
+                          readOnly: true, // ✅ یوزر خود کچھ نہیں لکھ سکتا
+                          onTap: () => DatePickerUtil.selectDate(context, dateController),
                           controller: dateController,
                           hintText: "Date",
                           maxLines: 20,
@@ -192,21 +184,6 @@ class _EmploymentAgreementState extends State<EmploymentAgreement> {
             ),
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             SizedBox(height: 30,),
             // Agreement Sections
             Padding(
@@ -218,81 +195,37 @@ class _EmploymentAgreementState extends State<EmploymentAgreement> {
                 ),
                 padding: EdgeInsets.all(15),
 
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                child: SizedBox(
+                  height: 600,
+                  child: ListView(
+                    children: descriptionController.entries.map((entry) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
 
-                  children: [
 
-                    SizedBox(height: 40,),
+                            CustomTextField(
+                                controller: entry.value,
 
-
-
-                    CustomTextField(
-                      controller: resposnibility,
-                      hintText: "resposnibility",
-                      maxLines: 20,
-                    ),
-                    CustomTextField(
-                      controller: Compensation_and_Benefits,
-                      hintText: "Compensation_and_Benefits",
-                      maxLines: 20,
-                    ),
-
-                    CustomTextField(
-                      controller: Confidentiality,
-                      hintText: "Confidentiality",
-                      maxLines: 20,
-                    ),
-                    CustomTextField(
-                      controller: Work_Schedule,
-                      hintText: "",
-                      maxLines: 20,
-                    ),
-                    CustomTextField(
-                      controller: Intellectual_Property,
-                      hintText: "Intellectual_Property",
-                      maxLines: 20,
-                    ),
-                    CustomTextField(
-                      controller: Non_Competition_and_Non_Solicitation,
-                      hintText: "Non_Competition_and_Non_Solicitation",
-                      maxLines: 20,
-                    ),
-                    CustomTextField(
-                      controller: Term_and_Termination,
-                      hintText: "Term_and_Termination",
-                      maxLines: 20,
-                    ),
-                    CustomTextField(
-                      controller: Dispute_Resolution,
-                      hintText: "Dispute_Resolution",
-                      maxLines: 20,
-                    ),
-                    CustomTextField(
-                      controller: Entire_Agreement,
-                      hintText: "Entire_Agreement",
-                      maxLines: 20,
-                    ),
-                    CustomTextField(
-                      controller:Severability,
-                      hintText: "Severability",
-                      maxLines: 20,
-                    ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  )),
 
 
 
 
-                  ]
                 ),
               ),
 
 
-            // Signature Section
 
 
-            // Three Buttons
-            ),
+
 
 
 
@@ -511,6 +444,7 @@ class _EmploymentAgreementState extends State<EmploymentAgreement> {
             ),
             ElevatedButton(
               onPressed: () {
+
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => const Page36()));
               },
               style: ElevatedButton.styleFrom(
@@ -549,263 +483,6 @@ class _EmploymentAgreementState extends State<EmploymentAgreement> {
 
 
 
-// Padding(
-//   padding: EdgeInsets.all(10),
-//   child: Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: agreementData!['Agreement']['sections'].map<Widget>((section) {
-//       return Padding(
-//         padding: EdgeInsets.symmetric(vertical: 10),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Text(
-//               section['title'],
-//               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-//             ),
-//             SizedBox(height: 5),
-//             if (section['content'] is String)
-//               Text(
-//                 section['content'],
-//                 style: TextStyle(fontSize: 16),
-//               )
-//             else if (section['content'] is Map)
-//               Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   if (section['content']['position'] != null)
-//                     Text("Position: ${section['content']['position']}", style: TextStyle(fontSize: 16)),
-//                   if (section['content']['reporting_to'] != null)
-//                     Text("Reporting To: ${section['content']['reporting_to']}", style: TextStyle(fontSize: 16)),
-//                   if (section['content']['duties'] != null)
-//                     Text("Duties: ${section['content']['duties']}", style: TextStyle(fontSize: 16)),
-//                 ],
-//               ),
-//             SizedBox(height: 5),
-//           ],
-//         ),
-//       );
-//     }).toList(),
-//   ),
-// ),
 
-// import 'dart:convert';
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart' show rootBundle;
-//
-// class EmploymentAgreement extends StatefulWidget {
-//   @override
-//   _EmploymentAgreementState createState() => _EmploymentAgreementState();
-// }
-//
-// class _EmploymentAgreementState extends State<EmploymentAgreement> {
-//   Map<String, dynamic>? agreementData;
-//   bool isEditing = false; // To track edit mode
-//
-//   TextEditingController titleController = TextEditingController();
-//   TextEditingController employerNameController = TextEditingController();
-//   TextEditingController employeeNameController = TextEditingController();
-//   TextEditingController dateController = TextEditingController();
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     loadAgreementJson();
-//   }
-//
-//   Future<void> loadAgreementJson() async {
-//     String jsonString = await rootBundle.loadString('assets/employment_agreement.json');
-//     setState(() {
-//       agreementData = jsonDecode(jsonString);
-//       titleController.text = agreementData!['agreement_title'];
-//       employerNameController.text = agreementData!['parties']['employer']['name'];
-//       employeeNameController.text = agreementData!['parties']['employee']['name'];
-//       dateController.text = agreementData!['date'];
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     if (agreementData == null) {
-//       return Scaffold(
-//         body: Center(child: CircularProgressIndicator()), // Show loading indicator
-//       );
-//     }
-//
-//     return Scaffold(
-//       appBar: AppBar(title: Text("Employment Agreement")),
-//       body: Column(
-//         children: [
-//           // Top Black Container
-//           Container(
-//             color: Colors.black,
-//             padding: EdgeInsets.all(15),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 isEditing
-//                     ? TextField(
-//                   controller: titleController,
-//                   style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-//                   decoration: InputDecoration(border: InputBorder.none, hintText: "Agreement Title", hintStyle: TextStyle(color: Colors.white70)),
-//                 )
-//                     : Text(
-//                   titleController.text,
-//                   style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-//                   textAlign: TextAlign.center,
-//                 ),
-//                 SizedBox(height: 10),
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     isEditing
-//                         ? Expanded(
-//                       child: TextField(
-//                         controller: employerNameController,
-//                         style: TextStyle(color: Colors.white, fontSize: 16),
-//                         decoration: InputDecoration(border: InputBorder.none, hintText: "Employer Name", hintStyle: TextStyle(color: Colors.white70)),
-//                       ),
-//                     )
-//                         : Text(
-//                       employerNameController.text,
-//                       style: TextStyle(color: Colors.white, fontSize: 16),
-//                     ),
-//                     isEditing
-//                         ? Expanded(
-//                       child: TextField(
-//                         controller: employeeNameController,
-//                         textAlign: TextAlign.right,
-//                         style: TextStyle(color: Colors.white, fontSize: 16),
-//                         decoration: InputDecoration(border: InputBorder.none, hintText: "Employee Name", hintStyle: TextStyle(color: Colors.white70)),
-//                       ),
-//                     )
-//                         : Text(
-//                       employeeNameController.text,
-//                       style: TextStyle(color: Colors.white, fontSize: 16),
-//                     ),
-//                   ],
-//                 ),
-//                 SizedBox(height: 10),
-//                 isEditing
-//                     ? TextField(
-//                   controller: dateController,
-//                   style: TextStyle(color: Colors.white, fontSize: 14),
-//                   decoration: InputDecoration(border: InputBorder.none, hintText: "Date", hintStyle: TextStyle(color: Colors.white70)),
-//                 )
-//                     : Text(
-//                   "Date: ${dateController.text}",
-//                   style: TextStyle(color: Colors.white, fontSize: 14),
-//                   textAlign: TextAlign.center,
-//                 ),
-//               ],
-//             ),
-//           ),
-//
-//           // Agreement Sections
-//           Expanded(
-//             child: ListView.builder(
-//               itemCount: agreementData!['terms'].length,
-//               itemBuilder: (context, index) {
-//                 var section = agreementData!['terms'][index];
-//                 return Padding(
-//                   padding: EdgeInsets.all(10),
-//                   child: Padding(
-//                     padding: EdgeInsets.all(10),
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Text(
-//                           section['section'],
-//                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-//                         ),
-//                         SizedBox(height: 5),
-//                         for (String detail in section['details'])
-//                           Padding(
-//                             padding: EdgeInsets.only(top: 5),
-//                             child: Text(
-//                               "• $detail",
-//                               style: TextStyle(fontSize: 16),
-//                             ),
-//                           ),
-//                       ],
-//                     ),
-//                   ),
-//                 );
-//               },
-//             ),
-//           ),
-//
-//           // Signature Section
-//           Padding(
-//             padding: EdgeInsets.all(10),
-//             child: Column(
-//               children: [
-//                 Divider(color: Colors.grey),
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     Column(
-//                       children: [
-//                         Text(
-//                           "Employer’s Signature",
-//                           style: TextStyle(fontWeight: FontWeight.bold),
-//                         ),
-//                         SizedBox(height: 50), // Space for actual signature
-//                         Text(agreementData!['signatures']['employer']),
-//                       ],
-//                     ),
-//                     Column(
-//                       children: [
-//                         Text(
-//                           "Employee’s Signature",
-//                           style: TextStyle(fontWeight: FontWeight.bold),
-//                         ),
-//                         SizedBox(height: 50), // Space for actual signature
-//                         Text(agreementData!['signatures']['employee']),
-//                       ],
-//                     ),
-//                   ],
-//                 ),
-//                 SizedBox(height: 10),
-//                 Text(
-//                   "Date: ${agreementData!['signatures']['date']}",
-//                   style: TextStyle(fontSize: 14),
-//                 ),
-//               ],
-//             ),
-//           ),
-//
-//           // Three Buttons
-//           Padding(
-//             padding: EdgeInsets.all(10),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               children: [
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     print("Download PDF");
-//                   },
-//                   child: Text("Download PDF"),
-//                 ),
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     setState(() {
-//                       isEditing = !isEditing;
-//                     });
-//                   },
-//                   child: Text(isEditing ? "Save" : "Edit"),
-//                 ),
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     print("Submit Agreement");
-//                   },
-//                   child: Text("Submit"),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+
+

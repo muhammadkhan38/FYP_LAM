@@ -238,6 +238,7 @@ class _Page4State extends State<Page4> {
 
                           const SizedBox(height: 10),
                           CustomTextFormField(
+
                             controller: dobController,
                             hintText: 'Date of Birth',
                             icon: Icons.date_range,
