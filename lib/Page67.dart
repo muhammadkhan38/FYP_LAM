@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-
-// import 'Template/EmploymentAgreement.dart';
-import 'Template/EmploymentAgreement.dart';
+import 'Template/Agreement_detatil.dart';
 import 'Template/LeaseAgreement.dart';
 import 'Template/PartnershipAgreement.dart';
 import 'Template/Property_Deal_ Agrement.dart';
-import 'Template/SalesAgreement.dart';class Page67 extends StatefulWidget {
+import 'Template/SalesAgreement.dart';
+class Page67 extends StatefulWidget {
   const Page67({super.key});
 
   @override
   State<Page67> createState() => _Page67State();
 }
+
 
 class _Page67State extends State<Page67> {
   @override
@@ -114,7 +114,7 @@ class _Page67State extends State<Page67> {
               const SizedBox(height: 10,),
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> PartnershipAgreementScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> AgreementDatail(true,"partnership_agreement.json")));
                 },
                 child: Container(
                   width: size.width-35, // Container width
@@ -148,7 +148,7 @@ class _Page67State extends State<Page67> {
               const SizedBox(height: 10,),
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> EmploymentAgreement()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> AgreementDatail(true, "employment_agreement.json")));
                 },
                 child: Container(
                   width: size.width-35, // Container width

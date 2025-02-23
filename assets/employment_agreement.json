@@ -2,19 +2,12 @@
   "Agreement": {
     "title": "Employment Agreement",
     "date": "",
-    "parties": {
-      "Employer": {
-        "name": "",
-        "address": "[Employer’s Address]"
-      },
-      "Employee": {
-        "name": "",
-        "address": "[Employee’s Address]"
-      }
-    },
+    "name1": "Employer",
+    "address1": "[Employer’s Address]",
+    "name2": "Employee",
+    "address2": "[Employee’s Address]",
+
     "Description": {
-
-
       "Position_and_Responsibilities": "The Employee is employed as [Job Title], reporting to [Supervisor/Manager’s Title].The Employee’s primary duties include, but are not limited to: [List specific responsibilities].The Employee agrees to perform duties to the best of their abilities and in compliance with company policies.",
       "Compensation_and_Benefits": ". Salary: The Employee shall be paid a gross salary of [Insert Amount and Currency] per [Month/Year], payable in accordance with the Employer’s payroll practices.\n Benefits: The Employee is entitled to the following benefits:\n•\t[Health Insurance Details]\n•\t[Retirement Plan Details]\n•\t[Vacation or Paid Leave Details]\n•\t[Other Benefits, if applicable].\n. Deductions will be made for taxes and other contributions required by law",
       "Work_Schedule": ". The Employee shall work [Insert Hours, e.g., 9:00 AM to 5:00 PM], Monday to Friday. Overtime, if required, will be compensated as per [Insert Relevant Laws].\n. The Employee is entitled to [Insert Number] paid leave days annually.",
