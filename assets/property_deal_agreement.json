@@ -1,31 +1,25 @@
 {
-  "Property Deal Agreement": {
-    "Title": "Property Deal Agreement",
-    "Date": "[Insert Date]",
-    "Parties": {
-      "Seller": {
-        "Name": "[Insert Seller’s Name]",
-        "Address": "[Insert Seller’s Address]"
-      },
-      "Buyer": {
-        "Name": "[Insert Buyer’s Name]",
-        "Address": "[Insert Buyer’s Address]"
-      }
-    },
-    "Description": {
-      "Whereas": "the Seller desires to sell the property located at [Insert Property Address], and the Buyer agrees to purchase the property under the terms and conditions set forth below, the parties hereby agree as follows:",
-      "1. Property Description": "The property subject to this Agreement is located at [Insert Property Address] and is described as [Insert Property Description].\nThe property includes [Insert Property Details, e.g., land size, buildings, amenities, etc.].\n",
-      "2. Purchase Price and Payment Terms": "The total purchase price of the property is [Insert Amount and Currency].\nThe Buyer agrees to pay the Seller the full purchase price in the following manner:\n•\tA down payment of [Insert Amount and Currency] upon signing this Agreement.\n•\tThe remaining balance of [Insert Amount and Currency] will be paid on or before [Insert Closing Date]. 2.3. Payments will be made via [Insert Payment Method, e.g., bank transfer, cheque, etc.].\n",
-      "3. Closing Date": "The closing of the sale shall take place on [Insert Closing Date], at which point the Seller shall transfer the title of the property to the Buyer and the Buyer shall pay the remaining balance of the purchase price.\nIf either party is unable to meet the closing date, the other party may, at their discretion, extend the closing date for an additional [Insert Number of Days] days.\n",
-      "4. Title and Ownership": "The Seller guarantees that the property is free from any encumbrances, liens, or disputes and has full legal ownership of the property.\nThe Seller agrees to provide the Buyer with all necessary documents to transfer the property title, including the deed of sale, clearances, and any other documents required by law.\nThe Buyer will assume full ownership of the property upon successful transfer of the title.\n",
-      "5. Condition of the Property": "The Buyer has had the opportunity to inspect the property and agrees to purchase it in its current condition, \"as is,\" unless otherwise agreed.\nThe Seller represents that the property is in good condition, free from any structural defects, hazardous materials, or major repairs, except for [Insert any known issues if applicable].\nAny repairs, if agreed upon, shall be completed by [Insert Repair Completion Date].\n",
-      "6. Taxes and Fees": "The Buyer shall be responsible for all taxes, registration fees, and other charges associated with the purchase of the property.\nThe Seller shall be responsible for any taxes related to the sale, including but not limited to capital gains taxes.\n",
-      "7. Risk and Insurance": "The risk of loss or damage to the property shall pass to the Buyer once the full payment has been made, and ownership has been transferred.\nThe Buyer is responsible for insuring the property after the closing date.\n",
-      "8. Default": "If the Buyer fails to make any payment as agreed, the Seller has the right to terminate this Agreement and retain any deposits paid as liquidated damages.\nIf the Seller fails to transfer ownership of the property as agreed, the Buyer may demand the return of any payments made or seek legal remedies.\n",
-      "9. Dispute Resolution": "Any disputes arising from this Agreement shall be resolved through [Insert Dispute Resolution Method, e.g., Arbitration, Mediation, etc.].\nThe governing law of this Agreement shall be the laws of [Insert Jurisdiction, e.g., Country/State].\n",
-      "10. Entire Agreement": "This Agreement represents the entire understanding between the parties and supersedes all prior agreements, negotiations, and communications.\nAmendments to this Agreement must be made in writing and signed by both parties.\n",
-      "11. Severability": "If any provision of this Agreement is found to be invalid or unenforceable, the remaining provisions shall remain in full force and effect."
-    }
-
+  "Agreement": {
+    "title": "Property Deal Agreement",
+    "date": "[Insert Date]",
+    "name1": "[Employer’s Name]",
+    "address1": "[Employer’s Address]",
+    "name2": "[Employee’s Name]",
+    "address2": "[Employee’s Address]",
+  "Description": {
+    "Whereas": "the Seller desires to sell the property located at [Insert Property Address], and the Buyer agrees to purchase the property under the terms and conditions set forth below, the parties hereby agree as follows:",
+    "1. Property Description": "The property subject to this Agreement is located at [Insert Property Address] and is described as [Insert Property Description].\nThe property includes [Insert Property Details, e.g., land size, buildings, amenities, etc.].\n",
+    "2. Purchase Price and Payment Terms": "The total purchase price of the property is [Insert Amount and Currency].\nThe Buyer agrees to pay the Seller the full purchase price in the following manner:\n•\tA down payment of [Insert Amount and Currency] upon signing this Agreement.\n•\tThe remaining balance of [Insert Amount and Currency] will be paid on or before [Insert Closing Date]. 2.3. Payments will be made via [Insert Payment Method, e.g., bank transfer, cheque, etc.].\n",
+    "3. Closing Date": "The closing of the sale shall take place on [Insert Closing Date], at which point the Seller shall transfer the title of the property to the Buyer and the Buyer shall pay the remaining balance of the purchase price.\nIf either party is unable to meet the closing date, the other party may, at their discretion, extend the closing date for an additional [Insert Number of Days] days.\n",
+    "4. Title and Ownership": "The Seller guarantees that the property is free from any encumbrances, liens, or disputes and has full legal ownership of the property.\nThe Seller agrees to provide the Buyer with all necessary documents to transfer the property title, including the deed of sale, clearances, and any other documents required by law.\nThe Buyer will assume full ownership of the property upon successful transfer of the title.\n",
+    "5. Condition of the Property": "The Buyer has had the opportunity to inspect the property and agrees to purchase it in its current condition, \"as is,\" unless otherwise agreed.\nThe Seller represents that the property is in good condition, free from any structural defects, hazardous materials, or major repairs, except for [Insert any known issues if applicable].\nAny repairs, if agreed upon, shall be completed by [Insert Repair Completion Date].\n",
+    "6. Taxes and Fees": "The Buyer shall be responsible for all taxes, registration fees, and other charges associated with the purchase of the property.\nThe Seller shall be responsible for any taxes related to the sale, including but not limited to capital gains taxes.\n",
+    "7. Risk and Insurance": "The risk of loss or damage to the property shall pass to the Buyer once the full payment has been made, and ownership has been transferred.\nThe Buyer is responsible for insuring the property after the closing date.\n",
+    "8. Default": "If the Buyer fails to make any payment as agreed, the Seller has the right to terminate this Agreement and retain any deposits paid as liquidated damages.\nIf the Seller fails to transfer ownership of the property as agreed, the Buyer may demand the return of any payments made or seek legal remedies.\n",
+    "9. Dispute Resolution": "Any disputes arising from this Agreement shall be resolved through [Insert Dispute Resolution Method, e.g., Arbitration, Mediation, etc.].\nThe governing law of this Agreement shall be the laws of [Insert Jurisdiction, e.g., Country/State].\n",
+    "10. Entire Agreement": "This Agreement represents the entire understanding between the parties and supersedes all prior agreements, negotiations, and communications.\nAmendments to this Agreement must be made in writing and signed by both parties.\n",
+    "11. Severability": "If any provision of this Agreement is found to be invalid or unenforceable, the remaining provisions shall remain in full force and effect."
   }
 }
+  }
+
