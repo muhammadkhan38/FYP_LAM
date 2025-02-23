@@ -180,16 +180,13 @@ class _AgreementDatailState extends State<AgreementDatail> {
     descriptionController.forEach((key, controller) {
       jsonData["Agreement"]["Description"][key] = controller.text;
     });
-
-
-
     // Convert Map to JSON string
     String jsonString = jsonEncode(jsonData);
 
     Map<String, dynamic> create_Agrement = {
 
       "email": "mqasimkhan638@gmail.com",
-      "slug" : slug,
+      "slug" : "this is agreement between two party",
       "title": titleController.text,
       "agreement_file": jsonString,
       "signature": "true",

@@ -132,7 +132,7 @@ class Page34 extends StatelessWidget {
                             children: [
                               IconButton(onPressed: (){
 
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const Page36()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> DynamicTextFormFields()));
                                // Navigator.push(context, MaterialPageRoute(builder: (context)=> const CustomTextFields()));
                                // Navigator.push(context, MaterialPageRoute(builder: (context)=> EmploymentAgreement()));
                                // Navigator.push(context, MaterialPageRoute(builder: (context)=> DynamicFormFieldsScreen()));
