@@ -26,7 +26,7 @@ class _Page56State extends State<Page56> {
               children: [
                 Container(
                   height: 494,
-                  width: 430,
+                  width: screenSize.width,
                   color: Colors.black87,
                   child:  Column(
                       children: [
@@ -75,52 +75,96 @@ class _Page56State extends State<Page56> {
                   )
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 220,left: 30),
-                  child: Container(
-                    height: 360,
-                    width: screenSize.width-60,
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlueAccent,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child:
-
-                    Column(
-                      children: [
-                        TextButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Page6(),
-                            ),
+                  padding: const EdgeInsets.only(top: 220,),
+                  child: Center(
+                    child: Container(
+                      height: 360,
+                     width: screenSize.width-5,
+                      decoration: BoxDecoration(
+                        color: Colors.lightBlueAccent,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 180,top: 15),
+                            child: ElevatedButton(
+                            onPressed: () {
+                                                  // Perform action when the button is pressed
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(content: Text("Button Pressed!")),
+                                              );
+                                            },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.white, // Button background color
+                                                foregroundColor: Colors.black, // Text color
+                                                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                                                textStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(50), // Rounded corners
+                                                ),
+                                                elevation: 9, // Shadow effect
+                                              ),
+                                              child: Text("MOST POPULAR"),
+                                            ),
                           ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.lightBlueAccent), // Background color
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(30.0),
+
+                          Padding(
+                            padding: const EdgeInsets.only(left: 30),
+                            child: RichText(
+                              text: TextSpan(
+                                text: "\$15",
+                                style: TextStyle(fontSize: 32, color: Colors.white,fontWeight: FontWeight.w800), // Default style
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: '/month',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500, color: Colors.white,fontSize: 15),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                          child:  SizedBox(
-                              height: 40,
-                              width: screenSize.width-90,
-                              child: const Center(
-                                child: Text('SUBMIT',
-                                    style: TextStyle(fontSize:16,color: Colors.white)),
-                              )), // Text style
-                        ),
-                      ],
-                    ),
 
+                          Padding(
+                            padding: const EdgeInsets.only(left: 30),
+                            child: Text("Enterprise", style: TextStyle(fontSize: 32, color: Colors.white,fontWeight: FontWeight.w600), // Default style
+                            ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(left: 30),
+                            child: RichText(
+                              text: TextSpan(
+                                text: "Unlimited",
+                                style: TextStyle(fontSize: 20, color: Colors.white,fontWeight: FontWeight.w600), // Default style
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: ' Agreement',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w400, color: Colors.white,fontSize: 14),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(left: 30),
+                            child: Text("Lorem Ipsum is simply dummy text of the printing.", style: TextStyle(fontSize: 15, color: Colors.white,fontWeight: FontWeight.w500), // Default style
+                            ),
+                          ),
+
+
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
-
-
           ],
         ),
       ),
