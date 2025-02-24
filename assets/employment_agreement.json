@@ -1,29 +1,22 @@
 {
   "Agreement": {
     "title": "Employment Agreement",
-    "date": "[Date]:",
-    "parties": {
-      "Employer": {
-        "name": "[Employer’s Name]",
-        "address": "[Employer’s Address]"
-      },
-      "Employee": {
-        "name": "[Employee’s Name]",
-        "address": "[Employee’s Address]"
-      }
-    },
+    "date": "",
+    "name1": "Employer",
+    "address1": "[Employer’s Address]",
+    "name2": "Employee",
+    "address2": "[Employee’s Address]",
+
     "Description": {
-
-
       "Position_and_Responsibilities": "The Employee is employed as [Job Title], reporting to [Supervisor/Manager’s Title].The Employee’s primary duties include, but are not limited to: [List specific responsibilities].The Employee agrees to perform duties to the best of their abilities and in compliance with company policies.",
-      "Compensation_and_Benefits": ". Salary: The Employee shall be paid a gross salary of [Insert Amount and Currency] per [Month/Year], payable in accordance with the Employer’s payroll practices.\n Benefits: The Employee is entitled to the following benefits:\n•\t[Health Insurance Details]\n•\t[Retirement Plan Details]\n•\t[Vacation or Paid Leave Details]\n•\t[Other Benefits, if applicable].\n. Deductions will be made for taxes and other contributions required by law\n",
-      "Work_Schedule": ". The Employee shall work [Insert Hours, e.g., 9:00 AM to 5:00 PM], Monday to Friday.\n. Overtime, if required, will be compensated as per [Insert Relevant Laws].\n. The Employee is entitled to [Insert Number] paid leave days annually.\n",
-      "Confidentiality": ". The Employee agrees to maintain the confidentiality of all non-public information pertaining to the Employer’s business, including trade secrets, client details, and proprietary data.\n. This obligation continues beyond the termination of employment.\n",
-      "Intellectual_Property": ". Any work product created by the Employee during the course of employment shall be the sole property of the Employer.\n. The Employee agrees to assign all intellectual property rights arising from such work to the Employer.\n",
-      "Non_Competition_and_Non_Solicitation": ". During employment and for a period of [Insert Time Period] following termination, the Employee shall not engage in business activities that directly compete with the Employer’s business within [Insert Geographic Area].\n. The Employee shall not solicit the Employer’s clients, employees, or business partners during this period\n",
-      "Term_and_Termination": ". This Agreement is effective as of [Start Date] and continues until terminated by either party.\n. Termination may occur:\n•\tBy Either Party: Upon providing [Notice Period, e.g., 30 days] written notice.\n•\tBy Employer: Immediately for just cause, including but not limited to misconduct or breach of this Agreement.\n. Upon termination, the Employee shall return all Employer-owned property, including documents, equipment, and access credentials.\n",
-      "Dispute_Resolution": ". Any disputes arising from this Agreement shall be resolved through [Insert Dispute Resolution Method, e.g., Arbitration].\n. The governing law of this Agreement shall be the laws of [Insert Jurisdiction, e.g., Country/State].\n",
-      "Entire_Agreement": ". This Agreement represents the entire understanding between the parties and supersedes all prior agreements.\n. Amendments to this Agreement must be made in writing and signed by both parties.\n",
+      "Compensation_and_Benefits": ". Salary: The Employee shall be paid a gross salary of [Insert Amount and Currency] per [Month/Year], payable in accordance with the Employer’s payroll practices.\n Benefits: The Employee is entitled to the following benefits:\n•\t[Health Insurance Details]\n•\t[Retirement Plan Details]\n•\t[Vacation or Paid Leave Details]\n•\t[Other Benefits, if applicable].\n. Deductions will be made for taxes and other contributions required by law",
+      "Work_Schedule": ". The Employee shall work [Insert Hours, e.g., 9:00 AM to 5:00 PM], Monday to Friday. Overtime, if required, will be compensated as per [Insert Relevant Laws].\n. The Employee is entitled to [Insert Number] paid leave days annually.",
+      "Confidentiality": ". The Employee agrees to maintain the confidentiality of all non-public information pertaining to the Employer’s business, including trade secrets, client details, and proprietary data.\n. This obligation continues beyond the termination of employment.",
+      "Intellectual_Property": ". Any work product created by the Employee during the course of employment shall be the sole property of the Employer.\n. The Employee agrees to assign all intellectual property rights arising from such work to the Employer.",
+      "Non_Competition_and_Non_Solicitation": ". During employment and for a period of [Insert Time Period] following termination, the Employee shall not engage in business activities that directly compete with the Employer’s business within [Insert Geographic Area].\n. The Employee shall not solicit the Employer’s clients, employees, or business partners during this period",
+      "Term_and_Termination": ". This Agreement is effective as of [Start Date] and continues until terminated by either party.\n. Termination may occur:\n•\tBy Either Party: Upon providing [Notice Period, e.g., 30 days] written notice.\n•\tBy Employer: Immediately for just cause, including but not limited to misconduct or breach of this Agreement.\n. Upon termination, the Employee shall return all Employer-owned property, including documents, equipment, and access credentials.",
+      "Dispute_Resolution": ". Any disputes arising from this Agreement shall be resolved through [Insert Dispute Resolution Method, e.g., Arbitration].\n. The governing law of this Agreement shall be the laws of [Insert Jurisdiction, e.g., Country/State].",
+      "Entire_Agreement": ". This Agreement represents the entire understanding between the parties and supersedes all prior agreements.\n. Amendments to this Agreement must be made in writing and signed by both parties.",
       " Severability": ". If any provision of this Agreement is found to be invalid or unenforceable, the remaining provisions shall remain in full force and effect."
     },
     "signatures": {

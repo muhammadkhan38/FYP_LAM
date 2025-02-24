@@ -92,6 +92,7 @@ flutter:
     - assets/partnership_agreement.json
     - assets/lease_agreement.json
     - assets/sales_agreement.json
+    - assets/employment_agreement.json
 
 
 

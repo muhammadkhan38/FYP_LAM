@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
 import 'dart:convert'; // To parse JSON responses
 import 'package:connectivity_plus/connectivity_plus.dart'; // Connectivity package
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Page21.dart';
 import 'Page4.dart';
 
@@ -50,6 +51,18 @@ class _Page3State extends State<Page3> {
       print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+
+        // Extract user details
+        String name = responseBody['user']['name'];
+        String email = responseBody['user']['email'];
+
+        // Save in SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_name', name);
+        await prefs.setString('user_email', email);
+
+        print('Login successful, user data saved');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const Page21()),
@@ -59,13 +72,18 @@ class _Page3State extends State<Page3> {
       } else {
         // Parse the response body
         final responseBody = jsonDecode(response.body);
-
-        if (responseBody['message'] == 'Email not found.') {
-          // Email does not exist
+        if(responseBody["status"]==301){
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Email does not exist')),
           );
-        } else if (responseBody['message'] ==
+
+        }
+
+        // if (responseBody['message'] == 'Email not found.') {
+        //   // Email does not exist
+        //
+        // }
+        else if (responseBody['message'] ==
             'Invalid credentials theek da credentials') {
           // Password is incorrect
           ScaffoldMessenger.of(context).showSnackBar(
@@ -220,7 +238,7 @@ class _Page3State extends State<Page3> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 180),
+                          padding: const EdgeInsets.only(left: 150),
                           child: TextButton(
                             onPressed: () {
                               Navigator.push(

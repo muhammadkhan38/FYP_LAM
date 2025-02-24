@@ -5,7 +5,7 @@ class ReusableListTileWithInput extends StatelessWidget {
   final  richTextSubtitle;
   final String hintText;
   final keyboardType;
-  final readOnly;
+  final bool readOnly;
 
   final int maxLengthPerLine;
   final VoidCallback? onTap;
@@ -22,7 +22,7 @@ class ReusableListTileWithInput extends StatelessWidget {
     this.onTap,
      this.keyboardType,
     this.validator,
-    this.readOnly,
+    this.readOnly = false,
 
   }) : super(key: key);
 
@@ -58,6 +58,7 @@ class ReusableListTileWithInput extends StatelessWidget {
         ),
         child: TextFormField(
           controller: controller,
+          readOnly: readOnly,
           onTap: onTap,
           keyboardType: TextInputType.multiline,
           maxLines: null, // Allows unlimited lines

@@ -11,6 +11,7 @@ import 'Page22.dart';
 import 'Page23.dart';
 import 'Page41.dart';
 import 'SmallText.dart';
+import 'Template/Agreement_detatil.dart';
 
 class Page21 extends StatefulWidget {
 
@@ -291,140 +292,185 @@ class _Page21State extends State<Page21> {
                       ),
                     ),
                     const SizedBox(height: 10,),
-                    Container(
-                      width: screenSize.width-30,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ListTile(
-                        title: const Text('My General Will',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500),),
-
-                        subtitle: Row(
-                          children: [
-                            const Text('Self Signed',style: TextStyle(fontSize: 12,color: Colors.lightBlueAccent,fontWeight: FontWeight.w500),),
-                            const SizedBox(width: 15,),
-                            Text('20-01-2023',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                          ],
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AgreementDatail(false,"text_data.json")));
+                      },
+                      child: Container(
+                        width: screenSize.width-30,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        trailing: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 13,left: 40),
-                              child: Text('#05',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
+                        child: ListTile(
+                          title: const Text('My General Will',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500),),
 
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10,),
-                    Container(
-                      width: screenSize.width-30,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ListTile(
-                        title: const Text('Consent',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500),),
-
-                        subtitle: Row(
-                          children: [
-                            const Text('With - ',style: TextStyle(color: Colors.black54,fontSize: 12),),
-                            const Text('Sarah ipsum',style: TextStyle(fontSize: 12,color: Colors.lightBlueAccent,fontWeight: FontWeight.w500),),
-                            const SizedBox(width: 15,),
-                            Text('20-01-2023',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                          ],
-                        ),
-                        trailing: Column(
-                          children: [
-                            Padding(
+                          subtitle: Row(
+                            children: [
+                              const Text('Self Signed',style: TextStyle(fontSize: 12,color: Colors.lightBlueAccent,fontWeight: FontWeight.w500),),
+                              const SizedBox(width: 15,),
+                              Text('20-01-2023',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
+                            ],
+                          ),
+                          trailing: Column(
+                            children: [
+                              Padding(
                                 padding: const EdgeInsets.only(top: 13,left: 40),
-                                child: Text('#08',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                            ),
-                            const Padding(
+                                child: Text('#05',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
+                              ),
+                              const Padding(
                                 padding: EdgeInsets.only(top: 5),
                                 child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
 
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10,),
-                    Container(
-                      width: screenSize.width-30,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ListTile(
-                        title: const Text('Client Agreement',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500),),
 
-                        subtitle: Row(
-                          children: [
-                            const Text('With - ',style: TextStyle(color: Colors.black54,fontSize: 12),),
-                            const Text('Sarah ipsum',style: TextStyle(fontSize: 12,color: Colors.lightBlueAccent,fontWeight: FontWeight.w500),),
-                            const SizedBox(width: 15,),
-                            Text('20-12-2023',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                          ],
-                        ),
-                        trailing: Column(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.only(top: 13,left: 40),
-                                child: Text('#07',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                            ),
-                            const Padding(
-                                padding: EdgeInsets.only(top: 5),
-                                child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
 
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10,),
-                    Container(
-                      width: screenSize.width-30,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ListTile(
-                        title: const Text('Client Agreement',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500),),
 
-                        subtitle: Row(
-                          children: [
-                            const Text('With - ',style: TextStyle(color: Colors.black54,fontSize: 12),),
-                            const Text('Sarah ipsum',style: TextStyle(fontSize: 12,color: Colors.lightBlueAccent,fontWeight: FontWeight.w500),),
-                            const SizedBox(width: 15,),
-                            Text('20-12-2023',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                          ],
-                        ),
-                        trailing: Column(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.only(top: 13,left: 40),
-                                child: Text('#07',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                            ),
-                            const Padding(
-                                padding: EdgeInsets.only(top: 5),
-                                child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
 
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    // const SizedBox(height: 10,),
+                    // Container(
+                    //   width: screenSize.width-30,
+                    //   height: 60,
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.grey.shade100,
+                    //     borderRadius: BorderRadius.circular(10),
+                    //   ),
+                    //   child: ListTile(
+                    //     title: const Text('Consent',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500),),
+                    //
+                    //     subtitle: Row(
+                    //       children: [
+                    //         const Text('With - ',style: TextStyle(color: Colors.black54,fontSize: 12),),
+                    //         const Text('Sarah ipsum',style: TextStyle(fontSize: 12,color: Colors.lightBlueAccent,fontWeight: FontWeight.w500),),
+                    //         const SizedBox(width: 15,),
+                    //         Text('20-01-2023',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
+                    //       ],
+                    //     ),
+                    //     trailing: Column(
+                    //       children: [
+                    //         Padding(
+                    //             padding: const EdgeInsets.only(top: 13,left: 40),
+                    //             child: Text('#08',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
+                    //         ),
+                    //         const Padding(
+                    //             padding: EdgeInsets.only(top: 5),
+                    //             child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
+                    //
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 10,),
+                    // Container(
+                    //   width: screenSize.width-30,
+                    //   height: 60,
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.grey.shade100,
+                    //     borderRadius: BorderRadius.circular(10),
+                    //   ),
+                    //   child: ListTile(
+                    //     title: const Text('Client Agreement',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500),),
+                    //
+                    //     subtitle: Row(
+                    //       children: [
+                    //         const Text('With - ',style: TextStyle(color: Colors.black54,fontSize: 12),),
+                    //         const Text('Sarah ipsum',style: TextStyle(fontSize: 12,color: Colors.lightBlueAccent,fontWeight: FontWeight.w500),),
+                    //         const SizedBox(width: 15,),
+                    //         Text('20-12-2023',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
+                    //       ],
+                    //     ),
+                    //     trailing: Column(
+                    //       children: [
+                    //         Padding(
+                    //             padding: const EdgeInsets.only(top: 13,left: 40),
+                    //             child: Text('#07',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
+                    //         ),
+                    //         const Padding(
+                    //             padding: EdgeInsets.only(top: 5),
+                    //             child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
+                    //
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 10,),
+                    // Container(
+                    //   width: screenSize.width-30,
+                    //   height: 60,
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.grey.shade100,
+                    //     borderRadius: BorderRadius.circular(10),
+                    //   ),
+                    //   child: ListTile(
+                    //     title: const Text('Client Agreement',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500),),
+                    //
+                    //     subtitle: Row(
+                    //       children: [
+                    //         const Text('With - ',style: TextStyle(color: Colors.black54,fontSize: 12),),
+                    //         const Text('Sarah ipsum',style: TextStyle(fontSize: 12,color: Colors.lightBlueAccent,fontWeight: FontWeight.w500),),
+                    //         const SizedBox(width: 15,),
+                    //         Text('20-12-2023',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
+                    //       ],
+                    //     ),
+                    //     trailing: Column(
+                    //       children: [
+                    //         Padding(
+                    //             padding: const EdgeInsets.only(top: 13,left: 40),
+                    //             child: Text('#07',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
+                    //         ),
+                    //         const Padding(
+                    //             padding: EdgeInsets.only(top: 5),
+                    //             child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
+                    //
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
