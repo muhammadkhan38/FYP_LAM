@@ -1,17 +1,11 @@
 {
-  "Sales_Agreement": {
+  "Agreement": {
     "title": "Sales_Agreement",
-    "Date": "[Insert Date]",
-    "parties": {
-      "party 1": {
-        "name": "[Employer’s Name]",
-        "address": "[Employer’s Address]"
-      },
-      "party 2": {
-        "name": "[Employee’s Name]",
-        "address": "[Employee’s Address]"
-      }
-    },
+    "date": "[Insert Date]",
+    "name1": "[Employer’s Name]",
+    "address1": "[Employer’s Address]",
+    "name2": "[Employee’s Name]",
+    "address2": "[Employee’s Address]",
     "Description": {
       "Whereas": "the Seller agrees to sell, and the Buyer agrees to purchase the goods described herein under the terms and conditions set forth below, the parties hereby agree as follows:",
       "1. Description of Goods": "The goods to be sold are described as [Description of Goods].\nQuantity: [Insert Quantity].\nCondition: [New/Used/Other, specify].\n",

@@ -1,17 +1,12 @@
 {
-  "Property Deal Agreement": {
-    "Title": "Property Deal Agreement",
-    "Date": "[Insert Date]",
-    "Parties": {
-      "Seller": {
-        "Name": "[Insert Seller’s Name]",
-        "Address": "[Insert Seller’s Address]"
-      },
-      "Buyer": {
-        "Name": "[Insert Buyer’s Name]",
-        "Address": "[Insert Buyer’s Address]"
-      }
-    },
+  "Agreement": {
+    "title": "Property Deal Agreement",
+    "date": "[Insert Date]",
+    "name1": "[Employer’s Name]",
+    "address1": "[Employer’s Address]",
+    "name2": "[Employee’s Name]",
+    "address2": "[Employee’s Address]"
+  },
     "Description": {
       "Whereas": "the Seller desires to sell the property located at [Insert Property Address], and the Buyer agrees to purchase the property under the terms and conditions set forth below, the parties hereby agree as follows:",
       "1. Property Description": "The property subject to this Agreement is located at [Insert Property Address] and is described as [Insert Property Description].\nThe property includes [Insert Property Details, e.g., land size, buildings, amenities, etc.].\n",
