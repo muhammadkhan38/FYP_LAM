@@ -44,42 +44,11 @@ class _Page67State extends State<Page67> {
                 ),
               ),
               const SizedBox(height: 15),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(10),
-              //     color: Colors.white,
-              //   ),
-              //   width: size.width - 40,
-              //   child: TextFormField(
-              //     decoration: const InputDecoration(
-              //       filled: false,
-              //       fillColor: Color(0xffFFFFFF),
-              //       hintText: 'Enter clause',
-              //       suffixIcon: Icon(
-              //         Icons.align_vertical_bottom_outlined,
-              //         color: Colors.lightBlue,
-              //       ),
-              //       prefixIcon: Icon(
-              //         Icons.search_rounded,
-              //         color: Colors.lightBlue,
-              //       ),
-              //       hintStyle: TextStyle(
-              //         fontWeight: FontWeight.w500,
-              //         fontSize: 14,
-              //         color: Colors.grey,
-              //       ),
-              //       border: InputBorder.none,
-              //       enabledBorder: InputBorder.none,
-              //       focusedBorder: InputBorder.none,
-              //       contentPadding:
-              //       EdgeInsets.symmetric(vertical: 12.0, horizontal: 35.0),
-              //     ),
-              //   ),
-              // ),
+
               const SizedBox(height: 10,),
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> PropertyDealAgreementScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> AgreementDatail(true,"property_deal_agreement.json")));
                 },
                 child: Container(
                   width: size.width-35, // Container width
@@ -182,7 +151,7 @@ class _Page67State extends State<Page67> {
               const SizedBox(height: 10,),
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> SalesAgreementScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>AgreementDatail(true,"sales_agreement.json")));
                 },
                 child: Container(
                   width: size.width-35, // Container width
@@ -217,7 +186,7 @@ class _Page67State extends State<Page67> {
               const SizedBox(height: 10,),
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> LeaseAgreementScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> AgreementDatail(true,"lease_agreement.json")));
                 },
                 child: Container(
                   width: size.width-35, // Container width
