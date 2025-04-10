@@ -23,7 +23,7 @@ class _DrawerClassState extends State<DrawerClass> {
     super.initState();
     _loadUserInfo();
   }
-
+// to show user Name and Email
   Future<void> _loadUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -44,8 +44,8 @@ class _DrawerClassState extends State<DrawerClass> {
         child: ListView(
           children: [
             DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.lightBlueAccent,
+              decoration:  BoxDecoration(
+                color: Colors.blueAccent,
               ),
               child: Row(
                 children: [
@@ -74,10 +74,9 @@ class _DrawerClassState extends State<DrawerClass> {
                     ),
                     child: Column(
                       children: [
-                        Text('$_name', style: TextStyle(fontSize: 18)),
-                        Text('$_email', style: TextStyle(fontSize: 18)),
-                        //  Text(users[10]['name'].toString(),style: const TextStyle(color: Colors.white,fontSize: 16),),
-                        // Text(users[10]['email'].toString(),maxLines: 2,overflow: TextOverflow.fade,style: const TextStyle(color: Colors.white,fontSize: 12,),),
+                        Text(_name, style: TextStyle(fontSize: 16,color: Colors.white)),
+                        Text(_email, style: TextStyle(fontSize: 12,color: Colors.white)),
+
                       ],
                     ),
                   ),
@@ -197,11 +196,19 @@ class _DrawerClassState extends State<DrawerClass> {
                 color: Colors.lightBlueAccent,
               ),
               title: const Text('Logout'),
-              onTap: () {
+              onTap: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String? token = prefs.getString('user_token');
+                print("Stored Token ///////////////////////////////////////////////////: $token");
+
+                // Clear the stored token
+                await prefs.remove('user_token');
+
+                // Navigate and remove all previous screens
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => Page3()),
-                  (route) => false, // Removes all previous screens
+                      (route) => false,
                 );
               },
             ),

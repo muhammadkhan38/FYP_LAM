@@ -257,6 +257,7 @@ class _Page4State extends State<Page4> {
                             hintText: 'Driving License Number',
                             icon: Icons.call_to_action_rounded, obscureText: false,
                           ),
+
                           const SizedBox(height: 10),
                           Padding(
                             padding: const EdgeInsets.only(left: 5,right: 5),

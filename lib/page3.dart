@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Page21.dart';
 import 'Page4.dart';
 
+String? userToken; // Global variable to store the token
+
 class Page3 extends StatefulWidget {
   const Page3({super.key});
 
@@ -52,17 +54,36 @@ class _Page3State extends State<Page3> {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
+        final Map<String, dynamic> data = json.decode(response.body);
+
+
+          String token = data['token']; // Extract token
+          print("User Token my nameis muhammad khan:///////////////////////////////////////////////////////////////// $token"); // Print token
 
         // Extract user details
-        String name = responseBody['user']['name'];
-        String email = responseBody['user']['email'];
+        String name = responseBody['user']['name']??"";
+        String email = responseBody['user']['email']??"";
 
-        // Save in SharedPreferences
+
+
+
+       // Save in SharedPreferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_token', token);
         await prefs.setString('user_name', name);
         await prefs.setString('user_email', email);
+        await prefs.setString('user_token', token);
+
+        print(token);
+
+
+
+
+
+
 
         print('Login successful, user data saved');
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const Page21()),
@@ -76,8 +97,8 @@ class _Page3State extends State<Page3> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Email does not exist')),
           );
-
         }
+
 
         // if (responseBody['message'] == 'Email not found.') {
         //   // Email does not exist
@@ -101,7 +122,8 @@ class _Page3State extends State<Page3> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${e.toString()}')),
       );
-    } finally {
+    }
+    finally {
       setState(() {
         _isLoading = false;
       });

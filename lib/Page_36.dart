@@ -14,7 +14,16 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController firstPartyController = TextEditingController();
   final TextEditingController secondPartyController = TextEditingController();
-  final TextEditingController DateController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController remediesController = TextEditingController();
+  final TextEditingController exclusionsController = TextEditingController();
+  final TextEditingController roiController = TextEditingController();
+  final TextEditingController cOBController = TextEditingController();
+  final TextEditingController clausController = TextEditingController();
+
+  final TextEditingController jurisdictionController = TextEditingController();
+  final TextEditingController obligationsController = TextEditingController();
+  bool isSwitched = true;
 
   // Maps to hold the controllers for keys and values
   Map<String, TextEditingController> descriptionController = {};
@@ -47,7 +56,7 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
         "address1" : "dummy Addresss ",
          "name1": secondPartyController.text,
         "adress2" : "Dummy address 2",
-        "date": DateController.text,
+        "date": dateController.text,
         "Description": {}
       }
     };
@@ -173,11 +182,11 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
             ReusableListTileWithInput(
               richTextTitle: "Enter the Date of Agreement",
               hintText: "Select Date",
-              controller: DateController,
+              controller: dateController,
               keyboardType: TextInputType.numberWithOptions(signed: true),
               maxLengthPerLine: 1,
               readOnly: true,
-              onTap: () => DatePickerUtil.selectDate(context, DateController),
+              onTap: () => DatePickerUtil.selectDate(context, dateController),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please select a date';
@@ -185,6 +194,21 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
                 return null;
               },
             ),
+
+            ReusableListTileWithInput(
+              richTextTitle: "Remedies",
+              hintText: "Enter clause",
+              controller: remediesController,
+              maxLengthPerLine: 30,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Remedies';
+                }
+                return null;
+              },
+            ),
+
+
             const SizedBox(height: 10),
             Container(
               decoration: BoxDecoration(
@@ -205,7 +229,7 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
             // ListView to display the dynamic fields
             Column(
               children: [
-                Container(
+                SizedBox(
                   height: 100,
                   child: ListView(
                     children: descriptionController.entries.map((entry) {
@@ -278,6 +302,7 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
     super.dispose();
   }
 }
+
 
 
 

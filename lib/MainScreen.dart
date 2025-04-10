@@ -1,14 +1,69 @@
+import 'package:final_year_project/Page21.dart';
 import 'package:final_year_project/page3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Page4.dart';
 import 'SmallText.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
 
   const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+
+
+  String? _token;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadToken(); // Call _loadToken() in initState
+  }
+
+  // Load token from SharedPreferences
+  Future<void> _loadToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('user_token');
+
+    setState(() {
+      _token = token; // Update _token
+    });
+
+    if (_token == null || _token!.isEmpty) {
+      print("Token is null or empty////////////////////////////////////"); // Print message if token is empty
+    } else {
+      // Navigate to another screen if token exists
+      print("Token:////////////////////////////// $_token"); // Print token for debugging
+      // Navigate to another screen, e.g., HomeScreen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Page21()), // Replace with your next screen
+      );
+    }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Main Screen')),
+      body: Center(
+        child: _token == null || _token!.isEmpty
+            ? Text('No token found')
+            : Text('Token: $_token'),
+      ),
+    );
+  }
+}
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
