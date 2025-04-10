@@ -1,3 +1,4 @@
+import 'package:final_year_project/customtextfieldwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http; // For making HTTP requests
 import 'dart:convert'; // For JSON encoding
@@ -121,7 +122,7 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Custom  TextFormFields'),
+        title: Text('Custom  Template'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
       floatingActionButton: FloatingActionButton(
@@ -142,6 +143,12 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
                   color: Color(0xff000000)),
+            ),const Text(
+              "Please Fill the Details below",
+              style: TextStyle(
+                  fontWeight: FontWeight.w100,
+                  fontSize: 12,
+                  color: Colors.grey),
             ),
             const SizedBox(height: 20),
             ReusableListTileWithInput(
@@ -228,6 +235,7 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
             ),
             // ListView to display the dynamic fields
             Column(
+<<<<<<< HEAD
               children: [
                 SizedBox(
                   height: 100,
@@ -260,29 +268,51 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
                         ),
                       );
                     }).toList(),
+=======
+              children: descriptionController.entries.map((entry) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // TextFormField for the key
+                      CustomTextFormField(
+                        controller: descriptionkeyController[entry.key] ?? TextEditingController(),
+                        hintText: "Title",
+                      ),
+                      SizedBox(height: 10),
+                      // TextFormField for the value
+                      CustomTextFormField(
+                        controller: entry.value,
+                        hintText: 'Description',
+                      ),
+                      SizedBox(height: 40),
+                    ],
+>>>>>>> 371e5881bfa755bd138081c41a936d03fc249526
                   ),
+                );
+              }).toList(),
+            ),
+            TextButton(
+              onPressed: _sendDataToAPI,
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.lightBlueAccent,
+                backgroundColor:  Colors.lightBlueAccent,
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+
                 ),
-                TextButton(
-                  onPressed: _sendDataToAPI,
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.blueAccent,
-                    backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
-                  ),
-                  child: const Text(
-                    'Done',
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ),
-              ],
+                padding:
+                const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
+              ),
+              child: const Text(
+                'Done',
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700),
+              ),
             ),
           ],
         ),
@@ -304,7 +334,7 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
 }
 
 
-
+//    controller: descriptionkeyController[entry.key],                          controller: entry.value,
 
 
 
