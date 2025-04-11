@@ -58,7 +58,8 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
     });
     // Convert Map to JSON string
     String jsonString = jsonEncode(jsonData);
-
+// Debugging: Print JSON before sending
+    print("Generated Agreement JSON: $jsonString");
     Map<String, dynamic> create_Agrement = {
 
       "email": "mqasimkhan638@gmail.com",
