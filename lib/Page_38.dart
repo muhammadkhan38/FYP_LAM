@@ -523,7 +523,7 @@ class _Page38State extends State<Page38> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const Page40()));
+              //  Navigator.push(context, MaterialPageRoute(builder: (context) => const Page40()));
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.blueAccent,

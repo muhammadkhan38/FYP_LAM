@@ -4,7 +4,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final TextEditingController controller;
   final String hintText;
-  final IconData icon;
+  final  icon;
   final bool readOnly; // ✅ readOnly کو سپورٹ کریں
   final VoidCallback? onTap;
   final String? Function(String?)? validator;
@@ -15,7 +15,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.controller,
     required this.hintText,
     this.readOnly = false, // ✅ Default false رکھیں
-    required this.icon,
+     this.icon,
     this.validator,
     this.obscureText,
     this.keyboardType,

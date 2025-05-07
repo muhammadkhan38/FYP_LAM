@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:final_year_project/page27.dart';
 import 'package:final_year_project/page34.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,8 +11,25 @@ import 'Drawer_Class.dart';
 import 'Page22.dart';
 import 'Page23.dart';
 import 'Page41.dart';
+import 'Show_Single_Agreemnet.dart';
+import 'SingleAgreemnet_API_Code.dart';
 import 'SmallText.dart';
-import 'Template/Agreement_detatil.dart';
+//https://nda.yourailist.com/api/getSingleAgreement
+class Agreement {
+  final int id;
+  final String title;
+  final String createdAt;
+
+  Agreement({required this.id, required this.title, required this.createdAt});
+
+  factory Agreement.fromJson(Map<String, dynamic> json) {
+    return Agreement(
+      id: json['id'],
+      title: json['title'],
+      createdAt: json['created_at'],
+    );
+  }
+}
 
 class Page21 extends StatefulWidget {
 
@@ -21,18 +40,78 @@ class Page21 extends StatefulWidget {
 }
 
 class _Page21State extends State<Page21> {
-  String _name = 'Loading...';
+  List<Agreement> _agreements = [];
+  bool _loading = true;
+  String? _error;
+  String _name = '';
+  String _email = '';
+
+
+
+  @override
   void initState() {
     super.initState();
-    _loadUserInfo();
+    _initialize();
+
+  }
+  Future<void> _initialize() async {
+    await _loadUserInfo();
+    print("$_email this is the init email ");
+   await _fetchAgreements();
   }
 
   Future<void> _loadUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _name = prefs.getString('user_name') ?? 'No Name';
+      _name = prefs.getString('user_name') ?? '';
+      _email = prefs.getString('user_email') ?? '';
+      print(_email +  "  This is Load user info email funciton ");
 
     });
+  }
+
+
+  Future<void> _fetchAgreements() async {
+    final url = Uri.parse('https://nda.yourailist.com/api/getAgreements');
+    final data;
+
+    try {
+      print(_email + " this inside the Fetch Agreement ");
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': _email,
+        }),
+      );
+      data = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+
+
+        // Now extract the message
+
+
+
+        List<dynamic> list = data['agreements'];
+        setState(() {
+          _agreements = list.map((e) => Agreement.fromJson(e)).toList();
+          _loading = false;
+        });
+
+      } else {
+        setState(() {
+
+          _error = "Error: ${data['message']}";
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -269,7 +348,7 @@ class _Page21State extends State<Page21> {
               ),
               const SizedBox(height: 20,),
               Container(
-                height: 330,
+               // height: 330,
                 width: screenSize.width-10,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -277,6 +356,7 @@ class _Page21State extends State<Page21> {
                 ),
                 child: Column(
                   children: [
+                    SizedBox(height: 15,),
                     Padding(
                       padding: const EdgeInsets.only(left: 10,right: 10),
                       child: Row(
@@ -291,44 +371,56 @@ class _Page21State extends State<Page21> {
                       ),
                     ),
                     const SizedBox(height: 10,),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AgreementDatail(false,"text_data.json")));
-                      },
-                      child: Container(
-                        width: screenSize.width-30,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ListTile(
-                          title: const Text('My General Will',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500),),
+                    _loading
+                        ? const Center(child: CircularProgressIndicator())
+                        : _error != null
+                        ? Center(child: Text("Error: $_error"))
+                        : SizedBox(
+                        height: 220,
+                          // height: 800,
+                          child: ListView.builder(
+                            itemCount: _agreements.length,
+                            itemBuilder: (context, index) {
+                          final agreement = _agreements[index];
+                          return GestureDetector(
+                            onTap: (){
+                              print(" tap ");
+                              print(agreement.id);
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>AgreementPage(id: agreement.id,)));
 
-                          subtitle: Row(
-                            children: [
-                              const Text('Self Signed',style: TextStyle(fontSize: 12,color: Colors.lightBlueAccent,fontWeight: FontWeight.w500),),
-                              const SizedBox(width: 15,),
-                              Text('20-01-2023',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                            ],
-                          ),
-                          trailing: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 13,left: 30),
-                                child: Text('#05',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
+                              //AgreementService.fetchAgreement(agreement.id);
+                            },
+                            child: Container(
+                              height: 80,
+
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(12)
                               ),
-                              Text("completed",style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
-                              // const Padding(
-                              //   padding: EdgeInsets.only(top: 5),
-                              //   child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
-                              //
-                              // )
-                            ],
-                          ),
+                              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(agreement.title),
+                                    Text(agreement.createdAt),
+                                    // ListTile(
+                                    //   title:  Text(" ${agreement.title}"),
+                                    //   subtitle: Text("sent  ${agreement.createdAt}"),
+                                    //
+                                    // ),
+                                  //  Text(" ${agreement.id}", style: TextStyle(fontWeight: FontWeight.bold)),
+
+
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                                                },
+                                              ),
                         ),
-                      ),
-                    ),
 
 
 
@@ -368,109 +460,6 @@ class _Page21State extends State<Page21> {
 
 
 
-
-                    // const SizedBox(height: 10,),
-                    // Container(
-                    //   width: screenSize.width-30,
-                    //   height: 60,
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.grey.shade100,
-                    //     borderRadius: BorderRadius.circular(10),
-                    //   ),
-                    //   child: ListTile(
-                    //     title: const Text('Consent',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500),),
-                    //
-                    //     subtitle: Row(
-                    //       children: [
-                    //         const Text('With - ',style: TextStyle(color: Colors.black54,fontSize: 12),),
-                    //         const Text('Sarah ipsum',style: TextStyle(fontSize: 12,color: Colors.lightBlueAccent,fontWeight: FontWeight.w500),),
-                    //         const SizedBox(width: 15,),
-                    //         Text('20-01-2023',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                    //       ],
-                    //     ),
-                    //     trailing: Column(
-                    //       children: [
-                    //         Padding(
-                    //             padding: const EdgeInsets.only(top: 13,left: 40),
-                    //             child: Text('#08',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                    //         ),
-                    //         const Padding(
-                    //             padding: EdgeInsets.only(top: 5),
-                    //             child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
-                    //
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 10,),
-                    // Container(
-                    //   width: screenSize.width-30,
-                    //   height: 60,
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.grey.shade100,
-                    //     borderRadius: BorderRadius.circular(10),
-                    //   ),
-                    //   child: ListTile(
-                    //     title: const Text('Client Agreement',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500),),
-                    //
-                    //     subtitle: Row(
-                    //       children: [
-                    //         const Text('With - ',style: TextStyle(color: Colors.black54,fontSize: 12),),
-                    //         const Text('Sarah ipsum',style: TextStyle(fontSize: 12,color: Colors.lightBlueAccent,fontWeight: FontWeight.w500),),
-                    //         const SizedBox(width: 15,),
-                    //         Text('20-12-2023',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                    //       ],
-                    //     ),
-                    //     trailing: Column(
-                    //       children: [
-                    //         Padding(
-                    //             padding: const EdgeInsets.only(top: 13,left: 40),
-                    //             child: Text('#07',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                    //         ),
-                    //         const Padding(
-                    //             padding: EdgeInsets.only(top: 5),
-                    //             child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
-                    //
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 10,),
-                    // Container(
-                    //   width: screenSize.width-30,
-                    //   height: 60,
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.grey.shade100,
-                    //     borderRadius: BorderRadius.circular(10),
-                    //   ),
-                    //   child: ListTile(
-                    //     title: const Text('Client Agreement',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500),),
-                    //
-                    //     subtitle: Row(
-                    //       children: [
-                    //         const Text('With - ',style: TextStyle(color: Colors.black54,fontSize: 12),),
-                    //         const Text('Sarah ipsum',style: TextStyle(fontSize: 12,color: Colors.lightBlueAccent,fontWeight: FontWeight.w500),),
-                    //         const SizedBox(width: 15,),
-                    //         Text('20-12-2023',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                    //       ],
-                    //     ),
-                    //     trailing: Column(
-                    //       children: [
-                    //         Padding(
-                    //             padding: const EdgeInsets.only(top: 13,left: 40),
-                    //             child: Text('#07',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
-                    //         ),
-                    //         const Padding(
-                    //             padding: EdgeInsets.only(top: 5),
-                    //             child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
-                    //
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -480,3 +469,5 @@ class _Page21State extends State<Page21> {
     );
   }
 }
+
+

@@ -82,15 +82,38 @@ class _Page4State extends State<Page4> {
       if (response.statusCode == 200) {
         print('Status code: ${response.statusCode}');
         print('Response body: ${response.body}');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Page5(email: emailController.text)),
+        );
+
+        final responseBody = jsonDecode(response.body);
+        final Map<String, dynamic> data = json.decode(response.body);
+
+
+        String token = data['token']; // Extract token
+        print("User Token my nameis muhammad khan:///////////////////////////////////////////////////////////////// $token"); // Print token
+
+        // Extract user details
+        String name = responseBody['user']['name']??"";
+        String email = responseBody['user']['email']??"";
+
+
+
+
+        // Save in SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_token', token);
+        await prefs.setString('user_name', name);
+        await prefs.setString('user_email', email);
+
+
         // Registration successful
         print(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Registration successful')),
         );
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Page5(email: emailController.text)),
-        );
+
       }
       //else if (response.statusCode == 422 || (responseData['message']?.contains('The email has already been taken') ?? false))
       else if (response.statusCode == 422 )
@@ -438,3 +461,4 @@ class _Page4State extends State<Page4> {
     );
   }
 }
+

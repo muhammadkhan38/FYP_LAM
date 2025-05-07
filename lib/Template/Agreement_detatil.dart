@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:final_year_project/Page_40.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -10,7 +11,11 @@ import 'package:signature/signature.dart';
 
 import '../Widgets/Reusable Date Picker.dart';
 import 'Templeate_textfiedl.dart';
-
+enum Status {
+  Complete,
+  Draft,
+  Pendding,
+}
 class AgreementDatail extends StatefulWidget {
   final istemplet;
   final filename;
@@ -38,10 +43,32 @@ class _AgreementDatailState extends State<AgreementDatail> {
   );
 
   String? base64Signature;
+  // Future<void> _saveSignature() async {
+  //   if (_controller.isNotEmpty) {
+  //     // Get SVG string from the controller
+  //     final String svgString = (await _controller.toSVG(width: 300,height: 400)) as String;
+  //
+  //     // Convert the SVG string to bytes
+  //     Uint8List data = Uint8List.fromList(utf8.encode(svgString));
+  //
+  //     setState(() {
+  //       base64Signature = base64Encode(data);
+  //     });
+  //
+  //     print(base64Signature);
+  //     print("Signature saved as Base64. ////////////////////////////////////////////////////////////");
+  //     print(base64Signature?.length);
+  //   }
+  // }
+
+
+
 
   Future<void> _saveSignature() async {
     if (_controller.isNotEmpty) {
-      Uint8List? data = (await _controller.toSVG(height: 400,width: 400)) as Uint8List?;
+     // Uint8List? data = (await _controller.toSVG(height: 400,width: 400)) as Uint8List?;
+      Uint8List? data = (await _controller.toSVG()) as Uint8List?;
+
       if (data != null) {
         setState(() {
           base64Signature = base64Encode(data);
@@ -61,7 +88,8 @@ class _AgreementDatailState extends State<AgreementDatail> {
   Map<String, dynamic>? agreementData;
   Map<String, String>? description;
   final  whareas = '';
-  String _email = 'Loading...';
+  String _email = '';
+  int Agreement_id = 0;
 
   bool isEditing = false; // To track edit mode
 
@@ -86,7 +114,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
 
-      _email = prefs.getString('user_email') ?? 'No Email';
+      _email = prefs.getString('user_email') ?? '';
     });
   }
   Future<void> loadAgreementJson() async {
@@ -178,80 +206,84 @@ class _AgreementDatailState extends State<AgreementDatail> {
       return "{}"; // Return empty JSON on error
     }
   }
-
-
-
-
-  Future<void> _sendDataToAPI() async {
+  Future<void> _sendDataToAPI(String status,{int id = 0}) async {
     const String apiUrl = "https://Nda.yourailist.com/api/create_agreement";
     try {
-
-
-        // Prepare the rest of the data
-        Map<String, dynamic> jsonData = {
-          "Agreement": {
-            "title": titleController.text,
-            "parties": {
-              "Employer": {"name": party1Controller.text},
-              "Employee": {"name": party2Controller.text}
-            },
-            "date": dateController.text,
-            "Description": {}
-          }
-        };
-
-        // Loop through description controllers to add to JSON
-        descriptionController.forEach((key, controller) {
-          jsonData["Agreement"]["Description"][key] = controller.text;
-        });
-
-        // Convert Map to JSON string
-        String jsonString = jsonEncode(jsonData);
-
-        Map<String, dynamic> createAgreement = {
-
-          "email": _email,
-          "slug": "slug",
+      // Prepare the agreement JSON structure
+      Map<String, dynamic> jsonData = {
+        "Agreement": {
           "title": titleController.text,
-          "agreement_file": jsonString,
-          "signature": base64Signature,
-          // Send the Base64 encoded signature here
-         // "signature": base64Signature?.substring(0,5000) ?? "",
-
-          // Send the Base64 encoded signature
-        };
-
-        final response = await http.post(
-          Uri.parse(apiUrl),
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode(createAgreement),
-        );
-
-        if (response.statusCode == 200) {
-          print(response.body);
-          print(response.statusCode);
-          print("Data successfully sent to API!");
-
-        } else {
-          print("Failed to send data. Status code: ${response.statusCode}");
-          print("Response Body: ${response.body}");
-
+          "parties": {
+            "Employer": {"name": party1Controller.text},
+            "Employee": {"name": party2Controller.text}
+          },
+          "date": dateController.text,
+          "Description": {}
         }
+      };
 
+      // Add dynamic description fields
+      descriptionController.forEach((key, controller) {
+        jsonData["Agreement"]["Description"][key] = controller.text;
+      });
+
+      // Convert the Agreement Map to JSON string
+      String jsonString = jsonEncode(jsonData);
+
+      // Prepare final payload for API
+      Map<String, dynamic> createAgreement = {
+        "email": _email,
+        "slug": "slug",
+
+        "title": titleController.text,
+        "agreement_file": jsonString,
+        "signature": base64Signature,
+        "status": "true",
+       // "signature": "true",
+        "id": id,
+      };
+
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {"Content-Type": "application/json"},
+          body: jsonEncode(createAgreement),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+        print(responseData);
+
+        int agreementId = responseData['agreement_id'];
+        String message = responseData['message'];
+
+        print("Agreement ID: $agreementId");
+        print("Message: $message");
+
+
+        // ✅ Save agreementId to SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('agreement_id', agreementId);
+         Agreement_id = prefs.getInt('agreement_id')!;
+        print("$Agreement_id the is the share perfersnce is dis ");
+
+        print("Agreement ID saved to SharedPreferences!");
+      } else {
+        print("Failed to send data. Status code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
+      }
     } catch (e) {
       print("Error sending data: $e");
-
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: Text("Employment Agreement")),
+      appBar: AppBar(
+          title: Text("Agreement (NDA)")
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -585,9 +617,14 @@ class _AgreementDatailState extends State<AgreementDatail> {
               height: 30,
             ),
             ElevatedButton(
-              onPressed: () {
-                _sendDataToAPI();
-              //  Navigator.push(context, MaterialPageRoute(builder: (context) => const Page40()));
+              onPressed: () async {
+                print(_email);
+                print("$Agreement_id asdfasdfasdfasdfasdf");
+                print("asdfasdfasdfasddddddddddddddddddddddddddddddddddddd");
+               // await  _saveSignature();
+                await _sendDataToAPI(Status.Draft.toString());
+                print((Status.Draft.toString()+"jhklasdjklahsdlfkjahsdlkfjahsdl"));
+                await  Navigator.push(context, MaterialPageRoute(builder: (context) => Page40(agreement_ids: Agreement_id)));
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.blueAccent,
@@ -608,8 +645,13 @@ class _AgreementDatailState extends State<AgreementDatail> {
               height: 30,
             ),
             ElevatedButton(
-              onPressed: () {
-                _saveSignature();
+              onPressed: () async {
+
+                //await  _saveSignature();
+
+
+
+
                 //  saveTextToJson();
 
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => const Page36()));
@@ -644,6 +686,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
     );
   }
 }
+
 
 
 

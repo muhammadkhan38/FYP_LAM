@@ -1,12 +1,14 @@
 import 'package:final_year_project/customtextfieldwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http; // For making HTTP requests
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert'; // For JSON encoding
-
 import 'Widgets/Reusable Date Picker.dart';
 import 'Widgets/reausable_text_form_field..dart';
 
 class DynamicTextFormFields extends StatefulWidget {
+  const DynamicTextFormFields({super.key});
+
   @override
   _DynamicTextFormFieldsState createState() => _DynamicTextFormFieldsState();
 }
@@ -15,22 +17,13 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController firstPartyController = TextEditingController();
   final TextEditingController secondPartyController = TextEditingController();
-  final TextEditingController dateController = TextEditingController();
-  final TextEditingController remediesController = TextEditingController();
-  final TextEditingController exclusionsController = TextEditingController();
-  final TextEditingController roiController = TextEditingController();
-  final TextEditingController cOBController = TextEditingController();
-  final TextEditingController clausController = TextEditingController();
-
-  final TextEditingController jurisdictionController = TextEditingController();
-  final TextEditingController obligationsController = TextEditingController();
-  bool isSwitched = true;
+  final TextEditingController DateController = TextEditingController();
 
   // Maps to hold the controllers for keys and values
   Map<String, TextEditingController> descriptionController = {};
   Map<String, TextEditingController> descriptionkeyController = {};
 
-  // Counter to generate unique keys for new fields
+
   int _counter = 0;
 
   // Function to add a new pair of TextFormFields
@@ -47,6 +40,53 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
   }
 
 
+  Future<void> _saveToSharedPreferences() async {   //save data into shared perferneces
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('title', titleController.text);
+    await prefs.setString('firstParty', firstPartyController.text);
+    await prefs.setString('secondParty', secondPartyController.text);
+    await prefs.setString('date', DateController.text);
+
+    // Save dynamic fields
+    Map<String, String> dynamicFields = {};
+    descriptionController.forEach((key, value) {
+      dynamicFields[key] = value.text;
+    });
+
+    await prefs.setString('dynamicFields', jsonEncode(dynamicFields));
+  }
+  @override
+  void initState() {
+    super.initState();
+    _loadFromSharedPreferences();
+  }
+
+  Future<void> _loadFromSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    titleController.text = prefs.getString('title') ?? '';
+    firstPartyController.text = prefs.getString('firstParty') ?? '';
+    secondPartyController.text = prefs.getString('secondParty') ?? '';
+    DateController.text = prefs.getString('date') ?? '';
+
+    // Load dynamic fields
+    String? dynamicFieldsString = prefs.getString('dynamicFields');
+    if (dynamicFieldsString != null) {
+      Map<String, dynamic> dynamicFields = jsonDecode(dynamicFieldsString);
+      dynamicFields.forEach((key, value) {
+        descriptionController[key] = TextEditingController(text: value);
+        descriptionkeyController[key] = TextEditingController(text: ''); // You can also save/load the key if needed
+      });
+
+      // Update counter so new fields get unique keys
+      _counter = dynamicFields.length;
+      setState(() {});
+    }
+  }
+
+
+
+
 
   Future<void> _sendDataToAPI() async {
     // Collect data from the main fields
@@ -57,7 +97,7 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
         "address1" : "dummy Addresss ",
          "name1": secondPartyController.text,
         "adress2" : "Dummy address 2",
-        "date": dateController.text,
+        "date": DateController.text,
         "Description": {}
       }
     };
@@ -66,7 +106,8 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
     });
     // Convert Map to JSON string
     String jsonString = jsonEncode(jsonData);
-
+// Debugging: Print JSON before sending
+    print("Generated Agreement JSON: $jsonString");
     Map<String, dynamic> create_Agrement = {
 
       "email": "mqasimkhan638@gmail.com",
@@ -96,20 +137,8 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Data sent successfully!")),
       );
-
-      // Navigate to the next page and pass the data
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => DisplayDataPage(data: data),
-      //   ),
-      // );
     } else {
 
-      // Error
-     // print("//////////////////${response.body}");
-      //print("///////////////////////////////////////////////////////////////////////////// ${response.statusCode}");
-      //print(response.body);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to send data. Please try again.")),
       );
@@ -189,11 +218,11 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
             ReusableListTileWithInput(
               richTextTitle: "Enter the Date of Agreement",
               hintText: "Select Date",
-              controller: dateController,
+              controller: DateController,
               keyboardType: TextInputType.numberWithOptions(signed: true),
               maxLengthPerLine: 1,
               readOnly: true,
-              onTap: () => DatePickerUtil.selectDate(context, dateController),
+              onTap: () => DatePickerUtil.selectDate(context, DateController),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please select a date';
@@ -201,21 +230,6 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
                 return null;
               },
             ),
-
-            ReusableListTileWithInput(
-              richTextTitle: "Remedies",
-              hintText: "Enter clause",
-              controller: remediesController,
-              maxLengthPerLine: 30,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Remedies';
-                }
-                return null;
-              },
-            ),
-
-
             const SizedBox(height: 10),
             Container(
               decoration: BoxDecoration(
@@ -235,40 +249,6 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
             ),
             // ListView to display the dynamic fields
             Column(
-<<<<<<< HEAD
-              children: [
-                SizedBox(
-                  height: 100,
-                  child: ListView(
-                    children: descriptionController.entries.map((entry) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // TextFormField for the key
-                            TextFormField(
-                              controller: descriptionkeyController[entry.key],
-                              decoration: InputDecoration(
-                                labelText: 'Key',
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            // TextFormField for the value
-                            TextFormField(
-                              controller: entry.value,
-                              decoration: InputDecoration(
-                                labelText: 'Value',
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                            SizedBox(height: 40),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-=======
               children: descriptionController.entries.map((entry) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10),
@@ -288,7 +268,6 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
                       ),
                       SizedBox(height: 40),
                     ],
->>>>>>> 371e5881bfa755bd138081c41a936d03fc249526
                   ),
                 );
               }).toList(),
@@ -301,7 +280,6 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
                 elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
-
                 ),
                 padding:
                 const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
@@ -332,9 +310,6 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
     super.dispose();
   }
 }
-
-
-//    controller: descriptionkeyController[entry.key],                          controller: entry.value,
 
 
 
