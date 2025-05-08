@@ -323,7 +323,7 @@ class _AgreementPageState extends State<AgreementPage> {
 
             const SizedBox(height: 60),
             // Signature Area - First Party
-            _signatureBlock(size, label: "Signature of First Party"),
+
             const SizedBox(height: 30),
             // Signature Area - Second Party
             _signatureBlock(size, label: "Signature of Second Party", useSignaturePad: true),
