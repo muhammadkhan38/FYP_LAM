@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:final_year_project/page27.dart';
 import 'package:final_year_project/page34.dart';
@@ -12,8 +13,8 @@ import 'Page22.dart';
 import 'Page23.dart';
 import 'Page41.dart';
 import 'Show_Single_Agreemnet.dart';
-import 'SingleAgreemnet_API_Code.dart';
 import 'SmallText.dart';
+//import 'getAgreementApiClass.dart';
 //https://nda.yourailist.com/api/getSingleAgreement
 enum Status {
   complete,
@@ -45,11 +46,14 @@ class Page21 extends StatefulWidget {
 }
 
 class _Page21State extends State<Page21> {
+
+
   List<Agreement> _agreements = [];
   bool _loading = true;
   String? _error;
   String _name = '';
   String _email = '';
+//  final GetAgreementApi _userService = GetAgreementApi();
 
 
 
@@ -62,6 +66,8 @@ class _Page21State extends State<Page21> {
   Future<void> _initialize() async {
     await _loadUserInfo();
     print("$_email this is the init email ");
+
+   // await _userService.fetchAgreements( _email, status: "pending");
    await _fetchAgreements();
   }
 
@@ -82,16 +88,14 @@ class _Page21State extends State<Page21> {
 
     try {
       print("$_email this inside the Fetch Agreement function");
-      print(Status.complete.toString());
-      print(Status.pending.toString());
-      print(Status.draft);
+
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': _email,
           //'status': Status.complete.toString(),
-          'status': "draft",
+          'status': "complete",
         }),
       );
       data = json.decode(response.body);
@@ -112,7 +116,7 @@ class _Page21State extends State<Page21> {
       } else {
         setState(() {
 
-          _error = "Error: ${data['message']}";
+          _error = "${data['message']}";
           _loading = false;
         });
       }
@@ -123,6 +127,7 @@ class _Page21State extends State<Page21> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
      final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -384,7 +389,7 @@ class _Page21State extends State<Page21> {
                     _loading
                         ? const Center(child: CircularProgressIndicator())
                         : _error != null
-                        ? Center(child: Text("Error: $_error"))
+                        ? Center(child: Text(" $_error",style: TextStyle(color: Colors.red),))
                         : SizedBox(
                         height: 220,
                           // height: 800,
@@ -394,8 +399,12 @@ class _Page21State extends State<Page21> {
                           final agreement = _agreements[index];
                           return GestureDetector(
                             onTap: (){
-                              print(" tap ");
-                              print(agreement.id);
+                              if (kDebugMode) {
+                                print(" tap ");
+                              }
+                              if (kDebugMode) {
+                                print(agreement.id);
+                              }
                               Navigator.push(context, MaterialPageRoute(builder: (context)=>AgreementPage(id: agreement.id,)));
 
                               //AgreementService.fetchAgreement(agreement.id);

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:final_year_project/Page_40.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -629,12 +630,20 @@ class _AgreementDatailState extends State<AgreementDatail> {
             ),
             ElevatedButton(
               onPressed: () async {
-                print(_email);
-                print("$Agreement_id asdfasdfasdfasdfasdf");
-                print("asdfasdfasdfasddddddddddddddddddddddddddddddddddddd");
+                if (kDebugMode) {
+                  print(_email);
+                }
+                if (kDebugMode) {
+                  print("$Agreement_id asdfasdfasdfasdfasdf");
+                }
+                if (kDebugMode) {
+                  print("asdfasdfasdfasddddddddddddddddddddddddddddddddddddd");
+                }
                // await  _saveSignature();
                 await _sendDataToAPI(Status.draft.toString());
-                print(("${Status.draft}jhklasdjklahsdlfkjahsdlkfjahsdl"));
+                if (kDebugMode) {
+                  print(("${Status.draft}jhklasdjklahsdlfkjahsdlkfjahsdl"));
+                }
                 await  Navigator.push(context, MaterialPageRoute(builder: (context) => Page40(agreement_ids: Agreement_id)));
                 await _sendDataToAPI(Status.draft.toString());
                 await Navigator.push(

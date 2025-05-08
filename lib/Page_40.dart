@@ -104,6 +104,7 @@ class _Page40State extends State<Page40> {
                     controller: EmailController,
                     hintText: 'Enter The Email  of Second Party',
                     icon: Icons.email,
+
                   ),
                   const SizedBox(height: 15),
                   Row(
