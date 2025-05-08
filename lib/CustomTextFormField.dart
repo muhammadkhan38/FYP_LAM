@@ -34,11 +34,11 @@ class CustomTextFormField extends StatelessWidget {
         obscureText: obscureText ?? false,
 
         decoration: InputDecoration(
-          fillColor: Colors.black,
+          fillColor: Colors.grey.shade100,
           filled: true,
           suffixIcon: Icon(icon, color: Colors.black),
           hintText: hintText,
-          hintStyle: const TextStyle(color: Colors.black54),
+          hintStyle:  TextStyle(color: Colors.grey.shade500),
           border: InputBorder.none,
 
           // ✅ Circular Shape برقرار رکھنے کے لیے یہ Borders ضروری ہیں:

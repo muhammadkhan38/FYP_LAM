@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 
 import 'CustomTextFormField.dart';
 import 'Page21.dart';
-import 'CustomTextButton.dart';
 
 
 class Page40 extends StatefulWidget {
@@ -20,7 +19,7 @@ class Page40 extends StatefulWidget {
 }
 
 class _Page40State extends State<Page40> {
-  final TextEditingController EmailController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   bool isLoading = false;
 
   Future<void> fetchAgreement() async {
@@ -37,7 +36,7 @@ class _Page40State extends State<Page40> {
         },
         body: jsonEncode({
           "agreement_id": widget.agreement_ids,
-          "email": EmailController.text,
+          "email": emailController.text,
         }),
       );
 
@@ -101,9 +100,10 @@ class _Page40State extends State<Page40> {
                 children: [
                   const SizedBox(height: 10),
                   CustomTextFormField(
-                    controller: EmailController,
+                    controller: emailController,
                     hintText: 'Enter The Email  of Second Party',
                     icon: Icons.email,
+                    keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(height: 15),
                   Row(
@@ -137,8 +137,46 @@ class _Page40State extends State<Page40> {
                     child: ElevatedButton(
                       onPressed: isLoading
                           ? null
-                          : () {
-                        fetchAgreement();
+                          : () async {
+                        String email = emailController.text.trim();
+                        bool isValidEmail = RegExp(
+                          r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                        ).hasMatch(email);
+
+                        if (email.isEmpty || !isValidEmail) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Please enter a valid email address"),
+                            ),
+                          );
+                          return;
+                        }
+
+                        try {
+                          setState(() {
+                            isLoading = true;
+                          });
+
+                          await fetchAgreement(); // <-- Make sure this function is `Future`
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Agreement sent successfully"),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Failed to send agreement: ${e.toString()}"),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } finally {
+                          setState(() {
+                            isLoading = false;
+                          });
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.blueAccent,
@@ -150,18 +188,19 @@ class _Page40State extends State<Page40> {
                         padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 16),
                       ),
                       child: isLoading
-                          ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
+                          ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
                         'Send Agreement',
                         style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
-                            color: Colors.white),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
+
+
                   const SizedBox(height: 20),
                 ],
               ),

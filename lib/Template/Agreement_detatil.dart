@@ -292,7 +292,6 @@ class _AgreementDatailState extends State<AgreementDatail> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             Padding(
               padding: const EdgeInsets.all(5),
               child: Container(
@@ -304,8 +303,6 @@ class _AgreementDatailState extends State<AgreementDatail> {
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
-
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: CustomTextField(
@@ -316,14 +313,12 @@ class _AgreementDatailState extends State<AgreementDatail> {
                         maxLines: 3,
                       ),
                     ),
-
                     Divider(
                       color: Colors.grey.shade600,
                       thickness: 1,
                       indent: 25,
                       endIndent: 25,
                     ),
-
                     const Padding(
                       padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 5.0),
                       child: Row(
@@ -337,7 +332,6 @@ class _AgreementDatailState extends State<AgreementDatail> {
                               color: Colors.grey,
                             ),
                           ),
-
                           Text(
                             'Party 2',
                             style: TextStyle(
@@ -349,7 +343,6 @@ class _AgreementDatailState extends State<AgreementDatail> {
                         ],
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 10.0),
                       child: Row(
@@ -374,16 +367,12 @@ class _AgreementDatailState extends State<AgreementDatail> {
                         ],
                       ),
                     ),
-
-
-
-                    // Centered Date TextField
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 100),
                         child: CustomTextField(
-                          readOnly: true, // ✅ یوزر خود کچھ نہیں لکھ سکتا
+                          readOnly: true,
                           onTap: () => DatePickerUtil.selectDate(context, dateController),
                           controller: dateController,
                           hintText: "Date",
@@ -392,320 +381,184 @@ class _AgreementDatailState extends State<AgreementDatail> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 5),
                   ],
                 ),
               ),
             ),
-
-
-            SizedBox(height: 30,),
-            // Agreement Sections
+            const SizedBox(height: 30),
             Padding(
-              padding: const EdgeInsets.only(left: 0.0,right: 0.0),
+              padding: const EdgeInsets.symmetric(horizontal: 0.0),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                   color: Colors.white,
                 ),
-                padding: EdgeInsets.all(15),
-
-                child: SizedBox(
-                  height: 600,
-                  child: ListView(
-                    children: descriptionController.entries.map((entry) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomTextField(
-                              controller: descriptionkeyController[entry.key] ??
-                                  TextEditingController(text: entry.key), // Fallback in case it's null
-                            ),
-                            CustomTextField(
-                                controller: entry.value,
-                            ),
-
-
-                            SizedBox(height: 40,),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  )),
-                ),
-              ),
-            const SizedBox(
-              height: 60,
-            ),
-            Row(children: [
-              const Spacer(),
-              Text( "Party 1 ",style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,),),
-
-              const Spacer(
-                flex: 3,
-              ),
-              const Text(
-                '00-00-0000',
-                style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey),
-              ),
-              const Spacer(),
-            ]),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                height: 123,
-                width: size.width - 30,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  //color: const Color(0xffF7F7F7),
-                  color: Colors.grey.shade300,
-                  //color: Colors.pinkAccent,
-                ),
+                padding: const EdgeInsets.all(15),
                 child: Column(
-                  children: [
-                    Row(
-                      // crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding:
-                          const EdgeInsets.only(top: 10.0, right: 10),
-                          child: CircleAvatar(
-                              backgroundColor: const Color(0xff474646),
-                              child: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.qr_code_scanner,
-                                    color: Colors.lightBlueAccent,
-                                  ))),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    const Text(
-                      'Signature of First party',
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xffA9ACB0)),
-                    ),
-                  ],
+                  children: descriptionController.entries.map((entry) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextField(
+                            controller: descriptionkeyController[entry.key] ??
+                                TextEditingController(text: entry.key),
+                          ),
+                          CustomTextField(controller: entry.value),
+                        ],
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
             ),
-
-            const SizedBox(
-              height: 40,
-            ),
-
+            const SizedBox(height: 30),
             Row(children: [
               const Spacer(),
-              Text( " second party ",style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,),),
-              const Spacer(
-                flex: 3,
+              const Text(
+                "First Party",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
               ),
+              const Spacer(flex: 3),
               const Text(
                 '00-00-0000',
                 style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey),
+                  fontSize: 10,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey,
+                ),
               ),
-              Spacer(),
+              const Spacer(),
             ]),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(5.0),
               child: Container(
-                // height: 123,
                 width: size.width - 30,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  //color: const Color(0xffF7F7F7),
                   color: Colors.grey.shade300,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const SizedBox(height: 5,),
+                    const SizedBox(height: 5),
                     Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Signature(
-                        controller: _controller,
-
+                        controller: _controller, // Define a second controller for Party 2
                         height: 123,
                         backgroundColor: Colors.grey.shade300,
-
                         dynamicPressureSupported: true,
                       ),
                     ),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        'Signature of second party',
+                        'Signature of Second party',
                         style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xffA9ACB0)),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xffA9ACB0),
+                        ),
                       ),
                     ),
-
                   ],
                 ),
               ),
             ),
-            const SizedBox(
-              height: 15,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Container(
-                height: 45,
-                width: size.width - 30,
-                //width: 380,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: const Color(0xff474646)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      width: 120,
-                    ),
-                    RichText(
-                        text: const TextSpan(
-                            text: '3',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white),
-                            children: [
-                              TextSpan(
-                                  text: '/4',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.grey)),
-                            ])),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 70.0),
-                      child: CircleAvatar(
-                        radius: 15,
-                        backgroundColor: const Color(0xff00C2FF),
-                        child: Center(
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                                size: 15,
-                              ),
-                            )),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(
-              height: 20,
-            ),
-            const SizedBox(
-              height: 30,
-            ),
+            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () async {
-                print(_email);
-                print("$Agreement_id asdfasdfasdfasdfasdf");
-                print("asdfasdfasdfasddddddddddddddddddddddddddddddddddddd");
-               // await  _saveSignature();
-                await _sendDataToAPI(Status.draft.toString());
-                print(("${Status.draft}jhklasdjklahsdlfkjahsdlkfjahsdl"));
-                await  Navigator.push(context, MaterialPageRoute(builder: (context) => Page40(agreement_ids: Agreement_id)));
-                await _sendDataToAPI(Status.draft.toString());
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Page40(agreement_ids: Agreement_id),
-                  ),
-                );
+                if (titleController.text.isEmpty ||
+                    party1Controller.text.isEmpty ||
+                    party2Controller.text.isEmpty ||
+                    dateController.text.isEmpty ||
+                    _controller.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Please Sign The Agreement.")),
+                  );
+                  return;
+                }
+
+                setState(() {
+                  _isCreating = true;
+                });
+
+                try {
+                  await _sendDataToAPI(Status.draft.toString());
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Data submitted successfully")),
+                  );
+
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Page40(agreement_ids: Agreement_id),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Error: ${e.toString()}")),
+                  );
+                } finally {
+                  setState(() {
+                    _isCreating = false;
+                  });
+                }
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.blueAccent,
-                // backgroundColor: Colors.blueAccent.shade400,
                 backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                 padding: const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
               ),
-              child: const Text(
-                'Create',
-                style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            ElevatedButton(
-              onPressed: () async {
-
-                //await  _saveSignature();
-
-
-
-
-                //  saveTextToJson();
-
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => const Page36()));
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.blueAccent,
-                // backgroundColor: Colors.blueAccent.shade400,
-                backgroundColor: const Color.fromRGBO(71, 70, 70, 1),
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 19),
-              ),
-              child: const Text(
-                'Save as Draft',
-                style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
-              ),
+              child: _isCreating
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Text('Create', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
             ),
 
             const SizedBox(
-              height: 30,
+          height: 30,
+        ),
+        ElevatedButton(
+          onPressed: () async {
+
+            //await  _saveSignature();
+
+
+
+
+            //  saveTextToJson();
+
+            //Navigator.push(context, MaterialPageRoute(builder: (context) => const Page36()));
+          },
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.blueAccent,
+            // backgroundColor: Colors.blueAccent.shade400,
+            backgroundColor: const Color.fromRGBO(71, 70, 70, 1),
+            elevation: 3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
             ),
-
-
-
-
-
+            padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 19),
+          ),
+          child: const Text(
+            'Save as Draft',
+            style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
+          ),
+        ),
+            const SizedBox(height: 30),
           ],
         ),
       ),
     );
+
   }
 }
-
-
 
 
 

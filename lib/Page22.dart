@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'Drawer_Class.dart';
 import 'Page21.dart';
 import 'Page23.dart';
@@ -172,7 +173,12 @@ class Page22 extends StatelessWidget {
                   leading: SizedBox(
                       width: 50,
                       height: 50,
-                      child: Image.asset('assets/page22pic.png')),
+                      child: SvgPicture.asset(
+                        'assets/Ai image.svg', // Path to your SVG file
+                        fit: BoxFit.contain, // Adjust the fit as needed
+                      ),
+
+                  ),
                   title:  const Text(
                     'Legal Ai Assistant',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
