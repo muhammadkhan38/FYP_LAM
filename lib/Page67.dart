@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'Template/Agreement_detatil.dart';
-import 'Template/LeaseAgreement.dart';
-import 'Template/PartnershipAgreement.dart';
-import 'Template/Property_Deal_ Agrement.dart';
-import 'Template/SalesAgreement.dart';
 class Page67 extends StatefulWidget {
   const Page67({super.key});
 

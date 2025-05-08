@@ -34,7 +34,7 @@ class CustomTextFormField extends StatelessWidget {
         obscureText: obscureText ?? false,
 
         decoration: InputDecoration(
-          fillColor: Colors.grey.shade100,
+          fillColor: Colors.black,
           filled: true,
           suffixIcon: Icon(icon, color: Colors.black),
           hintText: hintText,

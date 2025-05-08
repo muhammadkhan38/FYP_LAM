@@ -1,9 +1,11 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart' show Uint8List, rootBundle;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:signature/signature.dart';
 
 import '../Widgets/Reusable Date Picker.dart';
@@ -35,9 +37,21 @@ class _AgreementDatailState extends State<AgreementDatail> {
 
   );
 
-  // void _clearSignature() {
-  //   _controller.clear();
-  // }
+  String? base64Signature;
+
+  Future<void> _saveSignature() async {
+    if (_controller.isNotEmpty) {
+      Uint8List? data = (await _controller.toSVG(height: 400,width: 400)) as Uint8List?;
+      if (data != null) {
+        setState(() {
+          base64Signature = base64Encode(data);
+        });
+        print(base64Signature);
+        print("Signature saved as Base64.////////////////////////////////////////////////////////////");
+        print(base64Signature?.length);
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -47,6 +61,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
   Map<String, dynamic>? agreementData;
   Map<String, String>? description;
   final  whareas = '';
+  String _email = 'Loading...';
 
   bool isEditing = false; // To track edit mode
 
@@ -63,13 +78,23 @@ class _AgreementDatailState extends State<AgreementDatail> {
   @override
   void initState() {
     loadAgreementJson();
+    _loadUserInfo();
     super.initState();
+  }
+
+  Future<void> _loadUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+
+      _email = prefs.getString('user_email') ?? 'No Email';
+    });
   }
   Future<void> loadAgreementJson() async {
     String jsonString;
-    if(widget.istemplet) // boolean variable
+    if(widget.istemplet) {
+      // boolean variable
       jsonString =  await rootBundle.loadString('assets/'+widget.filename);
-    else {
+    } else {
       jsonString = await readJsonFromFiles();
     }
     setState(() {
@@ -78,12 +103,10 @@ class _AgreementDatailState extends State<AgreementDatail> {
 
       // Extract the description map
       Map<String, dynamic> descriptionMap = agreementData!['Agreement']['Description'];
-       String slug='';
        titleController.text=agreementData?['Agreement']?['title']??"";
        party1Controller.text=agreementData?['Agreement']?['name1']??"";
        party2Controller.text=agreementData?['Agreement']?['name2']??"";
        dateController.text=agreementData?['Agreement']?['date']??"";
-       slug= slugController.text=agreementData?['Agreement']?['Description']['rew']??"";
 
       // Initialize controllers for each key-value pair
       descriptionMap.forEach((key, value) {
@@ -139,9 +162,6 @@ class _AgreementDatailState extends State<AgreementDatail> {
       print("❌ Error saving JSON: $e");
     }
   }
-
-
-
   Future<String> readJsonFromFiles () async {
     try {
       File file = await _getLocalFile(); // Get the file path
@@ -163,54 +183,64 @@ class _AgreementDatailState extends State<AgreementDatail> {
 
 
   Future<void> _sendDataToAPI() async {
-    const String apiUrl = "https://Nda.yourailist.com/api/create_agreement"; // Change to your API URL
-    String slug = slugController.text;
-    Map<String, dynamic> jsonData = {
-      "Agreement": {
-        "title": titleController.text,
-        "parties": {
-          "Employer": {"name": party1Controller.text},
-          "Employee": {"name": party2Controller.text}
-        },
-        "date": dateController.text,
-        "Description": {}
-      }
-    };
-    // Loop through description controllers to add to JSON
-    descriptionController.forEach((key, controller) {
-      jsonData["Agreement"]["Description"][key] = controller.text;
-    });
-    // Convert Map to JSON string
-    String jsonString = jsonEncode(jsonData);
-
-    Map<String, dynamic> create_Agrement = {
-
-      "email": "mqasimkhan638@gmail.com",
-      "slug" : "this is agreement between two party",
-      "title": titleController.text,
-      "agreement_file": jsonString,
-      "signature": "true",
-
-
-
-    };
-
+    const String apiUrl = "https://Nda.yourailist.com/api/create_agreement";
     try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(create_Agrement),
-      );
-          print(response.body);
 
-      if (response.statusCode == 200) {
-        print(response.body);
-        print("Data successfully sent to API!");
-      } else {
-        print("Failed to send data. Status code: ${response.statusCode}");
-      }
+
+        // Prepare the rest of the data
+        Map<String, dynamic> jsonData = {
+          "Agreement": {
+            "title": titleController.text,
+            "parties": {
+              "Employer": {"name": party1Controller.text},
+              "Employee": {"name": party2Controller.text}
+            },
+            "date": dateController.text,
+            "Description": {}
+          }
+        };
+
+        // Loop through description controllers to add to JSON
+        descriptionController.forEach((key, controller) {
+          jsonData["Agreement"]["Description"][key] = controller.text;
+        });
+
+        // Convert Map to JSON string
+        String jsonString = jsonEncode(jsonData);
+
+        Map<String, dynamic> createAgreement = {
+
+          "email": _email,
+          "slug": "slug",
+          "title": titleController.text,
+          "agreement_file": jsonString,
+          "signature": base64Signature,
+          // Send the Base64 encoded signature here
+         // "signature": base64Signature?.substring(0,5000) ?? "",
+
+          // Send the Base64 encoded signature
+        };
+
+        final response = await http.post(
+          Uri.parse(apiUrl),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(createAgreement),
+        );
+
+        if (response.statusCode == 200) {
+          print(response.body);
+          print(response.statusCode);
+          print("Data successfully sent to API!");
+
+        } else {
+          print("Failed to send data. Status code: ${response.statusCode}");
+          print("Response Body: ${response.body}");
+
+        }
+
     } catch (e) {
       print("Error sending data: $e");
+
     }
   }
 
@@ -579,7 +609,8 @@ class _AgreementDatailState extends State<AgreementDatail> {
             ),
             ElevatedButton(
               onPressed: () {
-                saveTextToJson();
+                _saveSignature();
+                //  saveTextToJson();
 
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => const Page36()));
               },

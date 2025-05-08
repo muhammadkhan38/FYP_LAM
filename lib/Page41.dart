@@ -132,10 +132,10 @@ class _Page41State extends State<Page41> {
 
 
                          // Text('Muhammad khan',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600,color: Colors.white),),
-                          Text(_name, style: TextStyle(fontSize: 10,fontWeight: FontWeight.w600,color: Colors.grey),),
+                          Text(_name, style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.white),),
 
                           SizedBox(height: 5,),
-                          Text(_email,style: TextStyle(fontSize: 10,fontWeight: FontWeight.w600,color: Colors.grey),),
+                          Text(_email,style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600,color: Colors.white),),
 
                           //Text('Muhammadkhan8338@mail.com',style: TextStyle(fontSize: 10,fontWeight: FontWeight.w600,color: Colors.grey),),
 

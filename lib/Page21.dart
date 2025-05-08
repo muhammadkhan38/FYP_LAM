@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'BigText.dart';
 import 'Drawer_Class.dart';
 import 'Page22.dart';
@@ -271,7 +270,7 @@ class _Page21State extends State<Page21> {
               const SizedBox(height: 20,),
               Container(
                 height: 330,
-                width: screenSize.width-25,
+                width: screenSize.width-10,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -298,7 +297,7 @@ class _Page21State extends State<Page21> {
                       },
                       child: Container(
                         width: screenSize.width-30,
-                        height: 60,
+                        height: 70,
                         decoration: BoxDecoration(
                           color: Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(10),
@@ -316,14 +315,15 @@ class _Page21State extends State<Page21> {
                           trailing: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(top: 13,left: 40),
+                                padding: const EdgeInsets.only(top: 13,left: 30),
                                 child: Text('#05',style: TextStyle(fontSize: 12,color: Colors.grey.shade400,),)
                               ),
-                              const Padding(
-                                padding: EdgeInsets.only(top: 5),
-                                child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
-
-                              )
+                              Text("completed",style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
+                              // const Padding(
+                              //   padding: EdgeInsets.only(top: 5),
+                              //   child: Text('Completed',style: TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.w600),)
+                              //
+                              // )
                             ],
                           ),
                         ),
