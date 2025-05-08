@@ -46,7 +46,9 @@ class _Page3State extends State<Page3> {
     try {
       Response response = await post(
         Uri.parse('https://Nda.yourailist.com/api/login'),
-        body: {'email': email, 'password': password},
+        body: {
+          'email': email, 'password': password
+        },
       );
 
       print('Status code: ${response.statusCode}');
@@ -72,7 +74,7 @@ class _Page3State extends State<Page3> {
         await prefs.setString('user_token', token);
         await prefs.setString('user_name', name);
         await prefs.setString('user_email', email);
-        await prefs.setString('user_token', token);
+
 
         print(token);
 

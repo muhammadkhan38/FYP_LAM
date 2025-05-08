@@ -13,8 +13,8 @@ class Page41 extends StatefulWidget {
 }
 
 class _Page41State extends State<Page41> {
-  String _name = 'Loading...';
-  String _email = 'Loading...';
+  String _name = '';
+  String _email = '';
 
   @override
   void initState() {
