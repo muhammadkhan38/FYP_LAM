@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:final_year_project/Page21.dart';
 import 'package:final_year_project/Page_40.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
@@ -12,15 +13,15 @@ import 'package:signature/signature.dart';
 import '../Widgets/Reusable Date Picker.dart';
 import 'Templeate_textfiedl.dart';
 enum Status {
-  Complete,
-  Draft,
-  Pendding,
+  complete,
+  draft,
+  pending,
 }
 class AgreementDatail extends StatefulWidget {
   final istemplet;
   final filename;
   
-  AgreementDatail(this.istemplet, this.filename);
+  AgreementDatail(this.istemplet, this.filename, {super.key});
 
   @override
   _AgreementDatailState createState() => _AgreementDatailState();
@@ -190,6 +191,8 @@ class _AgreementDatailState extends State<AgreementDatail> {
       print("❌ Error saving JSON: $e");
     }
   }
+
+
   Future<String> readJsonFromFiles () async {
     try {
       File file = await _getLocalFile(); // Get the file path
@@ -206,6 +209,9 @@ class _AgreementDatailState extends State<AgreementDatail> {
       return "{}"; // Return empty JSON on error
     }
   }
+
+
+
   Future<void> _sendDataToAPI(String status,{int id = 0}) async {
     const String apiUrl = "https://Nda.yourailist.com/api/create_agreement";
     try {
@@ -239,6 +245,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
         "agreement_file": jsonString,
         "signature": base64Signature,
         "status": "true",
+       // "status": Status.Draft.toString(),
        // "signature": "true",
         "id": id,
       };
@@ -622,8 +629,8 @@ class _AgreementDatailState extends State<AgreementDatail> {
                 print("$Agreement_id asdfasdfasdfasdfasdf");
                 print("asdfasdfasdfasddddddddddddddddddddddddddddddddddddd");
                // await  _saveSignature();
-                await _sendDataToAPI(Status.Draft.toString());
-                print((Status.Draft.toString()+"jhklasdjklahsdlfkjahsdlkfjahsdl"));
+                await _sendDataToAPI(Status.draft.toString());
+                print(("${Status.draft}jhklasdjklahsdlfkjahsdlkfjahsdl"));
                 await  Navigator.push(context, MaterialPageRoute(builder: (context) => Page40(agreement_ids: Agreement_id)));
               },
               style: ElevatedButton.styleFrom(
@@ -646,6 +653,8 @@ class _AgreementDatailState extends State<AgreementDatail> {
             ),
             ElevatedButton(
               onPressed: () async {
+                await _sendDataToAPI(Status.draft.toString());
+                await  Navigator.push(context, MaterialPageRoute(builder: (context) => Page21()));
 
                 //await  _saveSignature();
 

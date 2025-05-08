@@ -2,24 +2,22 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-
 import 'Page21.dart';
 import 'customtextfieldwidget.dart';
 
-
 class Page40 extends StatefulWidget {
-
-
   final dynamic agreement_ids;
-  const Page40({super.key, required this.agreement_ids,});
+  const Page40({
+    super.key,
+    required this.agreement_ids,
+  });
 
   @override
   State<Page40> createState() => _Page40State();
 }
 
 class _Page40State extends State<Page40> {
-  final TextEditingController EmailController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   bool isLoading = false;
 
   Future<void> fetchAgreement() async {
@@ -36,7 +34,7 @@ class _Page40State extends State<Page40> {
         },
         body: jsonEncode({
           "agreement_id": widget.agreement_ids,
-          "email": EmailController.text,
+          "email": emailController.text,
         }),
       );
 
@@ -49,7 +47,9 @@ class _Page40State extends State<Page40> {
         // Navigate to new screen after success
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Page21()), // Replace with your target screen
+          MaterialPageRoute(
+              builder: (context) =>
+                  Page21()), // Replace with your target screen
         );
       } else {
         print("Error ${response.statusCode}: ${response.body}");
@@ -100,7 +100,7 @@ class _Page40State extends State<Page40> {
                 children: [
                   const SizedBox(height: 10),
                   CustomTextFormField(
-                    controller: EmailController,
+                    controller: emailController,
                     hintText: 'Enter The Email  of Second Party',
                     icon: Icons.email,
                   ),
@@ -109,7 +109,8 @@ class _Page40State extends State<Page40> {
                     children: [
                       IconButton(
                           onPressed: () {},
-                          icon: const Icon(Icons.perm_contact_calendar, color: Colors.lightBlue)),
+                          icon: const Icon(Icons.perm_contact_calendar,
+                              color: Colors.lightBlue)),
                       const Text(
                         'Select From Contacts',
                         style: TextStyle(
@@ -120,13 +121,15 @@ class _Page40State extends State<Page40> {
                       const SizedBox(width: 20),
                       IconButton(
                           onPressed: () {},
-                          icon: const Icon(Icons.facebook, color: Colors.lightBlue, size: 45)),
+                          icon: const Icon(Icons.facebook,
+                              color: Colors.lightBlue, size: 45)),
                       CircleAvatar(
                           radius: 20,
                           backgroundColor: const Color(0xff00E676),
                           child: IconButton(
                               onPressed: () {},
-                              icon: const Icon(Icons.phone, color: Colors.white))),
+                              icon: const Icon(Icons.phone,
+                                  color: Colors.white))),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -137,8 +140,8 @@ class _Page40State extends State<Page40> {
                       onPressed: isLoading
                           ? null
                           : () {
-                        fetchAgreement();
-                      },
+                              fetchAgreement();
+                            },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.blueAccent,
                         backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
@@ -146,19 +149,20 @@ class _Page40State extends State<Page40> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 80, vertical: 16),
                       ),
                       child: isLoading
                           ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
+                              color: Colors.white,
+                            )
                           : const Text(
-                        'Send Agreement',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
-                            color: Colors.white),
-                      ),
+                              'Send Agreement',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14,
+                                  color: Colors.white),
+                            ),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -180,14 +184,17 @@ class _Page40State extends State<Page40> {
                     padding: EdgeInsets.only(left: 15.0),
                     child: Text(
                       'Non-Disclosure Agreement Title',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                     ),
                   ),
                   Center(
                     child: Text(
                       'Read More',
                       style: TextStyle(
-                          fontSize: 10, fontWeight: FontWeight.w700, color: Color(0xff00C2FF)),
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xff00C2FF)),
                     ),
                   ),
                   SizedBox(height: 20)
@@ -201,52 +208,69 @@ class _Page40State extends State<Page40> {
   }
 }
 
-
-
-
 void _showAgreementDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return Dialog(
-        child:SizedBox(
+        child: SizedBox(
           height: 340,
           width: double.infinity,
           child: Column(
             children: <Widget>[
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               Container(
-
-                decoration:  BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: Colors.blueAccent, // Border color
                     width: 7.0, // Border width
                   ),
-
                 ),
-
                 child: const CircleAvatar(
                   radius: 60,
-
                   backgroundColor: Color(0xff00C2FF),
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0,bottom: 49),
-                    child: Icon(Icons.check,size: 80,),
+                    padding: EdgeInsets.only(left: 55.0, bottom: 49),
+                    child: Icon(
+                      Icons.check,
+                      size: 80,
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
-              const Text('Agreement Sent',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),),
-              const SizedBox(height: 5,),
-              const Text('Your Agreement have been successfully Sent to',style: TextStyle(fontSize: 10,fontWeight: FontWeight.w400),),
-              const Text('LOREM IPSUM NAME',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400,color: Color(0xff1268FB)),
+              const SizedBox(
+                height: 20,
               ),
-              const SizedBox(height: 20,),
+              const Text(
+                'Agreement Sent',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              const Text(
+                'Your Agreement have been successfully Sent to',
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400),
+              ),
+              const Text(
+                'LOREM IPSUM NAME',
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xff1268FB)),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               ElevatedButton(
                 onPressed: () {
                   // Navigator.push(context, MaterialPageRoute(builder: (context)=>const Page21()));
-                  Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => Page21()),(route) => false, // new change
+                  Navigator.pushAndRemoveUntil(
+                    context, MaterialPageRoute(builder: (context) => Page21()),
+                    (route) => false, // new change
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -258,7 +282,7 @@ void _showAgreementDialog(BuildContext context) {
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 80, vertical: 16),
+                      const EdgeInsets.symmetric(horizontal: 80, vertical: 16),
                 ),
                 child: const Text(
                   'Back to Home',
@@ -271,41 +295,10 @@ void _showAgreementDialog(BuildContext context) {
             ],
           ),
         ),
-
       );
     },
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
@@ -603,4 +596,3 @@ void _showAgreementDialog(BuildContext context) {
 //     );
 //   }
 // }
-

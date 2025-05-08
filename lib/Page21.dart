@@ -15,6 +15,11 @@ import 'Show_Single_Agreemnet.dart';
 import 'SingleAgreemnet_API_Code.dart';
 import 'SmallText.dart';
 //https://nda.yourailist.com/api/getSingleAgreement
+enum Status {
+  complete,
+  draft,
+  pending,
+}
 class Agreement {
   final int id;
   final String title;
@@ -65,7 +70,7 @@ class _Page21State extends State<Page21> {
     setState(() {
       _name = prefs.getString('user_name') ?? '';
       _email = prefs.getString('user_email') ?? '';
-      print(_email +  "  This is Load user info email funciton ");
+      print("$_email  This is Load user info email funciton ");
 
     });
   }
@@ -76,12 +81,17 @@ class _Page21State extends State<Page21> {
     final data;
 
     try {
-      print(_email + " this inside the Fetch Agreement ");
+      print("$_email this inside the Fetch Agreement function");
+      print(Status.complete.toString());
+      print(Status.pending.toString());
+      print(Status.draft);
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': _email,
+          //'status': Status.complete.toString(),
+          'status': "draft",
         }),
       );
       data = json.decode(response.body);

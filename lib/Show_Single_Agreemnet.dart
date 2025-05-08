@@ -404,18 +404,18 @@ class _AgreementPageState extends State<AgreementPage> {
               style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
         ),
         const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: () {
-            print("Save as draft tapped");
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromRGBO(71, 70, 70, 1),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-            padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 19),
-          ),
-          child: const Text('Save as Draft',
-              style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
-        ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     print("Save as draft tapped");
+        //   },
+        //   style: ElevatedButton.styleFrom(
+        //     backgroundColor: const Color.fromRGBO(71, 70, 70, 1),
+        //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+        //     padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 19),
+        //   ),
+        //   child: const Text('Save as Draft',
+        //       style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
+        // ),
         const SizedBox(height: 30),
       ],
     );
