@@ -76,6 +76,7 @@ class _Page24State extends State<Page24> {
         body: jsonEncode({
           'email': _email,
           'status': "draft",
+          //'status': "pending",
         }),
       );
       final data = json.decode(response.body);

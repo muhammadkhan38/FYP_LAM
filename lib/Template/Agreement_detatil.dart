@@ -243,7 +243,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
         "title": titleController.text,
         "agreement_file": jsonString,
         "signature": base64Signature,
-        "status": "true",
+        "status": status,
        // "signature": "true",
         "id": id,
       };
@@ -489,7 +489,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
                 });
 
                 try {
-                  await _sendDataToAPI(Status.draft.toString());
+                  await _sendDataToAPI(Status.pending.toString());
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Data submitted successfully")),

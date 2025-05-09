@@ -65,7 +65,7 @@ class _AgreementPageState extends State<AgreementPage> {
         "slug": "slug",
         "title": titleController.text,
         "agreement_file": jsonString,
-        //"signature": base64Signature,
+        //"status": "true",
          "signature": "true",
         "id": widget.id,
       };
