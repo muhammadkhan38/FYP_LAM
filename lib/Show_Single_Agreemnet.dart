@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:signature/signature.dart';
 
+import 'Page_40.dart';
 import 'Template/Templeate_textfiedl.dart'; // If you're using a signature package
 
 class AgreementPage extends StatefulWidget {
@@ -285,6 +286,33 @@ class _AgreementPageState extends State<AgreementPage> {
             //     ),
             //   ),
             // ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 0.0),
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(15.0),
+            //       color: Colors.white,
+            //     ),
+            //     padding: const EdgeInsets.all(15),
+            //     child: Column(
+            //       children: descriptionController.entries.map((entry) {
+            //         return Padding(
+            //           padding: const EdgeInsets.only(bottom: 10),
+            //           child: Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [
+            //               CustomTextField(
+            //                 controller: descriptionkeyController[entry.key] ??
+            //                     TextEditingController(text: entry.key),
+            //               ),
+            //               CustomTextField(controller: entry.value),
+            //             ],
+            //           ),
+            //         );
+            //       }).toList(),
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.only(left: 0.0,right: 0.0),
               child: Container(
@@ -320,6 +348,7 @@ class _AgreementPageState extends State<AgreementPage> {
                     )),
               ),
             ),
+
 
             const SizedBox(height: 60),
             // Signature Area - First Party
@@ -392,7 +421,14 @@ class _AgreementPageState extends State<AgreementPage> {
            await _sendDataToAPI();
 
             print("Create tapped");
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>Page21()));
+            // just for testing
+           await Navigator.push(
+             context,
+             MaterialPageRoute(
+               builder: (context) => Page40(agreement_ids: 325),
+             ),
+           );
+            //Navigator.push(context, MaterialPageRoute(builder: (context)=>Page21()));
 
           },
           style: ElevatedButton.styleFrom(

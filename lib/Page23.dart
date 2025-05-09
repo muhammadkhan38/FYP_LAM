@@ -190,10 +190,7 @@ class _Page23State extends State<Page23> {
                             ),
                           ),
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Page24()));
+
                           },
                           child: SizedBox(
                               height: 30,
@@ -222,7 +219,12 @@ class _Page23State extends State<Page23> {
                           ),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Page24()));
+                      },
                       child: SizedBox(
                           height: 30,
                           width: screenSize.width - 250,
