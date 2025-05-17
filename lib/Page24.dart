@@ -6,19 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
 import 'Page17.dart';
 import 'Page21.dart';
 import 'Page22.dart';
 import 'Page23.dart';
 import 'Page41.dart';
-import 'Show_Single_Agreemnet.dart';
+import 'Show_Single_Agreement.dart';
 import 'getAgreementApiClass.dart';
 
 class Agreement {
   final int id;
   final String title;
   final String createdAt;
+
 
   Agreement({required this.id, required this.title, required this.createdAt});
 
@@ -33,7 +35,6 @@ class Agreement {
 
 class Page24 extends StatefulWidget {
   const Page24({super.key});
-
   @override
   State<Page24> createState() => _Page24State();
 }
@@ -44,6 +45,7 @@ class _Page24State extends State<Page24> {
   String? _error;
   String _name = '';
   String _email = '';
+  int _selectedIndex = 0;
 
   final GetAgreementApi _userService = GetAgreementApi();
 
@@ -133,57 +135,13 @@ class _Page24State extends State<Page24> {
         onPressed: () {},
         child: const Icon(Icons.add),
       ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-        child: BottomAppBar(
-          height: 70,
-          color: Colors.black87,
-          notchMargin: 8,
-          elevation: 40,
-          shape: const CircularNotchedRectangle(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Page21()));
-                },
-                icon: const Icon(CupertinoIcons.house_alt),
-                splashColor: Colors.lightBlue,
-                color: Colors.lightBlueAccent,
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Page23()));
-                },
-                icon: const Icon(CupertinoIcons.doc_text),
-                splashColor: Colors.lightBlue,
-                color: Colors.lightBlueAccent,
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Page22()));
-                },
-                icon: const Icon(CupertinoIcons.bookmark),
-                splashColor: Colors.lightBlue,
-                color: Colors.lightBlueAccent,
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Page41()));
-                },
-                icon: const Icon(CupertinoIcons.person),
-                splashColor: Colors.lightBlue,
-                color: Colors.lightBlueAccent,
-              )
-            ],
-          ),
-        ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
       body: SingleChildScrollView(
         child: Column(

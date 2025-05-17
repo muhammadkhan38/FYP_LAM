@@ -28,9 +28,11 @@ class _Page3State extends State<Page3> {
   Future<bool> checkConnectivity() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You are offline')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      }
       return false;
     }
     return true;
@@ -122,7 +124,8 @@ class _Page3State extends State<Page3> {
     } catch (e) {
       print(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
+        SnackBar(content: Text('Edgfhgfdhgfdror: ${e.toString()}')
+        ),
       );
     }
     finally {

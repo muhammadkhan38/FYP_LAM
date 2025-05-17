@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
 import 'Page22.dart';
 import 'Page24.dart';
 import 'Page41.dart';
-import 'Show_Single_Agreemnet.dart';
+import 'Show_Single_Agreement.dart';
 
 class Page23 extends StatefulWidget {
   const Page23({super.key});
@@ -19,6 +20,7 @@ class Page23 extends StatefulWidget {
   @override
   State<Page23> createState() => _Page23State();
 }
+int _selectedIndex = 0;
 
 
 class _Page23State extends State<Page23> {
@@ -84,7 +86,7 @@ Future<void> _fetchAgreements() async {
 
 // delete agreement API
   Future<void> _deleteAgreements() async {
-    final url = Uri.parse('https://nda.yourailist.com/api/deleteAgreements');
+    final url = Uri.parse('https://nda.yourailist.com/api/declineAgreements');
 
     try {
       final response = await http.post(
@@ -217,40 +219,13 @@ Future<void> _fetchAgreements() async {
         },
         child:  const Icon(Icons.add,color: Colors.white,size: 35,),
       ),
-      bottomNavigationBar:
-      ClipRRect(
-        borderRadius: const BorderRadius.only(topRight: Radius.circular(30),topLeft:Radius.circular(30)),
-        child: BottomAppBar(
-          height:75,
-          color: Colors.black87,
-          notchMargin: 8,
-          elevation: 40,
-          shape: const CircularNotchedRectangle(),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(onPressed: (){},
-                    icon: const Icon(CupertinoIcons.house_alt),color: Colors.lightBlueAccent,),
-                  IconButton(onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder:(context)=>  const Page23()));
-                  },
-                    icon: const Icon(CupertinoIcons.doc_text),color: Colors.grey,),
-                  IconButton(onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder:(context)=>  const Page22()));
-                  },
-                    icon: const Icon(CupertinoIcons.bookmark),color: Colors.grey,),
-                  IconButton( onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder:(context)=>  const Page41()));
-                  },
-                    icon: const Icon(CupertinoIcons.person),color: Colors.grey,tooltip: 'file',
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
       body: SingleChildScrollView(
         child: Column(

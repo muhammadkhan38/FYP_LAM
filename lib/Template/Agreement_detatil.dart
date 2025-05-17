@@ -375,7 +375,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
                           readOnly: true,
                           onTap: () => DatePickerUtil.selectDate(context, dateController),
                           controller: dateController,
-                          hintText: "Date",
+                          hintText: "Enter Date",
                           maxLines: 20,
                           color: Colors.white,
                         ),
@@ -477,7 +477,8 @@ class _AgreementDatailState extends State<AgreementDatail> {
                     party1Controller.text.isEmpty ||
                     party2Controller.text.isEmpty ||
                     dateController.text.isEmpty ||
-                    _controller.isEmpty) {
+                    _controller.isEmpty
+                ) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Please Sign The Agreement.")),
                   );

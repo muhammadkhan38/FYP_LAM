@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
 import 'Page21.dart';
 import 'Page23.dart';
@@ -8,9 +9,14 @@ import 'Page41.dart';
 import 'Page67.dart';
 import 'Page_48.dart';
 
-class Page22 extends StatelessWidget {
+class Page22 extends StatefulWidget {
   const Page22({super.key});
 
+  @override
+  State<Page22> createState() => _Page22State();
+}
+int _selectedIndex = 0;
+class _Page22State extends State<Page22> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -40,51 +46,13 @@ class Page22 extends StatelessWidget {
         onPressed: () {},
         child: const Icon(Icons.add,size: 35,color: Colors.white,),
       ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-        child: BottomAppBar(
-          height: 70,
-          color: Colors.black87,
-          notchMargin: 8,
-          elevation: 40,
-          shape: const CircularNotchedRectangle(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder:(context)=>  const Page21()));
-                },
-                icon: const Icon(CupertinoIcons.house_alt),
-                splashColor: Colors.lightBlue,
-                color: Colors.lightBlueAccent,
-              ),
-              IconButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder:(context)=>  const Page23()));
-                },
-                icon: const Icon(CupertinoIcons.doc_text),
-                splashColor: Colors.lightBlue,
-                color: Colors.lightBlueAccent,
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(CupertinoIcons.bookmark),
-                splashColor: Colors.lightBlue,
-                color: Colors.lightBlueAccent,
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder:(context)=>  const Page41()));
-                },
-                icon: const Icon(CupertinoIcons.person),
-                splashColor: Colors.lightBlue,
-                color: Colors.lightBlueAccent,
-              )
-            ],
-          ),
-        ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
       body: SingleChildScrollView(
         child: Column(
