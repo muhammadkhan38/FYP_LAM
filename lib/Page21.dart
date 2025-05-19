@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:final_year_project/page27.dart';
@@ -44,6 +45,7 @@ class Page21 extends StatefulWidget {
 
 class _Page21State extends State<Page21> {
   int _selectedIndex = 0;
+  bool _isLoading = false;
 
 
   List<Agreement> _agreements = [];
@@ -119,9 +121,20 @@ class _Page21State extends State<Page21> {
         });
       }
     } catch (e) {
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
       setState(() {
-        _error = e.toString();
-        _loading = false;
+        _isLoading = false;
       });
     }
   }

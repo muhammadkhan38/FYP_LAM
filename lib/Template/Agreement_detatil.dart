@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:final_year_project/Page21.dart';
 import 'package:final_year_project/Page_40.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
@@ -24,7 +25,7 @@ enum Status {
 class AgreementDatail extends StatefulWidget {
   final istemplet;
   final filename;
-  
+
   AgreementDatail(this.istemplet, this.filename, {super.key});
 
   @override
@@ -34,7 +35,7 @@ class AgreementDatail extends StatefulWidget {
 class _AgreementDatailState extends State<AgreementDatail> {
   Map<String, TextEditingController> descriptionController = {};
   Map<String, TextEditingController> descriptionkeyController = {};
- // Map<String, TextEditingController> valuecontrollers = {};
+  // Map<String, TextEditingController> valuecontrollers = {};
   final SignatureController _controller = SignatureController(
     penStrokeWidth: 3,
     penColor: Colors.black,
@@ -71,7 +72,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
 
   Future<void> _saveSignature() async {
     if (_controller.isNotEmpty) {
-     // Uint8List? data = (await _controller.toSVG(height: 400,width: 400)) as Uint8List?;
+      // Uint8List? data = (await _controller.toSVG(height: 400,width: 400)) as Uint8List?;
       Uint8List? data = (await _controller.toSVG()) as Uint8List?;
 
       if (data != null) {
@@ -132,14 +133,14 @@ class _AgreementDatailState extends State<AgreementDatail> {
     }
     setState(() {
       // String jsonString =  readJsonFromFile();
-       agreementData = jsonDecode(jsonString);
+      agreementData = jsonDecode(jsonString);
 
       // Extract the description map
       Map<String, dynamic> descriptionMap = agreementData!['Agreement']['Description'];
-       titleController.text=agreementData?['Agreement']?['title']??"";
-       party1Controller.text=agreementData?['Agreement']?['name1']??"";
-       party2Controller.text=agreementData?['Agreement']?['name2']??"";
-       dateController.text=agreementData?['Agreement']?['date']??"";
+      titleController.text=agreementData?['Agreement']?['title']??"";
+      party1Controller.text=agreementData?['Agreement']?['name1']??"";
+      party2Controller.text=agreementData?['Agreement']?['name2']??"";
+      dateController.text=agreementData?['Agreement']?['date']??"";
 
       // Initialize controllers for each key-value pair
       descriptionMap.forEach((key, value) {
@@ -148,7 +149,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
       });
     });
   }
-  /// **Step 1: Get File Path**
+  /// *Step 1: Get File Path*
   Future<File> _getLocalFile() async {
     // final directory = await getApplicationDocumentsDirectory();
     final directory = await getExternalStorageDirectory(); // For Android's public storage
@@ -183,7 +184,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
           print(jsonData);
         }
       });
-  print(jsonData);
+      print(jsonData);
       // Convert Map to JSON string
       String jsonString = jsonEncode(jsonData);
 
@@ -203,7 +204,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
         String jsonString = await file.readAsString(); // Read file as a string
         return jsonString; // Return the JSON string
       } else {
-        print("⚠️ File does not exist!");
+        print("⚠ File does not exist!");
         return "{}"; // Return empty JSON if file is missing
       }
     } catch (e) {
@@ -242,16 +243,16 @@ class _AgreementDatailState extends State<AgreementDatail> {
 
         "title": titleController.text,
         "agreement_file": jsonString,
-        "signature": base64Signature,
+       // "signature": base64Signature,
         "status": status,
-       // "signature": "true",
+        "signature": "true",
         "id": id,
       };
 
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {"Content-Type": "application/json"},
-          body: jsonEncode(createAgreement),
+        body: jsonEncode(createAgreement),
       );
 
       if (response.statusCode == 200) {
@@ -268,7 +269,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
         // ✅ Save agreementId to SharedPreferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setInt('agreement_id', agreementId);
-         Agreement_id = prefs.getInt('agreement_id')!;
+        Agreement_id = prefs.getInt('agreement_id')!;
         print("$Agreement_id the is the share perfersnce is dis ");
 
         print("Agreement ID saved to SharedPreferences!");
@@ -375,7 +376,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
                           readOnly: true,
                           onTap: () => DatePickerUtil.selectDate(context, dateController),
                           controller: dateController,
-                          hintText: "Enter Date",
+                          hintText: "Date",
                           maxLines: 20,
                           color: Colors.white,
                         ),
@@ -477,8 +478,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
                     party1Controller.text.isEmpty ||
                     party2Controller.text.isEmpty ||
                     dateController.text.isEmpty ||
-                    _controller.isEmpty
-                ) {
+                    _controller.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Please Sign The Agreement.")),
                   );
@@ -490,7 +490,8 @@ class _AgreementDatailState extends State<AgreementDatail> {
                 });
 
                 try {
-                  await _sendDataToAPI(Status.pending.toString());
+                  await _sendDataToAPI(Status.draft.toString());
+
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Data submitted successfully")),
@@ -523,35 +524,42 @@ class _AgreementDatailState extends State<AgreementDatail> {
             ),
 
             const SizedBox(
-          height: 30,
-        ),
-        ElevatedButton(
-          onPressed: () async {
-
-            //await  _saveSignature();
-
-
-
-
-            //  saveTextToJson();
-
-            //Navigator.push(context, MaterialPageRoute(builder: (context) => const Page36()));
-          },
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.blueAccent,
-            // backgroundColor: Colors.blueAccent.shade400,
-            backgroundColor: const Color.fromRGBO(71, 70, 70, 1),
-            elevation: 3,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
+              height: 30,
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 19),
-          ),
-          child: const Text(
-            'Save as Draft',
-            style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
-          ),
-        ),
+            ElevatedButton(
+              onPressed: () async {
+                await _sendDataToAPI("draft");
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Page21(),
+                  ),
+                );
+
+                //await  _saveSignature();
+
+
+
+
+                //  saveTextToJson();
+
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => const Page36()));
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.blueAccent,
+                // backgroundColor: Colors.blueAccent.shade400,
+                backgroundColor: const Color.fromRGBO(71, 70, 70, 1),
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 19),
+              ),
+              child: const Text(
+                'Save as Draft',
+                style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
+              ),
+            ),
             const SizedBox(height: 30),
           ],
         ),
@@ -560,11 +568,3 @@ class _AgreementDatailState extends State<AgreementDatail> {
 
   }
 }
-
-
-
-
-
-
-
-

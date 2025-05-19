@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
@@ -123,12 +125,17 @@ class _Page3State extends State<Page3> {
       }
     } catch (e) {
       print(e.toString());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Edgfhgfdhgfdror: ${e.toString()}')
-        ),
-      );
-    }
-    finally {
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
       setState(() {
         _isLoading = false;
       });

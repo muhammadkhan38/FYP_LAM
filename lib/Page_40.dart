@@ -37,10 +37,12 @@ class _Page40State extends State<Page40> {
         body: jsonEncode({
           "agreement_id": widget.agreement_ids,
           "email": emailController.text,
+
         }),
       );
 
       if (response.statusCode == 200) {
+        print(response.body);
         final data = jsonDecode(response.body);
 
         print("Success! Agreement data:");

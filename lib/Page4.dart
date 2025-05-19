@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
@@ -129,10 +130,17 @@ class _Page4State extends State<Page4> {
         );
       }
     } catch (e) {
-      // Exception occurred
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Exception during registration: $e')),
-      );
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
     } finally {
       setState(() {
         _isLoading = false;
