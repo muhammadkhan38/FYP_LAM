@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +31,6 @@ String? _error;
 String _name = '';
 String _email = '';
   bool _isLoading = false;
-
-
-
-
-
-
-
 
 Future<void> _fetchAgreements() async {
   final url = Uri.parse('https://nda.yourailist.com/api/getAgreements');
@@ -131,8 +125,6 @@ Future<void> _fetchAgreements() async {
       });
     }
   }
-
-
   @override
   void initState() {
     super.initState();
@@ -181,9 +173,21 @@ Future<void> _fetchAgreements() async {
         });
       }
     } catch (e) {
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
       setState(() {
+        _isLoading = false;
         _error = e.toString();
-        _loading = false;
       });
     }
   }
@@ -206,8 +210,7 @@ Future<void> _fetchAgreements() async {
 
       if (response.statusCode == 200) {
         print({
-          response.body +
-              "1222222222222222222222222222222222222222222222222222222"
+          "${response.body}1222222222222222222222222222222222222222222222222222222"
         });
       } else {
         setState(() {
@@ -216,11 +219,22 @@ Future<void> _fetchAgreements() async {
           print(_error);
         });
       }
-    } catch (e) {
+     } catch (e) {
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
       setState(() {
-        print(_error);
+        _isLoading = false;
         _error = e.toString();
-        _loading = false;
       });
     }
   }
@@ -241,8 +255,7 @@ Future<void> _fetchAgreements() async {
 
       if (response.statusCode == 200) {
         print({
-          response.body +
-              "1222222222222222222222222222222222222222222222222222222"
+          "${response.body}1222222222222222222222222222222222222222222222222222222"
         });
       } else {
         setState(() {
@@ -250,10 +263,22 @@ Future<void> _fetchAgreements() async {
           _loading = false;
         });
       }
-    } catch (e) {
+    }catch (e) {
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
       setState(() {
+        _isLoading = false;
         _error = e.toString();
-        _loading = false;
       });
     }
   }
@@ -270,7 +295,7 @@ Future<void> _fetchAgreements() async {
         title: Padding(
           padding: const EdgeInsets.only(left: 45),
           child: const Text(
-            " tlasdjkf;alsdkjfa;sdjklfDocuments",
+            "Documents",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
         ),
