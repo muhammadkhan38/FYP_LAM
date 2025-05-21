@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  final  color;
-  final txtsize;
+  final Color? color;
+  final double? txtsize;
+  final bool? obsrevetext;
+  final FontWeight? Fontweight;
   final int maxLines;
   final TextStyle? textStyle;
   final InputBorder? border;
   final TextStyle? hintStyle;
-
   final VoidCallback? onTap;
-
-  final dynamic readOnly;
-
+  final bool? readOnly;
   const CustomTextField({
     Key? key,
     required this.controller,
@@ -26,11 +25,14 @@ class CustomTextField extends StatelessWidget {
     this.txtsize,
     this.onTap,
     this.readOnly,
+    this.obsrevetext,
+    this.Fontweight,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      //readOnly: readOnly,
       controller: controller,
       onTap: onTap,
       keyboardType: TextInputType.multiline,
@@ -40,7 +42,7 @@ class CustomTextField extends StatelessWidget {
           TextStyle(
             color: color,
             fontSize: txtsize,
-            fontWeight: FontWeight.bold,
+            fontWeight: Fontweight,
           ),
       decoration: InputDecoration(
         border: border ?? InputBorder.none,

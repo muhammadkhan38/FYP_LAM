@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:final_year_project/Page21.dart';
 import 'package:final_year_project/Page_40.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ enum Status {
 class AgreementDatail extends StatefulWidget {
   final istemplet;
   final filename;
-  
+
   AgreementDatail(this.istemplet, this.filename, {super.key});
 
   @override
@@ -35,7 +35,7 @@ class AgreementDatail extends StatefulWidget {
 class _AgreementDatailState extends State<AgreementDatail> {
   Map<String, TextEditingController> descriptionController = {};
   Map<String, TextEditingController> descriptionkeyController = {};
- // Map<String, TextEditingController> valuecontrollers = {};
+  // Map<String, TextEditingController> valuecontrollers = {};
   final SignatureController _controller = SignatureController(
     penStrokeWidth: 3,
     penColor: Colors.black,
@@ -72,7 +72,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
 
   Future<void> _saveSignature() async {
     if (_controller.isNotEmpty) {
-     // Uint8List? data = (await _controller.toSVG(height: 400,width: 400)) as Uint8List?;
+      // Uint8List? data = (await _controller.toSVG(height: 400,width: 400)) as Uint8List?;
       Uint8List? data = (await _controller.toSVG()) as Uint8List?;
 
       if (data != null) {
@@ -133,14 +133,14 @@ class _AgreementDatailState extends State<AgreementDatail> {
     }
     setState(() {
       // String jsonString =  readJsonFromFile();
-       agreementData = jsonDecode(jsonString);
+      agreementData = jsonDecode(jsonString);
 
       // Extract the description map
       Map<String, dynamic> descriptionMap = agreementData!['Agreement']['Description'];
-       titleController.text=agreementData?['Agreement']?['title']??"";
-       party1Controller.text=agreementData?['Agreement']?['name1']??"";
-       party2Controller.text=agreementData?['Agreement']?['name2']??"";
-       dateController.text=agreementData?['Agreement']?['date']??"";
+      titleController.text=agreementData?['Agreement']?['title']??"";
+      party1Controller.text=agreementData?['Agreement']?['name1']??"";
+      party2Controller.text=agreementData?['Agreement']?['name2']??"";
+      dateController.text=agreementData?['Agreement']?['date']??"";
 
       // Initialize controllers for each key-value pair
       descriptionMap.forEach((key, value) {
@@ -149,7 +149,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
       });
     });
   }
-  /// **Step 1: Get File Path**
+  /// *Step 1: Get File Path*
   Future<File> _getLocalFile() async {
     // final directory = await getApplicationDocumentsDirectory();
     final directory = await getExternalStorageDirectory(); // For Android's public storage
@@ -184,7 +184,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
           print(jsonData);
         }
       });
-  print(jsonData);
+      print(jsonData);
       // Convert Map to JSON string
       String jsonString = jsonEncode(jsonData);
 
@@ -204,7 +204,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
         String jsonString = await file.readAsString(); // Read file as a string
         return jsonString; // Return the JSON string
       } else {
-        print("⚠️ File does not exist!");
+        print("⚠ File does not exist!");
         return "{}"; // Return empty JSON if file is missing
       }
     } catch (e) {
@@ -243,16 +243,16 @@ class _AgreementDatailState extends State<AgreementDatail> {
 
         "title": titleController.text,
         "agreement_file": jsonString,
-        "signature": base64Signature,
-        "status": "true",
-       // "signature": "true",
+       // "signature": base64Signature,
+        "status": status,
+        "signature": "true",
         "id": id,
       };
 
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {"Content-Type": "application/json"},
-          body: jsonEncode(createAgreement),
+        body: jsonEncode(createAgreement),
       );
 
       if (response.statusCode == 200) {
@@ -269,7 +269,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
         // ✅ Save agreementId to SharedPreferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setInt('agreement_id', agreementId);
-         Agreement_id = prefs.getInt('agreement_id')!;
+        Agreement_id = prefs.getInt('agreement_id')!;
         print("$Agreement_id the is the share perfersnce is dis ");
 
         print("Agreement ID saved to SharedPreferences!");
@@ -293,7 +293,6 @@ class _AgreementDatailState extends State<AgreementDatail> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             Padding(
               padding: const EdgeInsets.all(5),
               child: Container(
@@ -305,8 +304,6 @@ class _AgreementDatailState extends State<AgreementDatail> {
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
-
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: CustomTextField(
@@ -317,14 +314,12 @@ class _AgreementDatailState extends State<AgreementDatail> {
                         maxLines: 3,
                       ),
                     ),
-
                     Divider(
                       color: Colors.grey.shade600,
                       thickness: 1,
                       indent: 25,
                       endIndent: 25,
                     ),
-
                     const Padding(
                       padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 5.0),
                       child: Row(
@@ -338,7 +333,6 @@ class _AgreementDatailState extends State<AgreementDatail> {
                               color: Colors.grey,
                             ),
                           ),
-
                           Text(
                             'Party 2',
                             style: TextStyle(
@@ -350,7 +344,6 @@ class _AgreementDatailState extends State<AgreementDatail> {
                         ],
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 10.0),
                       child: Row(
@@ -375,16 +368,12 @@ class _AgreementDatailState extends State<AgreementDatail> {
                         ],
                       ),
                     ),
-
-
-
-                    // Centered Date TextField
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 100),
                         child: CustomTextField(
-                          readOnly: true, // ✅ یوزر خود کچھ نہیں لکھ سکتا
+                          readOnly: true,
                           onTap: () => DatePickerUtil.selectDate(context, dateController),
                           controller: dateController,
                           hintText: "Date",
@@ -393,286 +382,165 @@ class _AgreementDatailState extends State<AgreementDatail> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 5),
                   ],
                 ),
               ),
             ),
-
-
-            SizedBox(height: 30,),
-            // Agreement Sections
+            const SizedBox(height: 30),
             Padding(
-              padding: const EdgeInsets.only(left: 0.0,right: 0.0),
+              padding: const EdgeInsets.symmetric(horizontal: 0.0),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                   color: Colors.white,
                 ),
-                padding: EdgeInsets.all(15),
-
-                child: SizedBox(
-                  height: 600,
-                  child: ListView(
-                    children: descriptionController.entries.map((entry) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomTextField(
-                              controller: descriptionkeyController[entry.key] ??
-                                  TextEditingController(text: entry.key), // Fallback in case it's null
-                            ),
-                            CustomTextField(
-                                controller: entry.value,
-                            ),
-
-
-                            SizedBox(height: 40,),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  )),
-                ),
-              ),
-            const SizedBox(
-              height: 60,
-            ),
-            Row(children: [
-              const Spacer(),
-              Text( "Party 1 ",style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,),),
-
-              const Spacer(
-                flex: 3,
-              ),
-              const Text(
-                '00-00-0000',
-                style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey),
-              ),
-              const Spacer(),
-            ]),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                height: 123,
-                width: size.width - 30,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  //color: const Color(0xffF7F7F7),
-                  color: Colors.grey.shade300,
-                  //color: Colors.pinkAccent,
-                ),
+                padding: const EdgeInsets.all(15),
                 child: Column(
-                  children: [
-                    Row(
-                      // crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding:
-                          const EdgeInsets.only(top: 10.0, right: 10),
-                          child: CircleAvatar(
-                              backgroundColor: const Color(0xff474646),
-                              child: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.qr_code_scanner,
-                                    color: Colors.lightBlueAccent,
-                                  ))),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    const Text(
-                      'Signature of First party',
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xffA9ACB0)),
-                    ),
-                  ],
+                  children: descriptionController.entries.map((entry) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextField(
+                            controller: descriptionkeyController[entry.key] ??
+                                TextEditingController(text: entry.key),
+                            txtsize: 16.0,
+
+                            Fontweight:FontWeight.bold ,
+                          ),
+                          CustomTextField(
+                              controller: entry.value,
+
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
             ),
-
-            const SizedBox(
-              height: 40,
-            ),
-
+            const SizedBox(height: 30),
             Row(children: [
               const Spacer(),
-              Text( " second party ",style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,),),
-              const Spacer(
-                flex: 3,
+              const Text(
+                "First Party",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
               ),
+              const Spacer(flex: 3),
               const Text(
                 '00-00-0000',
                 style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey),
+                  fontSize: 10,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey,
+                ),
               ),
-              Spacer(),
+              const Spacer(),
             ]),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(5.0),
               child: Container(
-                // height: 123,
                 width: size.width - 30,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  //color: const Color(0xffF7F7F7),
                   color: Colors.grey.shade300,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const SizedBox(height: 5,),
+                    const SizedBox(height: 5),
                     Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Signature(
-                        controller: _controller,
-
+                        controller: _controller, // Define a second controller for Party 2
                         height: 123,
                         backgroundColor: Colors.grey.shade300,
-
                         dynamicPressureSupported: true,
                       ),
                     ),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        'Signature of second party',
+                        'Signature of Second party',
                         style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xffA9ACB0)),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xffA9ACB0),
+                        ),
                       ),
                     ),
-
                   ],
                 ),
               ),
             ),
-            const SizedBox(
-              height: 15,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Container(
-                height: 45,
-                width: size.width - 30,
-                //width: 380,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: const Color(0xff474646)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      width: 120,
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () async {
+                if (titleController.text.isEmpty ||
+                    party1Controller.text.isEmpty ||
+                    party2Controller.text.isEmpty ||
+                    dateController.text.isEmpty ||
+                    _controller.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Please Sign The Agreement.")),
+                  );
+                  return;
+                }
+
+                setState(() {
+                  _isCreating = true;
+                });
+
+                try {
+                  await _sendDataToAPI(Status.draft.toString());
+
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Data submitted successfully")),
+                  );
+
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Page40(agreement_ids: Agreement_id),
                     ),
-                    RichText(
-                        text: const TextSpan(
-                            text: '3',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white),
-                            children: [
-                              TextSpan(
-                                  text: '/4',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.grey)),
-                            ])),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 70.0),
-                      child: CircleAvatar(
-                        radius: 15,
-                        backgroundColor: const Color(0xff00C2FF),
-                        child: Center(
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                                size: 15,
-                              ),
-                            )),
-                      ),
-                    )
-                  ],
-                ),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Error: ${e.toString()}")),
+                  );
+                } finally {
+                  setState(() {
+                    _isCreating = false;
+                  });
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                padding: const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
               ),
+              child: _isCreating
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Text('Create', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
             ),
 
-            const SizedBox(
-              height: 20,
-            ),
             const SizedBox(
               height: 30,
             ),
             ElevatedButton(
               onPressed: () async {
-                if (kDebugMode) {
-                  print(_email);
-                }
-                if (kDebugMode) {
-                  print("$Agreement_id asdfasdfasdfasdfasdf");
-                }
-                if (kDebugMode) {
-                  print("asdfasdfasdfasddddddddddddddddddddddddddddddddddddd");
-                }
-               // await  _saveSignature();
-                await _sendDataToAPI(Status.draft.toString());
-                if (kDebugMode) {
-                  print(("${Status.draft}jhklasdjklahsdlfkjahsdlkfjahsdl"));
-                }
-                await  Navigator.push(context, MaterialPageRoute(builder: (context) => Page40(agreement_ids: Agreement_id)));
-                await _sendDataToAPI(Status.draft.toString());
+                await _sendDataToAPI("draft");
                 await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Page40(agreement_ids: Agreement_id),
+                    builder: (context) => Page21(),
                   ),
                 );
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.blueAccent,
-                // backgroundColor: Colors.blueAccent.shade400,
-                backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
-              ),
-              child: const Text(
-                'Create',
-                style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            ElevatedButton(
-              onPressed: () async {
 
                 //await  _saveSignature();
 
@@ -698,28 +566,11 @@ class _AgreementDatailState extends State<AgreementDatail> {
                 style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
               ),
             ),
-
-            const SizedBox(
-              height: 30,
-            ),
-
-
-
-
-
+            const SizedBox(height: 30),
           ],
         ),
       ),
     );
+
   }
 }
-
-
-
-
-
-
-
-
-
-

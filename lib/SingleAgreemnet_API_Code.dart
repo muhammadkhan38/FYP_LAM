@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class AgreementService {
+class AgreementServices {
   static const String apiUrl = "https://nda.yourailist.com/api/getSingleAgreement";
 
   static Future<void> fetchAgreement(int agreemnetId) async {

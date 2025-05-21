@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
@@ -28,9 +29,11 @@ class _Page3State extends State<Page3> {
   Future<bool> checkConnectivity() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You are offline')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      }
       return false;
     }
     return true;
@@ -60,7 +63,9 @@ class _Page3State extends State<Page3> {
 
 
           String token = data['token']; // Extract token
-          print("User Token my nameis muhammad khan:///////////////////////////////////////////////////////////////// $token"); // Print token
+          if (kDebugMode) {
+            print("User Token my nameis muhammad khan:///////////////////////////////////////////////////////////////// $token");
+          } // Print token
 
         // Extract user details
         String name = responseBody['user']['name']??"";
@@ -76,7 +81,9 @@ class _Page3State extends State<Page3> {
         await prefs.setString('user_email', email);
 
 
-        print(token);
+        if (kDebugMode) {
+          print(token);
+        }
 
 
 
@@ -84,14 +91,18 @@ class _Page3State extends State<Page3> {
 
 
 
-        print('Login successful, user data saved');
+        if (kDebugMode) {
+          print('Login successful, user data saved');
+        }
 
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const Page21()),
         );
 
-        print('Login successful');
+        if (kDebugMode) {
+          print('Login successful');
+        }
       } else {
         // Parse the response body
         final responseBody = jsonDecode(response.body);
@@ -122,7 +133,8 @@ class _Page3State extends State<Page3> {
     } catch (e) {
       print(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
+        SnackBar(content: Text('Edgfhgfdhgfdror: ${e.toString()}')
+        ),
       );
     }
     finally {
@@ -178,6 +190,7 @@ class _Page3State extends State<Page3> {
                           style: TextStyle(fontSize: 15, color: Colors.grey),
                         ),
                         const SizedBox(height: 30),
+
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: TextFormField(

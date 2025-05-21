@@ -8,14 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'BigText.dart';
+import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
-import 'Page22.dart';
-import 'Page23.dart';
-import 'Page41.dart';
-import 'Show_Single_Agreemnet.dart';
+import 'Show_Single_Agreement.dart';
 import 'SmallText.dart';
-//import 'getAgreementApiClass.dart';
-//https://nda.yourailist.com/api/getSingleAgreement
+
 enum Status {
   complete,
   draft,
@@ -46,6 +43,7 @@ class Page21 extends StatefulWidget {
 }
 
 class _Page21State extends State<Page21> {
+  int _selectedIndex = 0;
 
 
   List<Agreement> _agreements = [];
@@ -65,7 +63,9 @@ class _Page21State extends State<Page21> {
   }
   Future<void> _initialize() async {
     await _loadUserInfo();
-    print("$_email this is the init email ");
+    if (kDebugMode) {
+      print("$_email this is the init email ");
+    }
 
    // await _userService.fetchAgreements( _email, status: "pending");
    await _fetchAgreements();
@@ -76,7 +76,9 @@ class _Page21State extends State<Page21> {
     setState(() {
       _name = prefs.getString('user_name') ?? '';
       _email = prefs.getString('user_email') ?? '';
-      print("$_email  This is Load user info email funciton ");
+      if (kDebugMode) {
+        print("$_email  This is Load user info email funciton ");
+      }
 
     });
   }
@@ -87,7 +89,9 @@ class _Page21State extends State<Page21> {
     final data;
 
     try {
-      print("$_email this inside the Fetch Agreement function");
+      if (kDebugMode) {
+        print("$_email this inside the Fetch Agreement function");
+      }
 
       final response = await http.post(
         url,
@@ -231,41 +235,15 @@ class _Page21State extends State<Page21> {
           },
           child:  const Icon(Icons.add,color: Colors.white,size: 35,grade: 40,),
         ),
-    bottomNavigationBar:
-        ClipRRect(
-          borderRadius: const BorderRadius.only(topRight: Radius.circular(30),topLeft:Radius.circular(30)),
-          child: BottomAppBar(
-            height:75,
-            color: Colors.black87,
-            notchMargin: 8,
-            elevation: 40,
-            shape: const CircularNotchedRectangle(),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(onPressed: (){},
-                      icon: const Icon(CupertinoIcons.house_alt),color: Colors.lightBlueAccent,),
-                    IconButton(onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder:(context)=>  const Page23()));
-                    },
-                      icon: const Icon(CupertinoIcons.doc_text),color: Colors.grey,),
-                    IconButton(onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder:(context)=>  const Page22()));
-                    },
-                      icon: const Icon(CupertinoIcons.bookmark),color: Colors.grey,),
-                    IconButton( onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder:(context)=>  const Page41()));
-                    },
-                      icon: const Icon(CupertinoIcons.person),color: Colors.grey,tooltip: 'file',
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+
+        onItemTapped: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+      ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -405,7 +383,7 @@ class _Page21State extends State<Page21> {
                               if (kDebugMode) {
                                 print(agreement.id);
                               }
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>AgreementPage(id: agreement.id,)));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>AgreementPage(id: agreement.id, mode: 'view',)));
 
                               //AgreementService.fetchAgreement(agreement.id);
                             },

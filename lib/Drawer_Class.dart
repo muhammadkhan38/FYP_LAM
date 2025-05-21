@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,23 +38,25 @@ class _DrawerClassState extends State<DrawerClass> {
     Size screenSize = MediaQuery.of(context).size;
     return ClipRRect(
       borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
+          topRight: Radius.circular(30), bottomRight: Radius.circular(30)),
       child: Drawer(
-        width: screenSize.width,
+        width: screenSize.width-30,
+
         backgroundColor: Colors.white,
         child: ListView(
           children: [
             DrawerHeader(
               decoration:  BoxDecoration(
-                color: Colors.blueAccent,
+                color: Colors.lightBlueAccent,
+
               ),
               child: Row(
                 children: [
                   Container(
-                    height: 50,
-                    width: 50,
+                    height: 65,
+                    width: 65,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(40),
                       border: Border.all(
                         color: Colors.white, // Border color
                         width: 2, // Border width
@@ -67,20 +70,39 @@ class _DrawerClassState extends State<DrawerClass> {
                         ),
                   ),
 
-                   Padding(
-                    padding: EdgeInsets.only(
-                      top: 50,
-                      left: 10,
-                    ),
+                  const SizedBox(width: 10),
+                  Expanded(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(_name, style: TextStyle(fontSize: 16,color: Colors.white)),
-                        Text(_email, style: TextStyle(fontSize: 12,color: Colors.white)),
-
+                        Text(
+                          _name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _email,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  // IconButton(onPressed: (){}, icon: const Icon(Icons.edit_calendar_sharp,color: Colors.white,)),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.edit_calendar_sharp, color: Colors.white),
+                  ),
                 ],
               ),
             ),
@@ -199,7 +221,9 @@ class _DrawerClassState extends State<DrawerClass> {
               onTap: () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 String? token = prefs.getString('user_token');
-                print("Stored Token ///////////////////////////////////////////////////: $token");
+                if (kDebugMode) {
+                  print("Stored Token ///////////////////////////////////////////////////: $token");
+                }
 
                 // Clear the stored token
                 await prefs.remove('user_token');
