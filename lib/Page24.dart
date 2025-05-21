@@ -1,18 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
-import 'Page17.dart';
-import 'Page21.dart';
-import 'Page22.dart';
+
 import 'Page23.dart';
-import 'Page41.dart';
 import 'Show_Single_Agreement.dart';
 import 'getAgreementApiClass.dart';
 
