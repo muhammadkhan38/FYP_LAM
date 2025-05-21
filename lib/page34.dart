@@ -4,12 +4,13 @@ import 'Page67.dart';
 import 'Page_36.dart';
 import 'Page_37.dart';
 import 'Page_38.dart';
+import 'Widgets/Reusable_Gradient_Button.dart';
 class Page34 extends StatelessWidget {
   const Page34({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size screenSize = MediaQuery.of(context).size;
     return  Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -39,7 +40,7 @@ class Page34 extends StatelessWidget {
             ),
             Column(
               children: [
-                Container( width:size.width-10,
+                Container( width:screenSize.width-10,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color:Colors.white,
@@ -50,7 +51,7 @@ class Page34 extends StatelessWidget {
                       const SizedBox(height: 10,),
                       Container(
 
-                        width:size.width-20,
+                        width:screenSize.width-20,
                         height: 49,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
@@ -83,7 +84,7 @@ class Page34 extends StatelessWidget {
                                     },
                                         icon: const Icon(Icons.library_music_outlined,size: 70,color: Colors.lightBlueAccent,)),
                                     const Text('Template Library',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w700),),
-                                    const Text('Create a document by using \n our ready to use templates',style: TextStyle(fontSize: 10,color: Color(0xff838788)),)
+                                    const Text('Create a document by using \n our ready to use templates',style: TextStyle(fontSize: 10,color: Color(0xFF838788)),)
 
                                   ],
                                 ),
@@ -122,7 +123,7 @@ class Page34 extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 5),
                         child: Container(
-                          width: size.width/2-10,
+                          width: screenSize.width/2-10,
                           height: 145,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
@@ -153,49 +154,67 @@ class Page34 extends StatelessWidget {
                 ),
                 const SizedBox(height: 30,),
                 SizedBox(
-                  width: size.width-30,
+                  width: screenSize.width-30,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      const SizedBox(width: 10,),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.black,
-                          backgroundColor: const Color(0xff00C2FF),
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(35.0),
+                      SizedBox(
+                        width: 140,
+                        height: 47,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.black,
+                            backgroundColor: const Color(0xFF00C2FF),
+                            elevation: 3,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(35.0),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
-                        ),
-                        child: const Text(
-                          'Previous',
-                          style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
+                          child: const Text(
+                            'Previous',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                         ),
                       ),
 
-                      const SizedBox(width: 10,),
-                      ElevatedButton(
-                        onPressed: () {
-
-                       Navigator.push(context, MaterialPageRoute(builder: (context)=>  Page38()));
+                      GradientButton(
+                        text: 'Next',
+                        width: 170,
+                        height: 47,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Page38()),
+                          );
                         },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.blueAccent,
-                          backgroundColor: Colors.blueAccent.shade400,
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 16),
-                        ),
-                        child: const Text(
-                          'Next',
-                          style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
-                        ),
                       ),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //
+                      //  Navigator.push(context, MaterialPageRoute(builder: (context)=>  Page38()));
+                      //   },
+                      //   style: ElevatedButton.styleFrom(
+                      //     foregroundColor: Colors.blueAccent,
+                      //     backgroundColor: Colors.blueAccent.shade400,
+                      //     elevation: 3,
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(30.0),
+                      //     ),
+                      //     padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 16),
+                      //   ),
+                      //   child: const Text(
+                      //     'Next',
+                      //     style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

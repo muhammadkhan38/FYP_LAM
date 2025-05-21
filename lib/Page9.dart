@@ -35,7 +35,7 @@ class Page9 extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('To modify it,',style: TextStyle(fontSize: 14,color: Colors.grey.shade600),),
-                  const Text('Click here',style: TextStyle(fontSize: 14,color: Colors.lightBlueAccent,fontWeight: FontWeight.bold),),
+                  const Text('Click here',style: TextStyle(fontSize: 14,color: Color(0xFF00C2FF),fontWeight: FontWeight.bold),),
                 ],
               ),
               const SizedBox(height: 40,),
@@ -48,7 +48,7 @@ class Page9 extends StatelessWidget {
                 padding: EdgeInsets.only(top: 20,bottom: 20,left: 50),
                 child: Row(
                   children: [
-                    Icon(Icons.date_range,color: Colors.lightBlueAccent,),
+                    Icon(Icons.date_range,color: Color(0xFF00C2FF),),
                     SizedBox(width: 20,),
                     Text('National ID Card',style: TextStyle(fontSize: 14,color: Colors.black),),
                   ],
@@ -68,7 +68,7 @@ class Page9 extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Icon(Icons.flag,color: Colors.lightBlueAccent,),
+                    Icon(Icons.flag,color: Color(0xFF00C2FF),),
                     SizedBox(height: 20,),
                     Text('United States',style: TextStyle(fontSize: 14,color: Colors.black),),
                   ],
@@ -91,7 +91,7 @@ class Page9 extends StatelessWidget {
                   ),
                 ),
                 child: const ListTile(
-                  leading: Icon(Icons.error,color: Colors.lightBlueAccent,),
+                  leading: Icon(Icons.error,color: Color(0xFF00C2FF),),
                   title:   Text('In the next step, you will record the',style: TextStyle(fontSize: 14,color: Colors.black),),
                   subtitle: Text('original document',style: TextStyle(fontSize: 14,color: Colors.black,fontWeight:FontWeight.w600),),
                 ),
@@ -106,7 +106,7 @@ class Page9 extends StatelessWidget {
                 ),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      Colors.lightBlueAccent), // Background color
+                      Color(0xFF00C2FF)), // Background color
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius:

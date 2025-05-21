@@ -190,7 +190,7 @@ class _Page5State extends State<Page5> {
                     text: ' +0 000 000 0000',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.lightBlueAccent,
+                      color: Color(0xFF00C2FF),
                       fontSize: 15,
                     ),
                   ),
@@ -208,18 +208,18 @@ class _Page5State extends State<Page5> {
                 keyboardType: TextInputType.number,
                 obscureText: true,
                 obscuringCharacter: '*',
-                cursorColor: Colors.lightBlueAccent,
+                cursorColor: Color(0xFF00C2FF),
                 pinTheme: PinTheme(
                   shape: PinCodeFieldShape.box,
                   borderRadius: BorderRadius.circular(10),
                   fieldHeight: 50,
                   fieldWidth: 50,
-                  activeFillColor: Colors.lightBlueAccent,
+                  activeFillColor: Color(0xFF00C2FF),
                   inactiveColor: Colors.grey,
-                  selectedColor: Colors.lightBlueAccent,
+                  selectedColor: Color(0xFF00C2FF),
                   inactiveFillColor: Colors.grey,
-                  activeColor: Colors.lightBlueAccent,
-                  selectedFillColor: Colors.lightBlueAccent,
+                  activeColor: Color(0xFF00C2FF),
+                  selectedFillColor: Color(0xFF00C2FF),
                 ),
               ),
             ),
@@ -241,7 +241,7 @@ class _Page5State extends State<Page5> {
                     'Resend',
                     style: TextStyle(
                       fontSize: 15,
-                      color: _canResend ? Colors.lightBlueAccent : Colors.grey,
+                      color: _canResend ? Color(0xFF00C2FF) : Colors.grey,
                     ),
                   ),
                 ),
@@ -251,7 +251,7 @@ class _Page5State extends State<Page5> {
             ElevatedButton(
               onPressed: _isSubmitting ? null : verifyOTP,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.lightBlueAccent,
+                backgroundColor: Color(0xFF00C2FF),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),

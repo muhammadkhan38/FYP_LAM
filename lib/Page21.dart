@@ -13,6 +13,7 @@ import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
 import 'Show_Single_Agreement.dart';
 import 'SmallText.dart';
+import 'Widgets/Reusable_Floating_Action_Button.dart';
 
 enum Status {
   complete,
@@ -22,15 +23,15 @@ enum Status {
 class Agreement {
   final int id;
   final String title;
-  final String createdAt;
+  final String Agreement_Creatd_date;
 
-  Agreement({required this.id, required this.title, required this.createdAt});
+  Agreement({required this.id, required this.title, required this.Agreement_Creatd_date});
 
   factory Agreement.fromJson(Map<String, dynamic> json) {
     return Agreement(
       id: json['id'],
       title: json['title'],
-      createdAt: json['created_at'],
+      Agreement_Creatd_date: json['created_at'],
     );
   }
 }
@@ -163,85 +164,7 @@ class _Page21State extends State<Page21> {
         drawer:  const DrawerClass(),
       backgroundColor: Colors.grey.shade100,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
-            // Adjust the radius
-          ),
-
-          backgroundColor: Colors.lightBlueAccent.shade700,
-          onPressed: (){
-            showModalBottomSheet(context: context, builder: (BuildContext context){
-              return Container(
-                height: 233,
-                width: screenSize.width,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(70),topRight: Radius.circular(70)),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>  const Page34(),
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(
-                          Colors.grey.shade800,), // Background color
-                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(40.0),
-                            // Border radius
-                          ),
-                        ),
-                      ),
-                      child:  SizedBox(
-                          height: 61,
-                          width: screenSize.width-90,
-                          child: const Center(
-                            child: Text("Non Disclosure Agreement",
-                                style: TextStyle(color: Colors.white)),
-                          )), // Text style
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Page27(),
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(
-                          Colors.lightBlueAccent,), // Background color
-                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(40.0),
-                            // Border radius
-                          ),
-                        ),
-                      ),
-                      child:  SizedBox(
-                          height: 61,
-                          width: screenSize.width-90,
-                          child: const Center(
-                            child: Text("Consent",
-                                style: TextStyle(color: Colors.white)),
-                          )), // Text style
-                    ),
-                  ],
-                ),
-              );
-            }
-            );
-          },
-          child:  const Icon(Icons.add,color: Colors.white,size: 35,grade: 40,),
-        ),
+      floatingActionButton: const CustomFloatingActionButton(),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: (int index) {
@@ -267,7 +190,7 @@ class _Page21State extends State<Page21> {
     //                 BottomNavigationBarClass(
     //                   icon: CupertinoIcons.house_alt,
     //                   label: 'Home',
-    //                   color: _selectedIndex == 0 ? Colors.grey : Colors.lightBlueAccent,
+    //                   color: _selectedIndex == 0 ? Colors.grey : Color(0xFF00C2FF),
     //                   onTap: () {
     //                     setState(() {
     //                       _selectedIndex = 0;
@@ -277,7 +200,7 @@ class _Page21State extends State<Page21> {
     //                 BottomNavigationBarClass(
     //                   icon: CupertinoIcons.doc_text,
     //                   label: 'Agreements',
-    //                   color: _selectedIndex == 0 ? Colors.lightBlueAccent : Colors.grey,
+    //                   color: _selectedIndex == 0 ? Color(0xFF00C2FF) : Colors.grey,
     //                   onTap: () {
     //                     setState(() {
     //                       _selectedIndex = 1;
@@ -288,7 +211,7 @@ class _Page21State extends State<Page21> {
     //                 BottomNavigationBarClass(
     //                   icon: CupertinoIcons.bookmark,
     //                   label: 'Saved',
-    //                   color: _selectedIndex == 0 ? Colors.lightBlueAccent : Colors.grey,
+    //                   color: _selectedIndex == 0 ? Color(0xFF00C2FF) : Colors.grey,
     //                   onTap: () {
     //                     setState(() {
     //                       _selectedIndex = 1;
@@ -299,7 +222,7 @@ class _Page21State extends State<Page21> {
     //                 BottomNavigationBarClass(
     //                   icon: CupertinoIcons.person,
     //                   label: 'Profile',
-    //                   color: _selectedIndex == 0 ? Colors.lightBlueAccent : Colors.grey,
+    //                   color: _selectedIndex == 0 ? Color(0xFF00C2FF) : Colors.grey,
     //                   onTap: () {
     //                     setState(() {
     //                       _selectedIndex = 1;
@@ -322,7 +245,7 @@ class _Page21State extends State<Page21> {
                   width: screenSize.width-25,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(15),
 
                   ),
                   child: ListTile(
@@ -353,14 +276,14 @@ class _Page21State extends State<Page21> {
                 width: screenSize.width-25,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 child: TextFormField(
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(width: 0, color: Colors.grey.shade100),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(15),
                       // Rounded border
                     ),
                     prefixIcon: Icon(CupertinoIcons.search,color: Colors.grey.shade400,),
@@ -376,13 +299,13 @@ class _Page21State extends State<Page21> {
                 height: 160,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 child: Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
-                      child: BigText(text: "By using APP NDA, you've saved",color: Colors.black,size: 16,),
+                      child: Text("By using APP NDA, you've saved",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700,color: Color(0xFF474646),),),
                     ),
                     const SizedBox(height: 40,),
                     const Row(
@@ -391,17 +314,17 @@ class _Page21State extends State<Page21> {
                        CircleAvatar(
                          radius: 33,
                          backgroundColor: Colors.black87,
-                         child: Icon(CupertinoIcons.time_solid,color: Colors.lightBlueAccent,),
+                         child: Icon(CupertinoIcons.time_solid,color: Color(0xFF00C2FF),),
                        ) ,
                         CircleAvatar(
                           radius: 33,
                          backgroundColor: Colors.black87,
-                         child: Icon(CupertinoIcons.film_fill,color: Colors.lightBlueAccent,),
+                         child: Icon(CupertinoIcons.film_fill,color: Color(0xFF00C2FF),),
                        ) ,
                         CircleAvatar(
                           radius: 33,
                          backgroundColor: Colors.black87,
-                         child: Icon(CupertinoIcons.doc_plaintext,color: Colors.lightBlueAccent,),
+                         child: Icon(CupertinoIcons.doc_plaintext,color: Color(0xFF00C2FF),),
                        )
                       ],
                     ),
@@ -414,7 +337,7 @@ class _Page21State extends State<Page21> {
                 width: screenSize.width-10,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 child: Column(
                   children: [
@@ -425,10 +348,9 @@ class _Page21State extends State<Page21> {
 
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-
-                          BigText(text: 'My Agreements',size: 16,color: Colors.black,),
+                          Text("My Agreements",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700,color: Colors.black),),
                           const SizedBox(width: 120,),
-                          BigText(text: 'View All',size: 12,color: Colors.lightBlueAccent,),
+                          Text("View All",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500,color: Color(0xFF00C2FF)),),
                         ],
                       ),
                     ),
@@ -457,26 +379,43 @@ class _Page21State extends State<Page21> {
                               //AgreementService.fetchAgreement(agreement.id);
                             },
                             child: Container(
-                              height: 80,
+                              height: 70,
 
                               decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(12)
+                                  color: Color(0xFFF7F7F7),
+                                  borderRadius: BorderRadius.circular(15)
                               ),
                               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               child: Padding(
-                                padding: const EdgeInsets.all(12),
+                                padding: const EdgeInsets.all(10),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(agreement.title),
-                                    Text(agreement.createdAt),
+                                    Expanded(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(agreement.title,style: TextStyle(fontWeight: FontWeight.w700,fontSize: 14,color: Color(0xFF474646),),),
+                                          Text("#${agreement.id}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Color(0xFF838788),),),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(agreement.Agreement_Creatd_date,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Color(0xFF838788),),),
+                                          Text("Completed",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: Color(0xFF454545),),),
+                                        ],
+                                      ),
+                                    ),
+                                   // Text(agreement.id as String),
                                     // ListTile(
                                     //   title:  Text(" ${agreement.title}"),
                                     //   subtitle: Text("sent  ${agreement.createdAt}"),
                                     //
                                     // ),
-                                  //  Text(" ${agreement.id}", style: TextStyle(fontWeight: FontWeight.bold)),
+                                   // Text(" ${agreement.id}", style: TextStyle(fontWeight: FontWeight.bold)),
 
 
                                   ],

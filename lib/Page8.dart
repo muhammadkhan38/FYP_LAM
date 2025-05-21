@@ -43,7 +43,7 @@ class Page8 extends StatelessWidget {
                 ),
                 child: Center(
                   child: ListTile(
-                    leading: const Icon(Icons.error,color: Colors.lightBlueAccent,),
+                    leading: const Icon(Icons.error,color: Color(0xFF00C2FF),),
                     title: SmallText(text: 'In the next step, you will record the',size: 14,),
                     subtitle: BigText(text: 'original document',size: 14,color: Colors.black,),
                   ),
@@ -59,19 +59,19 @@ class Page8 extends StatelessWidget {
                 child: const Column(
                   children: [
                     ListTile(
-                      leading: Icon(Icons.contact_mail_rounded,color: Colors.lightBlueAccent,),
+                      leading: Icon(Icons.contact_mail_rounded,color: Color(0xFF00C2FF),),
                       title: Text('National ID card',style: TextStyle(fontSize: 14,color: Colors.black,),),
                       trailing: Icon(Icons.navigate_next,color: Colors.black,),
                     ),
                     Divider(color: Colors.black,height: 5,indent: 15,endIndent: 15),
                     ListTile(
-                      leading: Icon(Icons.contact_mail_rounded,color: Colors.lightBlueAccent,),
+                      leading: Icon(Icons.contact_mail_rounded,color: Color(0xFF00C2FF),),
                       title: Text('Passport',style: TextStyle(fontSize: 14,color: Colors.black,),),
                       trailing: Icon(Icons.navigate_next,color: Colors.black,),
                     ),
                     Divider(color: Colors.black,height: 5,indent: 15,endIndent: 15),
                     ListTile(
-                      leading: Icon(Icons.contact_mail_rounded,color: Colors.lightBlueAccent,),
+                      leading: Icon(Icons.contact_mail_rounded,color: Color(0xFF00C2FF),),
                       title: Text('Driving licence',style: TextStyle(fontSize: 14,color: Colors.black,),),
                       trailing: Icon(Icons.navigate_next,color: Colors.black,),
                     ),
@@ -96,7 +96,7 @@ class Page8 extends StatelessWidget {
                   ),
                 ),
                 child: const ListTile(
-                  leading: Icon(Icons.flag, color: Colors.lightBlueAccent,),
+                  leading: Icon(Icons.flag, color: Color(0xFF00C2FF),),
                   title:  Text('United States',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500),),
                   trailing: Icon(Icons.navigate_next,color: Colors.black,),
 
@@ -112,7 +112,7 @@ class Page8 extends StatelessWidget {
                 ),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      Colors.lightBlueAccent), // Background color
+                      Color(0xFF00C2FF)), // Background color
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius:

@@ -59,8 +59,8 @@ class Page6 extends StatelessWidget {
               ),
               child: const Center(
                 child: ListTile(
-                  leading: Icon(Icons.person, color: Colors.lightBlueAccent,size: 25),
-                  title:  Text('Take a picture of a valid photo ID',style: TextStyle(fontSize: 14,color: Colors.lightBlueAccent,fontWeight: FontWeight.bold),),
+                  leading: Icon(Icons.person, color: Color(0xFF00C2FF),size: 25),
+                  title:  Text('Take a picture of a valid photo ID',style: TextStyle(fontSize: 14,color: Color(0xFF00C2FF),fontWeight: FontWeight.bold),),
                   subtitle: Text('To check your personal information is correct.',style: TextStyle(fontSize: 12,color: Colors.black),),
                 ),
               ),
@@ -77,8 +77,8 @@ class Page6 extends StatelessWidget {
 
               child: const Center(
                 child: ListTile(
-                  leading: Icon(Icons.camera_alt, color: Colors.lightBlueAccent,size: 25),
-                  title: Text('Record a short video of yourself',style: TextStyle(fontSize: 14,color: Colors.lightBlueAccent,fontWeight: FontWeight.bold),),
+                  leading: Icon(Icons.camera_alt, color: Color(0xFF00C2FF),size: 25),
+                  title: Text('Record a short video of yourself',style: TextStyle(fontSize: 14,color: Color(0xFF00C2FF),fontWeight: FontWeight.bold),),
                   subtitle:  Text('To mach your face to your ID photo.',style: TextStyle(fontSize: 12,color: Colors.black,),),
                 ),
               ),
@@ -93,7 +93,7 @@ class Page6 extends StatelessWidget {
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
-                   Colors.lightBlueAccent,), // Background color
+                  Color(0xFF00C2FF),), // Background color
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius:

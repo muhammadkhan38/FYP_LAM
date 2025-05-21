@@ -14,6 +14,7 @@ import 'Page22.dart';
 import 'Page24.dart';
 import 'Page41.dart';
 import 'Show_Single_Agreement.dart';
+import 'Widgets/Reusable_Floating_Action_Button.dart';
 
 class Page23 extends StatefulWidget {
   const Page23({super.key});
@@ -170,81 +171,7 @@ Future<void> _fetchAgreements() async {
       drawer:  const DrawerClass(),
       backgroundColor: Colors.grey.shade100,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-        backgroundColor: Colors.lightBlueAccent,
-        onPressed: (){
-          showModalBottomSheet(context: context, builder: (BuildContext context){
-            return Container(
-              height: 233,
-              width: screenSize.width,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
-                color: Colors.white,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>  const Page34(),
-                      ),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all<Color>(
-                        Colors.grey.shade800,), // Background color
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(40.0),
-                          // Border radius
-                        ),
-                      ),
-                    ),
-                    child:  SizedBox(
-                        height: 61,
-                        width: screenSize.width-90,
-                        child: const Center(
-                          child: Text("Non Disclosure Agreement",
-                              style: TextStyle(color: Colors.white)),
-                        )), // Text style
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Page27(),
-                      ),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all<Color>(
-                        Colors.lightBlueAccent,), // Background color
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(40.0),
-                          // Border radius
-                        ),
-                      ),
-                    ),
-                    child:  SizedBox(
-                        height: 61,
-                        width: screenSize.width-90,
-                        child: const Center(
-                          child: Text("Consent",
-                              style: TextStyle(color: Colors.white)),
-                        )), // Text style
-                  ),
-                ],
-              ),
-            );
-          }
-          );
-        },
-        child:  const Icon(Icons.add,color: Colors.white,size: 35,),
-      ),
+      floatingActionButton: const CustomFloatingActionButton(),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: (int index) {
@@ -280,7 +207,7 @@ Future<void> _fetchAgreements() async {
                         child: TextButton(
                           style: ButtonStyle(
                             backgroundColor: WidgetStateProperty.all<Color>(
-                              Colors.lightBlueAccent,
+                              Color(0xFF00C2FF),
                             ), // Background color
                             shape:
                                 WidgetStateProperty.all<RoundedRectangleBorder>(
@@ -608,7 +535,7 @@ Future<void> _fetchAgreements() async {
                                   style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 12,
-                                      color: Color(0xffFF5353)),
+                                      color: Color(0xFFFF5353)),
                                 ),
                               ),
 
@@ -628,7 +555,7 @@ Future<void> _fetchAgreements() async {
                     width: screenSize.width-35,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
-                        color:const Color(0xffFF5353),
+                        color:const Color(0xFFFF5353),
                     ),
                     child: const Padding(
                       padding:  EdgeInsets.all(8.0),
@@ -994,7 +921,7 @@ Future<void> _fetchAgreements() async {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.blueAccent,
+                        foregroundColor: Color(0xFF00C2FF),
                         backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
                         elevation: 3,
                         shape: RoundedRectangleBorder(
@@ -1045,7 +972,7 @@ Future<void> _fetchAgreements() async {
                 children: <Widget>[
                   const SizedBox(height: 15,),
 
-                  const Icon(Icons.sentiment_very_dissatisfied_sharp,size: 150,color: Colors.lightBlue,),
+                  const Icon(Icons.sentiment_very_dissatisfied_sharp,size: 150,color: Color(0xFF00C2FF),),
                   const SizedBox(height: 15,),
 
                   const Padding(
@@ -1077,7 +1004,7 @@ Future<void> _fetchAgreements() async {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.blueAccent,
+                      foregroundColor: Color(0xFF00C2FF),
                       backgroundColor: const Color.fromRGBO(255, 83, 83, 1),
                       elevation: 3,
                       shape: RoundedRectangleBorder(

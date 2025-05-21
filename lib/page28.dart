@@ -228,7 +228,7 @@ class _Page28State extends State<Page28> {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black, backgroundColor: const Color(0xff00C2FF), elevation: 3,
+                    foregroundColor: Colors.black, backgroundColor: const Color(0xFF00C2FF), elevation: 3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(35.0),
                     ),
@@ -246,7 +246,7 @@ class _Page28State extends State<Page28> {
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>const Page29()));
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.blueAccent, backgroundColor: Colors.blueAccent.shade400, elevation: 3,
+                    foregroundColor: Colors.blueAccent, backgroundColor:Color(0xFF00C2FF), elevation: 3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
                     ),
@@ -282,13 +282,13 @@ class _Page28State extends State<Page28> {
       child: ListTile(
         leading:  Theme(
           data: ThemeData(
-            unselectedWidgetColor: const Color(0xff00C2FF), // Color when unselected
-            hintColor: const Color(0xff00C2FF)
+            unselectedWidgetColor: const Color(0xFF00C2FF), // Color when unselected
+            hintColor: const Color(0xFF00C2FF),
           ),
           child: Radio<String>(
             value: title,
             groupValue: _selectedNDAType,
-            activeColor: const Color(0xff00C2FF),
+            activeColor: const Color(0xFF00C2FF),
             onChanged: (String? value) {
               setState(() {
                 _selectedNDAType = value!;

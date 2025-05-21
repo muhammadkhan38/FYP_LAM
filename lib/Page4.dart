@@ -269,7 +269,6 @@ class _Page4State extends State<Page4> {
 
                           const SizedBox(height: 10),
                           CustomTextFormField(
-
                             controller: dobController,
                             hintText: 'Date of Birth',
                             icon: Icons.date_range,
@@ -430,7 +429,7 @@ class _Page4State extends State<Page4> {
                               _saveData();
                             } ,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.lightBlueAccent,
+                              backgroundColor:Color(0xFF00C2FF),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),

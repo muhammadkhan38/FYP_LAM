@@ -44,7 +44,7 @@ class Page14 extends StatelessWidget {
               ),
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all<Color>(
-                  Colors.lightBlueAccent,), // Background color
+                  Color(0xFF00C2FF),), // Background color
                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius:

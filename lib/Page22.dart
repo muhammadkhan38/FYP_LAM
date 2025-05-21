@@ -1,3 +1,5 @@
+import 'package:final_year_project/page27.dart';
+import 'package:final_year_project/page34.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,6 +10,7 @@ import 'Page23.dart';
 import 'Page41.dart';
 import 'Page67.dart';
 import 'Page_48.dart';
+import 'Widgets/Reusable_Floating_Action_Button.dart';
 
 class Page22 extends StatefulWidget {
   const Page22({super.key});
@@ -40,12 +43,7 @@ class _Page22State extends State<Page22> {
       drawer:  const DrawerClass(),
       backgroundColor: Colors.grey.shade100,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-        backgroundColor: Colors.blue,
-        onPressed: () {},
-        child: const Icon(Icons.add,size: 35,color: Colors.white,),
-      ),
+      floatingActionButton: const CustomFloatingActionButton(),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: (int index) {
@@ -78,7 +76,7 @@ class _Page22State extends State<Page22> {
                       ),
                       prefixIcon: const Icon(
                         CupertinoIcons.search,
-                        color: Colors.lightBlueAccent,
+                        color: Color(0xFF00C2FF),
                       ),
                       hintText: 'Search templates',
                       hintStyle: TextStyle(
@@ -102,7 +100,7 @@ class _Page22State extends State<Page22> {
                   leading: SizedBox(
                       width: 50,
                       height: 50,
-                      child: Icon(Icons.book_online_outlined,size: 60,color: Colors.lightBlue,)),
+                      child: Icon(Icons.book_online_outlined,size: 60,color: Color(0xFF00C2FF),)),
                   title: const Text(
                     'Template Library',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
@@ -133,7 +131,7 @@ class _Page22State extends State<Page22> {
               width: screenSize.width - 25,
               height: 80,
               decoration: BoxDecoration(
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
@@ -203,7 +201,7 @@ class _Page22State extends State<Page22> {
                            style: TextStyle(
                                fontWeight: FontWeight.bold,
                                fontSize: 14,
-                               color: Colors.lightBlueAccent),
+                               color: Color(0xFF00C2FF)),
                          ),
                        ],
                      ),

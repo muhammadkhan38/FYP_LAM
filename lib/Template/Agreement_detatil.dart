@@ -16,6 +16,7 @@ import 'Templeate_textfiedl.dart';
 // these for circular progress indicator
 bool _isCreating = false;
 bool _isSavingDraft = false;
+bool _isLoading = false;
 
 enum Status {
   complete,
@@ -278,7 +279,21 @@ class _AgreementDatailState extends State<AgreementDatail> {
         print("Response Body: ${response.body}");
       }
     } catch (e) {
-      print("Error sending data: $e");
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 

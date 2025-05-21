@@ -55,17 +55,17 @@ class Page7 extends StatelessWidget {
                 child: const Column(
                   children: [
                     ListTile(
-                      leading: Icon(CupertinoIcons.checkmark_alt,color: Colors.lightBlueAccent,), // Example of a leading icon
+                      leading: Icon(CupertinoIcons.checkmark_alt,color: Color(0xFF00C2FF),), // Example of a leading icon
                       title: Text("it hasn't expired",style: TextStyle(fontSize: 14,color: Colors.black,),),
                     ),
                     Divider(color: Colors.grey,height: 5,indent: 15,endIndent: 15),
                     ListTile(
-                      leading: Icon(CupertinoIcons.checkmark_alt,color: Colors.lightBlueAccent,), // Example of a leading icon
+                      leading: Icon(CupertinoIcons.checkmark_alt,color: Color(0xFF00C2FF),), // Example of a leading icon
                       title: Text("it's clear and essy to read",style: TextStyle(fontSize: 14,color: Colors.black),),
                     ),
                     Divider(color: Colors.grey,height: 5,indent: 15,endIndent: 15),
                     ListTile(
-                      leading: Icon(CupertinoIcons.checkmark_alt,color: Colors.lightBlueAccent,), // Example of a leading icon
+                      leading: Icon(CupertinoIcons.checkmark_alt,color: Color(0xFF00C2FF),), // Example of a leading icon
                       title: Text("the whole ID is in the picture",style: TextStyle(fontSize: 14,color: Colors.black),),
                     ),
                   ],
@@ -82,7 +82,7 @@ class Page7 extends StatelessWidget {
               ),
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all<Color>(
-                    Colors.lightBlueAccent), // Background color
+                    Color(0xFF00C2FF)), // Background color
                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius:

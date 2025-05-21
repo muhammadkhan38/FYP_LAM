@@ -45,9 +45,16 @@ class _DrawerClassState extends State<DrawerClass> {
         child: ListView(
           children: [
             DrawerHeader(
-              decoration:  BoxDecoration(
-                color: Colors.lightBlueAccent,
-
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF00C2FF),
+                    Color(0xFF1268FB),
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  // transform: GradientRotation(40),
+                ),
               ),
               child: Row(
                 children: [
@@ -82,7 +89,7 @@ class _DrawerClassState extends State<DrawerClass> {
                           style: const TextStyle(
                             fontSize: 16,
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -93,6 +100,7 @@ class _DrawerClassState extends State<DrawerClass> {
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.white,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ],
@@ -108,7 +116,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.person,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Profile'),
               onTap: () {
@@ -118,7 +126,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.doc_plaintext,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('My Agreements'),
               onTap: () {
@@ -128,7 +136,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.bell,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Notifications'),
               onTap: () {
@@ -138,7 +146,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.heart,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Saved'),
               onTap: () {
@@ -148,7 +156,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.circle_grid_hex_fill,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Membership'),
               onTap: () {
@@ -159,7 +167,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.bag_fill,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Payment Methods'),
               onTap: () {
@@ -174,7 +182,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.question_circle,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('FAQs'),
               onTap: () {
@@ -184,7 +192,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.headphones,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Help Center'),
               onTap: () {
@@ -194,7 +202,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 Icons.settings,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Settings'),
               onTap: () {
@@ -204,7 +212,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.person_2,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Refer a Friend'),
               onTap: () {
@@ -214,7 +222,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.square_arrow_right,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Logout'),
               onTap: () async {

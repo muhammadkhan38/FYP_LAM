@@ -57,12 +57,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: const BorderRadius.only(
-        topRight: Radius.circular(30),
-        topLeft: Radius.circular(30),
+        topRight: Radius.circular(25),
+        topLeft: Radius.circular(25),
       ),
       child: BottomAppBar(
-        height: 75,
-        color: Colors.black87,
+        height: 79,
+        color: Color(0xFF474646),
         notchMargin: 8,
         elevation: 40,
         shape: const CircularNotchedRectangle(),
@@ -80,7 +80,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   }
 
   Widget _buildNavItem(BuildContext context, IconData icon, String label, int index) {
-    final color = selectedIndex == index ? Colors.lightBlueAccent : Colors.grey;
+    final color = selectedIndex == index ? Color(0xFF00C2FF) : Colors.grey;
 
     return InkWell(
       onTap: () {

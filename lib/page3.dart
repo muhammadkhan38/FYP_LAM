@@ -303,7 +303,7 @@ class _Page3State extends State<Page3> {
 
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.lightBlueAccent,
+                            backgroundColor: Color(0xFF00C2FF),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                             ),
@@ -333,7 +333,7 @@ class _Page3State extends State<Page3> {
                               child: const Text('Sign Up',
                                   style: TextStyle(
                                     fontSize: 15,
-                                    color: Colors.lightBlueAccent,
+                                    color: Color(0xFF00C2FF),
                                     fontWeight: FontWeight.bold,
                                   )),
                             ),
