@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -84,13 +85,20 @@ class _Page5State extends State<Page5> {
           const SnackBar(content: Text('Failed to verify OTP. Please try again.')),
         );
       }
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred: $error')),
-      );
+    } catch (e) {
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
     } finally {
       setState(() {
-        _isSubmitting = false;
       });
     }
   }
@@ -182,7 +190,7 @@ class _Page5State extends State<Page5> {
                     text: ' +0 000 000 0000',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.lightBlueAccent,
+                      color: Color(0xFF00C2FF),
                       fontSize: 15,
                     ),
                   ),
@@ -200,18 +208,18 @@ class _Page5State extends State<Page5> {
                 keyboardType: TextInputType.number,
                 obscureText: true,
                 obscuringCharacter: '*',
-                cursorColor: Colors.lightBlueAccent,
+                cursorColor: Color(0xFF00C2FF),
                 pinTheme: PinTheme(
                   shape: PinCodeFieldShape.box,
                   borderRadius: BorderRadius.circular(10),
                   fieldHeight: 50,
                   fieldWidth: 50,
-                  activeFillColor: Colors.lightBlueAccent,
+                  activeFillColor: Color(0xFF00C2FF),
                   inactiveColor: Colors.grey,
-                  selectedColor: Colors.lightBlueAccent,
+                  selectedColor: Color(0xFF00C2FF),
                   inactiveFillColor: Colors.grey,
-                  activeColor: Colors.lightBlueAccent,
-                  selectedFillColor: Colors.lightBlueAccent,
+                  activeColor: Color(0xFF00C2FF),
+                  selectedFillColor: Color(0xFF00C2FF),
                 ),
               ),
             ),
@@ -233,7 +241,7 @@ class _Page5State extends State<Page5> {
                     'Resend',
                     style: TextStyle(
                       fontSize: 15,
-                      color: _canResend ? Colors.lightBlueAccent : Colors.grey,
+                      color: _canResend ? Color(0xFF00C2FF) : Colors.grey,
                     ),
                   ),
                 ),
@@ -243,7 +251,7 @@ class _Page5State extends State<Page5> {
             ElevatedButton(
               onPressed: _isSubmitting ? null : verifyOTP,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.lightBlueAccent,
+                backgroundColor: Color(0xFF00C2FF),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),

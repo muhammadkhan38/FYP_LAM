@@ -1,14 +1,18 @@
 import 'dart:convert';
-import 'package:final_year_project/page27.dart';
-import 'package:final_year_project/page34.dart';
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
+import 'Page22.dart';
 import 'Page24.dart';
+import 'Page41.dart';
 import 'Show_Single_Agreement.dart';
-
+import 'Widgets/Reusable_Floating_Action_Button.dart';
 
 class Page23 extends StatefulWidget {
   const Page23({super.key});
@@ -21,10 +25,113 @@ int _selectedIndex = 0;
 
 class _Page23State extends State<Page23> {
   List<Agreement> _agreements = [];
-  bool _loading = true;
-  String? _error;
-  String _name = '';
-  String _email = '';
+bool _loading = true;
+String? _error;
+String _name = '';
+String _email = '';
+  bool _isLoading = false;
+
+
+
+
+
+
+
+
+Future<void> _fetchAgreements() async {
+  final url = Uri.parse('https://nda.yourailist.com/api/getAgreements');
+
+  try {
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'email': _email,
+        //'status': "draft",
+        'status': "pending",
+      }),
+    );
+    final data = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      List<dynamic> list = data['agreements'];
+      setState(() {
+        _agreements = list.map((e) => Agreement.fromJson(e)).toList();
+        _loading = false;
+      });
+    } else {
+      setState(() {
+        _error = "Error: ${data['message']}";
+        _loading = false;
+      });
+    }
+  } catch (e) {
+    print(e.toString());
+
+    if (e is SocketException) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('You are offline')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
+  } finally {
+    setState(() {
+      _isLoading = false;
+      _loading = false;
+    });
+  }
+}
+
+// delete agreement API
+  Future<void> _deleteAgreements() async {
+    final url = Uri.parse('https://nda.yourailist.com/api/declineAgreements');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': _email,
+          "'agremment": _agreements,
+          //'status': "draft",
+          //'status': "pending",
+        }),
+      );
+      final data = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        print(response.body);
+
+
+      } else {
+        setState(() {
+          _error = "Error: ${data['message']}";
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
+      setState(() {
+        _error = _error.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
 
   @override
   void initState() {
@@ -177,93 +284,10 @@ class _Page23State extends State<Page23> {
           color: Colors.black,
         ),
       ),
-      drawer: const DrawerClass(),
+      drawer:  const DrawerClass(),
       backgroundColor: Colors.grey.shade100,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-        backgroundColor: Colors.lightBlueAccent,
-        onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return Container(
-                  height: 233,
-                  width: screenSize.width,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30)),
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      TextButton(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Page34(),
-                          ),
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all<Color>(
-                            Colors.grey.shade800,
-                          ), // Background color
-                          shape:
-                              WidgetStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                              // Border radius
-                            ),
-                          ),
-                        ),
-                        child: SizedBox(
-                            height: 61,
-                            width: screenSize.width - 90,
-                            child: const Center(
-                              child: Text("Non Disclosure Agreement",
-                                  style: TextStyle(color: Colors.white)),
-                            )), // Text style
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Page27(),
-                          ),
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all<Color>(
-                            Colors.lightBlueAccent,
-                          ), // Background color
-                          shape:
-                              WidgetStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                              // Border radius
-                            ),
-                          ),
-                        ),
-                        child: SizedBox(
-                            height: 61,
-                            width: screenSize.width - 90,
-                            child: const Center(
-                              child: Text("Consent",
-                                  style: TextStyle(color: Colors.white)),
-                            )), // Text style
-                      ),
-                    ],
-                  ),
-                );
-              });
-        },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 35,
-        ),
-      ),
+      floatingActionButton: const CustomFloatingActionButton(),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: (int index) {
@@ -287,7 +311,7 @@ class _Page23State extends State<Page23> {
                 ),
               ),
               child: SizedBox(
-                width: screenSize.width - 25,
+                width: screenSize.width-25,
                 child: Row(
                   children: [
                     const SizedBox(
@@ -299,7 +323,7 @@ class _Page23State extends State<Page23> {
                         child: TextButton(
                           style: ButtonStyle(
                             backgroundColor: WidgetStateProperty.all<Color>(
-                              Colors.lightBlueAccent,
+                              Color(0xFF00C2FF),
                             ), // Background color
                             shape:
                                 WidgetStateProperty.all<RoundedRectangleBorder>(
@@ -879,6 +903,7 @@ class _Page23State extends State<Page23> {
                           ),
               ],
             ),
+
           ],
         ),
       ),

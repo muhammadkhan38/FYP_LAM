@@ -43,7 +43,7 @@ class Page10 extends StatelessWidget {
                 ),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                    Colors.lightBlueAccent,), // Background color
+                    Color(0xFF00C2FF),), // Background color
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius:

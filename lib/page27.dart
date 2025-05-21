@@ -85,7 +85,7 @@ class _Page27State extends State<Page27> {
                       _buildRadioOption(
                         size,
                         'Unilateral',
-                        Icons.circle_outlined,const Color(0xff00C2FF),
+                        Icons.circle_outlined,const Color(0xFF00C2FF),
 
                       ),
                       const SizedBox(
@@ -94,7 +94,7 @@ class _Page27State extends State<Page27> {
                       _buildRadioOption(
                         size,
                         'Mutual',
-                        Icons.circle_outlined,Colors.lightBlueAccent,
+                        Icons.circle_outlined,Color(0xFF00C2FF),
                       ),
                       const SizedBox(
                         height: 20,
@@ -114,7 +114,7 @@ class _Page27State extends State<Page27> {
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.black,
-                        backgroundColor: const Color(0xff00C2FF),
+                        backgroundColor: const Color(0xFF00C2FF),
                         elevation: 3,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(35.0),
@@ -132,7 +132,7 @@ class _Page27State extends State<Page27> {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => const Page28()));
                       },
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.blueAccent,
+                        foregroundColor: Color(0xFF00C2FF),
                         backgroundColor: Colors.blueAccent.shade400,
                         elevation: 3,
                         shape: RoundedRectangleBorder(
@@ -166,7 +166,7 @@ class _Page27State extends State<Page27> {
         leading: Radio<String>(
           value: title,
           groupValue: _selectedNDAType,
-         activeColor: const Color(0xff00C2FF),
+         activeColor: const Color(0xFF00C2FF),
 
           focusColor:CupertinoColors.destructiveRed,
 

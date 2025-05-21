@@ -133,7 +133,7 @@ class _MainScreenState extends State<MainScreen> {
                         width: screenSize.width/2-35,
                         child: const Center(
                           child: Text('SIGN UP',
-                              style: TextStyle(fontSize: 16,color: Colors.lightBlueAccent),),
+                              style: TextStyle(fontSize: 16,color: Color(0xFF00C2FF)),),
                         )), // Text style
                   ),
                   TextButton(
@@ -145,7 +145,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all<Color>(
-                          Colors.lightBlueAccent), // Background color
+                          Color(0xFF00C2FF)), // Background color
                       shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius:

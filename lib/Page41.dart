@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
 import 'Page56.dart';
+import 'Widgets/Reusable_Floating_Action_Button.dart';
+import 'Widgets/Reusable_Gradient_Button.dart';
 class Page41 extends StatefulWidget {
   const Page41({super.key});
 
@@ -38,7 +40,7 @@ class _Page41State extends State<Page41> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.black87,
+        backgroundColor:Color(0xFF474646),
         elevation: 0,
         title: const Text('Profile',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600,color: Colors.white),),
           titleSpacing: 105,
@@ -55,15 +57,7 @@ class _Page41State extends State<Page41> {
       drawer: const DrawerClass(),
       backgroundColor: Colors.grey.shade100,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
-          // Adjust the radius
-        ),
-        onPressed: () {},
-        child: const Icon(Icons.add,color: Colors.white,size: 35,),
-      ),
+      floatingActionButton: const CustomFloatingActionButton(),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: (int index) {
@@ -80,7 +74,7 @@ class _Page41State extends State<Page41> {
                 Container(
                   height: 200,
                   width: 430,
-                  color: Colors.black87,
+                  color: Color(0xFF474646),
                   child:      Column(
                     children: [
                       Column(
@@ -202,30 +196,16 @@ class _Page41State extends State<Page41> {
               ],
             ),
             const SizedBox(height: 20,),
-            TextButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Page56(),
-                ),
-              ),
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color>(
-                  Colors.lightBlueAccent,), // Background color
-                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(30.0),
-                  ),
-                ),
-              ),
-              child:  SizedBox(
-                  height: 25,
-                  width: screenSize.width-70,
-                  child: const Center(
-                    child: Text("Buy Membership",
-                        style: TextStyle(color: Colors.white)),
-                  )), // Text style
+            GradientButton(
+              text: 'Buy Membership',
+              width: screenSize.width - 70,
+              height: 50,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Page56()),
+                );
+              },
             ),
             const SizedBox(height: 20,),
             Container(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -132,12 +134,17 @@ class _Page3State extends State<Page3> {
       }
     } catch (e) {
       print(e.toString());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Edgfhgfdhgfdror: ${e.toString()}')
-        ),
-      );
-    }
-    finally {
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
       setState(() {
         _isLoading = false;
       });
@@ -190,7 +197,6 @@ class _Page3State extends State<Page3> {
                           style: TextStyle(fontSize: 15, color: Colors.grey),
                         ),
                         const SizedBox(height: 30),
-
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: TextFormField(
@@ -306,7 +312,7 @@ class _Page3State extends State<Page3> {
 
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.lightBlueAccent,
+                            backgroundColor: Color(0xFF00C2FF),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                             ),
@@ -336,7 +342,7 @@ class _Page3State extends State<Page3> {
                               child: const Text('Sign Up',
                                   style: TextStyle(
                                     fontSize: 15,
-                                    color: Colors.lightBlueAccent,
+                                    color: Color(0xFF00C2FF),
                                     fontWeight: FontWeight.bold,
                                   )),
                             ),

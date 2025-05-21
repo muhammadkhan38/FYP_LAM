@@ -179,7 +179,7 @@ class Page29 extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black, backgroundColor: const Color(0xff00C2FF), elevation: 3,
+                    foregroundColor: Colors.black, backgroundColor: const Color(0xFF00C2FF), elevation: 3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(35.0),
                     ),
@@ -197,7 +197,7 @@ class Page29 extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>const Page30()));
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.blueAccent, backgroundColor: Colors.blueAccent.shade400, elevation: 3,
+                    foregroundColor: Colors.blueAccent, backgroundColor: Color(0xFF00C2FF), elevation: 3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
                     ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -21,6 +22,7 @@ class Page40 extends StatefulWidget {
 class _Page40State extends State<Page40> {
   final TextEditingController emailController = TextEditingController();
   bool isLoading = false;
+  bool Loading = false;
 
   Future<void> fetchAgreement() async {
     setState(() {
@@ -57,10 +59,20 @@ class _Page40State extends State<Page40> {
         print("Error ${response.statusCode}: ${response.body}");
       }
     } catch (e) {
-      print("Exception occurred: $e");
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
     } finally {
       setState(() {
-        isLoading = false;
+        Loading = false;
       });
     }
   }

@@ -64,7 +64,7 @@ class Page18 extends StatelessWidget {
                 child: const ListTile(
                   leading: Icon(
                     Icons.lock,
-                    color: Colors.lightBlueAccent,
+                    color: Color(0xFF00C2FF),
                   ),
                   title: Text(
                     "The video will be encrypted, stored\nsecurity, and only ever used to verify your\nidentity",
@@ -84,7 +84,7 @@ class Page18 extends StatelessWidget {
                 ),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                    Colors.lightBlueAccent,
+                    Color(0xFF00C2FF),
                   ), // Background color
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(

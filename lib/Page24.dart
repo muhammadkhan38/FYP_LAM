@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,9 @@ import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
 
 import 'Page23.dart';
+import 'Page41.dart';
 import 'Show_Single_Agreement.dart';
+import 'Widgets/Reusable_Floating_Action_Button.dart';
 import 'getAgreementApiClass.dart';
 
 class Agreement {
@@ -31,6 +34,7 @@ class Agreement {
 
 class Page24 extends StatefulWidget {
   const Page24({super.key});
+
   @override
   State<Page24> createState() => _Page24State();
 }
@@ -38,6 +42,7 @@ class Page24 extends StatefulWidget {
 class _Page24State extends State<Page24> {
   List<Agreement> _agreements = [];
   bool _loading = true;
+  bool _isLoading = true;
   String? _error;
   String _name = '';
   String _email = '';
@@ -74,6 +79,7 @@ class _Page24State extends State<Page24> {
         body: jsonEncode({
           'email': _email,
           'status': "draft",
+          //'status': "pending",
          //'status': "pending",
         }),
       );
@@ -93,13 +99,23 @@ class _Page24State extends State<Page24> {
         });
       }
     } catch (e) {
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    }  finally {
       setState(() {
-        _error = e.toString();
-        _loading = false;
+        _isLoading = false;
       });
     }
   }
-
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -127,11 +143,7 @@ class _Page24State extends State<Page24> {
       drawer: const DrawerClass(),
       backgroundColor: Colors.grey.shade100,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: const CustomFloatingActionButton(),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: (int index) {
@@ -155,32 +167,53 @@ class _Page24State extends State<Page24> {
                 child: Row(
                   children: [
                     const SizedBox(width: 5),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Page23(),
+                    Container(
+                      height: 40,
+                      width: screenSize.width - 180,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xFF00C2FF),
+                            Color(0xFF1268FB),
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                       ),
-                      style: ButtonStyle(
-                        backgroundColor:
-                        WidgetStateProperty.all<Color>(Colors.white),
-                        shape:
-                        WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(25),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Page23(),
+                              ),
+                            );
+                          },
+                          child: const Center(
+                            child: Text(
+                              "My Agreement",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                      child: SizedBox(
-                        height: 30,
-                        width: screenSize.width - 180,
-                        child: const Center(
-                          child: Text("My Agreement",
-                              style: TextStyle(color: Colors.black)),
-                        ),
-                      ),
                     ),
+
                     const SizedBox(width: 50),
                     const Text(
                       'My Draft',
