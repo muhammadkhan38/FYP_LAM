@@ -2,13 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:final_year_project/page27.dart';
-import 'package:final_year_project/page34.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'BigText.dart';
 import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
 import 'Show_Single_Agreement.dart';
@@ -47,7 +44,6 @@ class Page21 extends StatefulWidget {
 
 class _Page21State extends State<Page21> {
   int _selectedIndex = 0;
-  bool _isLoading = false;
 
 
   List<Agreement> _agreements = [];
@@ -142,7 +138,6 @@ class _Page21State extends State<Page21> {
       }
     } finally {
       setState(() {
-        _isLoading = false;
       });
     }
   }
@@ -381,7 +376,7 @@ class _Page21State extends State<Page21> {
                               if (kDebugMode) {
                                 print(agreement.id);
                               }
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>AgreementPage(id: agreement.id, mode: 'view',)));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>AgreementPage(id: agreement.id, mode: 'view',email:_email,)));
 
                               //AgreementService.fetchAgreement(agreement.id);
                             },
@@ -481,5 +476,6 @@ class _Page21State extends State<Page21> {
     );
   }
 }
+
 
 

@@ -9,13 +9,17 @@ import 'Template/Templeate_textfiedl.dart';
 
 class AgreementPage extends StatefulWidget {
   final int id;
-  final String mode; // "view", "sign", "edit"
+  final String mode;
+
+  final String email; // "view", "sign", "edit"
 
   const AgreementPage({
     super.key,
     required this.id,
     required this.mode,
+    required this.email,
   });
+
 
   @override
   State<AgreementPage> createState() => _AgreementPageState();
@@ -61,7 +65,7 @@ class _AgreementPageState extends State<AgreementPage> {
       String jsonString = jsonEncode(jsonData);
 
       Map<String, dynamic> createAgreement = {
-        "email": "muhammadkhan8338@gmail.com",
+        "email": widget.email,
 
         "slug": "slug",
         "title": titleController.text,

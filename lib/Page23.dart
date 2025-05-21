@@ -404,7 +404,7 @@ Future<void> _fetchAgreements() async {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          AgreementPage(id: agreement.id, mode: 'sign',),
+                                          AgreementPage(id: agreement.id, mode: 'sign', email: _email,),
                                     ),
                                   );
                                 },

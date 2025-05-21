@@ -240,7 +240,7 @@ class _Page24State extends State<Page24> {
                     print(agreement.id);
                     Navigator.push(context, MaterialPageRoute(
                       builder: (context) =>
-                          AgreementPage(id: agreement.id, mode: 'edit',),
+                          AgreementPage(id: agreement.id, mode: 'edit', email:_email,),
                     ) );
 
                     // await Navigator.push(
