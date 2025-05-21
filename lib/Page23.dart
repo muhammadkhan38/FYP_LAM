@@ -1,16 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
-import 'Page22.dart';
 import 'Page24.dart';
-import 'Page41.dart';
 import 'Show_Single_Agreement.dart';
 import 'Widgets/Reusable_Floating_Action_Button.dart';
 
@@ -30,107 +24,6 @@ String? _error;
 String _name = '';
 String _email = '';
   bool _isLoading = false;
-
-
-
-
-
-
-
-
-Future<void> _fetchAgreements() async {
-  final url = Uri.parse('https://nda.yourailist.com/api/getAgreements');
-
-  try {
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'email': _email,
-        //'status': "draft",
-        'status': "pending",
-      }),
-    );
-    final data = json.decode(response.body);
-
-    if (response.statusCode == 200) {
-      List<dynamic> list = data['agreements'];
-      setState(() {
-        _agreements = list.map((e) => Agreement.fromJson(e)).toList();
-        _loading = false;
-      });
-    } else {
-      setState(() {
-        _error = "Error: ${data['message']}";
-        _loading = false;
-      });
-    }
-  } catch (e) {
-    print(e.toString());
-
-    if (e is SocketException) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You are offline')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
-    }
-  } finally {
-    setState(() {
-      _isLoading = false;
-      _loading = false;
-    });
-  }
-}
-
-// delete agreement API
-  Future<void> _deleteAgreements() async {
-    final url = Uri.parse('https://nda.yourailist.com/api/declineAgreements');
-
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': _email,
-          "'agremment": _agreements,
-          //'status': "draft",
-          //'status': "pending",
-        }),
-      );
-      final data = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        print(response.body);
-
-
-      } else {
-        setState(() {
-          _error = "Error: ${data['message']}";
-          _loading = false;
-        });
-      }
-    } catch (e) {
-      print(e.toString());
-
-      if (e is SocketException) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('You are offline')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
-        );
-      }
-    } finally {
-      setState(() {
-        _error = _error.toString();
-        _isLoading = false;
-      });
-    }
-  }
 
 
   @override
@@ -225,7 +118,7 @@ Future<void> _fetchAgreements() async {
     }
   }
 
-  Future<void> declineAgreement(int id) async {
+  Future<void> declineAgreements(int id) async {
     final url = Uri.parse('https://nda.yourailist.com/api/declineAgreement');
 
     try {
@@ -270,7 +163,7 @@ Future<void> _fetchAgreements() async {
         title: Padding(
           padding: const EdgeInsets.only(left: 45),
           child: const Text(
-            " tlasdjkf;alsdkjfa;sdjklfDocuments",
+            "Documents",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
         ),
@@ -725,9 +618,7 @@ Future<void> _fetchAgreements() async {
                                                                   ElevatedButton(
                                                                     onPressed:
                                                                         () async {
-                                                                      await declineAgreement(
-                                                                          agreement
-                                                                              .id);
+                                                                      await declineAgreements(agreement.id);
                                                                       await Navigator.push(
                                                                           context,
                                                                           MaterialPageRoute(
