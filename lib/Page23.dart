@@ -338,7 +338,8 @@ class _Page23State extends State<Page23> {
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(agreement.title,style: TextStyle(fontWeight: FontWeight.w700,fontSize: 14,color: Color(0xFF474646),),),
+                                          Flexible(child: Text(agreement.title, maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,style: TextStyle(fontWeight: FontWeight.w700,fontSize: 14,color: Color(0xFF474646),),)),
                                           SizedBox(
                                             height: 35,
                                             child: PopupMenuButton<int>(

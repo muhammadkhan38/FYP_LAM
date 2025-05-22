@@ -397,7 +397,8 @@ class _Page21State extends State<Page21> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(agreement.title,style: TextStyle(fontWeight: FontWeight.w700,fontSize: 14,color: Color(0xFF474646),),),
+                                          Flexible(child: Text(agreement.title, maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,style: TextStyle(fontWeight: FontWeight.w700,fontSize: 14,color: Color(0xFF474646),),)),
                                           Text("#${agreement.id}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Color(0xFF838788),),),
                                         ],
                                       ),
