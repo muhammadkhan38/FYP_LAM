@@ -2,16 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
-import 'Page22.dart';
 import 'Page24.dart';
-import 'Page41.dart';
 import 'Show_Single_Agreement.dart';
 import 'Widgets/Reusable_Floating_Action_Button.dart';
 import 'Widgets/Reusable_Gradient_Button.dart';
@@ -22,17 +19,15 @@ class Page23 extends StatefulWidget {
   @override
   State<Page23> createState() => _Page23State();
 }
-int _selectedIndex = 0;
 
+int _selectedIndex = 0;
 
 class _Page23State extends State<Page23> {
   List<Agreement> _agreements = [];
-bool _loading = true;
-String? _error;
-String _name = '';
-String _email = '';
-  bool _isLoading = false;
-
+  bool _loading = true;
+  String? _error;
+  String _name = '';
+  String _email = '';
 
   @override
   void initState() {
@@ -112,7 +107,6 @@ String _email = '';
         body: jsonEncode({
           'email': _email,
           "agreement_id": ids,
-
         }),
       );
       final data = json.decode(response.body);
@@ -128,7 +122,7 @@ String _email = '';
           print(_error);
         });
       }
-     } catch (e) {
+    } catch (e) {
       print(e.toString());
 
       if (e is SocketException) {
@@ -143,7 +137,7 @@ String _email = '';
     } finally {
       setState(() {
         //_isLoading = false;
-       // _error = e.toString();
+        // _error = e.toString();
         _loading = false;
       });
     }
@@ -173,7 +167,7 @@ String _email = '';
           _loading = false;
         });
       }
-    }catch (e) {
+    } catch (e) {
       print(e.toString());
 
       if (e is SocketException) {
@@ -187,9 +181,7 @@ String _email = '';
       }
     } finally {
       setState(() {
-        _isLoading = false;
         _error = e.toString();
-
       });
     }
   }
@@ -220,7 +212,7 @@ String _email = '';
           color: Colors.black,
         ),
       ),
-      drawer:  const DrawerClass(),
+      drawer: const DrawerClass(),
       backgroundColor: Colors.grey.shade100,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: const CustomFloatingActionButton(),
@@ -247,7 +239,7 @@ String _email = '';
                 ),
               ),
               child: SizedBox(
-                width: screenSize.width-25,
+                width: screenSize.width - 25,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -255,8 +247,11 @@ String _email = '';
                       width: 5,
                     ),
                     Expanded(
-                      child: GradientButton(text: 'My Agreement', onTap: () {},
-                        width: screenSize.width - 200, height: 47,
+                      child: GradientButton(
+                        text: 'My Agreement',
+                        onTap: () {},
+                        width: screenSize.width - 200,
+                        height: 47,
                       ),
                     ),
                     Expanded(
@@ -265,7 +260,8 @@ String _email = '';
                           backgroundColor: WidgetStateProperty.all<Color>(
                             Colors.transparent,
                           ), // Background color
-                          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          shape:
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                               // Border radius
@@ -313,80 +309,47 @@ String _email = '';
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          AgreementPage(id: agreement.id, mode: 'sign', email: _email,),
+                                      builder: (context) => AgreementPage(
+                                        id: agreement.id,
+                                        mode: 'sign',
+                                        email: _email,
+                                      ),
                                     ),
                                   );
                                 },
                                 child: Container(
-                                    margin: const EdgeInsets.all(10),
+                                  margin: const EdgeInsets.all(10),
                                   padding: const EdgeInsets.only(
                                       left: 16.0, bottom: 16),
                                   width: screenSize.width - 20,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(10),
                                     color: Colors.white,
                                   ),
-                                  child: Row(
+                                  child: Column(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.center,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      // Left side with three text widgets
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text(agreement.title),
-                                          Text(agreement.createdAt),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          RichText(
-                                            text: const TextSpan(
-                                              text: 'Received ',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xff00C2FF),
-                                                  fontWeight: FontWeight.w500),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: '20-01-2023',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: Color(0xff838788),
-                                                      fontSize: 12),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
                                           SizedBox(
                                             height: 10,
-                                          )
-                                        ],
-                                      ),
-                                      // Right side with two text widgets and two icons
-
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
+                                          ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
+                                          Text(agreement.title,style: TextStyle(fontWeight: FontWeight.w700,fontSize: 14,color: Color(0xFF474646),),),
                                           SizedBox(
                                             height: 35,
                                             child: PopupMenuButton<int>(
                                               color: const Color(0xff474646),
 
-                      icon: const Icon(Icons.more_vert),
-                      // Use more_vert icon
+                                              icon: const Icon(Icons.more_vert),
+                                              // Use more_vert icon
 
                                               itemBuilder:
                                                   (BuildContext context) =>
-                                                      <PopupMenuEntry<int>>[
+                                              <PopupMenuEntry<int>>[
                                                 PopupMenuItem<int>(
                                                   value: 1,
                                                   onTap: () {
@@ -395,15 +358,15 @@ String _email = '';
                                                   },
                                                   child: const Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
+                                                    CrossAxisAlignment
+                                                        .center,
                                                     children: [
                                                       Text(
                                                         'Edit Agreement',
                                                         style: TextStyle(
                                                             fontSize: 12,
                                                             color:
-                                                                Colors.white),
+                                                            Colors.white),
                                                       ),
                                                       SizedBox(
                                                         height: 5,
@@ -419,118 +382,171 @@ String _email = '';
                                                 ),
                                                 PopupMenuItem<int>(
                                                   value: 2,
-                                                  onTap:() {
-
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext context) {
-                                                          return SingleChildScrollView(
-                                                            child: SizedBox(
-                                                              width: MediaQuery.of(context).size.width * 1,
-                                                              child: Dialog(
-                                                                child: SizedBox(
-                                                                  width: MediaQuery.of(context).size.width *
-                                                                      200, // Set the desired width here
-                                                                  height: 370,
-                                                                  child: Column(
-                                                                    children: <Widget>[
-                                                                      const SizedBox(
-                                                                        height: 20,
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                      context) {
+                                                        return SingleChildScrollView(
+                                                          child: SizedBox(
+                                                            width: MediaQuery.of(
+                                                                context)
+                                                                .size
+                                                                .width *
+                                                                1,
+                                                            child: Dialog(
+                                                              child: SizedBox(
+                                                                width: MediaQuery.of(
+                                                                    context)
+                                                                    .size
+                                                                    .width *
+                                                                    200, // Set the desired width here
+                                                                height: 370,
+                                                                child: Column(
+                                                                  children: <Widget>[
+                                                                    const SizedBox(
+                                                                      height:
+                                                                      20,
+                                                                    ),
+                                                                    const Icon(
+                                                                      Icons
+                                                                          .sentiment_very_dissatisfied,
+                                                                      size: 150,
+                                                                      color: Colors
+                                                                          .lightBlue,
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      height:
+                                                                      20,
+                                                                    ),
+                                                                    const Padding(
+                                                                      padding: EdgeInsets.only(
+                                                                          left:
+                                                                          10.0,
+                                                                          right:
+                                                                          10),
+                                                                      child:
+                                                                      Text(
+                                                                        'Add Signature ',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                            22,
+                                                                            fontWeight:
+                                                                            FontWeight.w600,
+                                                                            color: Color(0xff2A2A2A)),
                                                                       ),
-                                                                      const Icon(
-                                                                        Icons.sentiment_very_dissatisfied,
-                                                                        size: 150,
-                                                                        color: Colors.lightBlue,
+                                                                    ),
+                                                                    const Padding(
+                                                                      padding: EdgeInsets.only(
+                                                                          left:
+                                                                          8.0,
+                                                                          right:
+                                                                          8),
+                                                                      child:
+                                                                      Text(
+                                                                        'Scan your face ID to auto sign the document',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                            11.9,
+                                                                            fontWeight:
+                                                                            FontWeight.w400,
+                                                                            color: Color(0xffA9ACB0)),
                                                                       ),
-                                                                      const SizedBox(
-                                                                        height: 20,
-                                                                      ),
-                                                                      const Padding(
-                                                                        padding: EdgeInsets.only(left: 10.0, right: 10),
-                                                                        child: Text(
-                                                                          'Add Signature ',
-                                                                          style: TextStyle(
-                                                                              fontSize: 22,
-                                                                              fontWeight: FontWeight.w600,
-                                                                              color: Color(0xff2A2A2A)),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      height:
+                                                                      20,
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      height:
+                                                                      20,
+                                                                    ),
+                                                                    ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      },
+                                                                      style: ElevatedButton
+                                                                          .styleFrom(
+                                                                        foregroundColor:
+                                                                        Colors.blueAccent,
+                                                                        backgroundColor: const Color
+                                                                            .fromRGBO(
+                                                                            15,
+                                                                            104,
+                                                                            251,
+                                                                            1),
+                                                                        elevation:
+                                                                        3,
+                                                                        shape:
+                                                                        RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                          BorderRadius.circular(30.0),
                                                                         ),
+                                                                        padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                            horizontal:
+                                                                            60,
+                                                                            vertical:
+                                                                            16),
                                                                       ),
-                                                                      const Padding(
-                                                                        padding: EdgeInsets.only(left: 8.0, right: 8),
-                                                                        child: Text(
-                                                                          'Scan your face ID to auto sign the document',
-                                                                          style: TextStyle(
-                                                                              fontSize: 11.9,
-                                                                              fontWeight: FontWeight.w400,
-                                                                              color: Color(0xffA9ACB0)),
-                                                                        ),
+                                                                      child:
+                                                                      const Text(
+                                                                        'Sign Document',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                            16,
+                                                                            color:
+                                                                            Colors.white,
+                                                                            fontWeight: FontWeight.w700),
                                                                       ),
-                                                                      const SizedBox(
-                                                                        height: 20,
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      height:
+                                                                      15,
+                                                                    ),
+                                                                    const Padding(
+                                                                      padding: EdgeInsets.only(
+                                                                          left:
+                                                                          10.0,
+                                                                          right:
+                                                                          10),
+                                                                      child:
+                                                                      Text(
+                                                                        'Sign Manually',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                            13,
+                                                                            fontWeight:
+                                                                            FontWeight.w600,
+                                                                            color: Color(0xff474646)),
                                                                       ),
-                                                                      const SizedBox(
-                                                                        height: 20,
-                                                                      ),
-                                                                      ElevatedButton(
-                                                                        onPressed: () {
-                                                                          Navigator.pop(context);
-                                                                        },
-                                                                        style: ElevatedButton.styleFrom(
-                                                                          foregroundColor: Colors.blueAccent,
-                                                                          backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
-                                                                          elevation: 3,
-                                                                          shape: RoundedRectangleBorder(
-                                                                            borderRadius: BorderRadius.circular(30.0),
-                                                                          ),
-                                                                          padding: const EdgeInsets.symmetric(
-                                                                              horizontal: 60, vertical: 16),
-                                                                        ),
-                                                                        child: const Text(
-                                                                          'Sign Document',
-                                                                          style: TextStyle(
-                                                                              fontSize: 16,
-                                                                              color: Colors.white,
-                                                                              fontWeight: FontWeight.w700),
-                                                                        ),
-                                                                      ),
-                                                                      const SizedBox(
-                                                                        height: 15,
-                                                                      ),
-                                                                      const Padding(
-                                                                        padding: EdgeInsets.only(left: 10.0, right: 10),
-                                                                        child: Text(
-                                                                          'Sign Manually',
-                                                                          style: TextStyle(
-                                                                              fontSize: 13,
-                                                                              fontWeight: FontWeight.w600,
-                                                                              color: Color(0xff474646)),
-                                                                        ),
-                                                                      ),
-                                                                      const SizedBox(
-                                                                        height: 10,
-                                                                      ),
-                                                                    ],
-                                                                  ),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      height:
+                                                                      10,
+                                                                    ),
+                                                                  ],
                                                                 ),
                                                               ),
                                                             ),
-                                                          );
-                                                        },
-                                                      );
-
-
+                                                          ),
+                                                        );
+                                                      },
+                                                    );
                                                   },
                                                   child: const Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
+                                                    CrossAxisAlignment
+                                                        .center,
                                                     children: [
                                                       Text(
                                                         'Sign Agreement',
                                                         style: TextStyle(
                                                             fontSize: 12,
                                                             color:
-                                                                Colors.white),
+                                                            Colors.white),
                                                       ),
                                                       SizedBox(
                                                         height: 5,
@@ -550,14 +566,14 @@ String _email = '';
                                                     showDialog(
                                                       context: context,
                                                       builder: (BuildContext
-                                                          context) {
+                                                      context) {
                                                         return SingleChildScrollView(
                                                           child: Dialog(
                                                             child: SizedBox(
                                                               width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
+                                                                  context)
+                                                                  .size
+                                                                  .width *
                                                                   200, // Set the desired width here
 
                                                               child: Column(
@@ -578,52 +594,52 @@ String _email = '';
                                                                   const Padding(
                                                                     padding: EdgeInsets.only(
                                                                         left:
-                                                                            10.0,
+                                                                        10.0,
                                                                         right:
-                                                                            10),
+                                                                        10),
                                                                     child: Text(
                                                                       'Delete Agreement',
                                                                       style: TextStyle(
                                                                           fontSize:
-                                                                              22,
+                                                                          22,
                                                                           fontWeight: FontWeight
                                                                               .w600,
                                                                           color:
-                                                                              Color(0xff2A2A2A)),
+                                                                          Color(0xff2A2A2A)),
                                                                     ),
                                                                   ),
                                                                   const Padding(
                                                                     padding: EdgeInsets.only(
                                                                         left:
-                                                                            8.0,
+                                                                        8.0,
                                                                         right:
-                                                                            8),
+                                                                        8),
                                                                     child: Text(
                                                                       'Do you really want to delete the requested ',
                                                                       style: TextStyle(
                                                                           fontSize:
-                                                                              11.9,
+                                                                          11.9,
                                                                           fontWeight: FontWeight
                                                                               .w400,
                                                                           color:
-                                                                              Color(0xffA9ACB0)),
+                                                                          Color(0xffA9ACB0)),
                                                                     ),
                                                                   ),
                                                                   const Padding(
                                                                     padding: EdgeInsets.only(
                                                                         left:
-                                                                            8.0,
+                                                                        8.0,
                                                                         right:
-                                                                            8),
+                                                                        8),
                                                                     child: Text(
                                                                       'Agreement?',
                                                                       style: TextStyle(
                                                                           fontSize:
-                                                                              11.9,
+                                                                          11.9,
                                                                           fontWeight: FontWeight
                                                                               .w400,
                                                                           color:
-                                                                              Color(0xffA9ACB0)),
+                                                                          Color(0xffA9ACB0)),
                                                                     ),
                                                                   ),
                                                                   const SizedBox(
@@ -635,7 +651,9 @@ String _email = '';
                                                                   ElevatedButton(
                                                                     onPressed:
                                                                         () async {
-                                                                      await declineAgreements(agreement.id);
+                                                                      await declineAgreements(
+                                                                          agreement
+                                                                              .id);
                                                                       await Navigator.push(
                                                                           context,
                                                                           MaterialPageRoute(
@@ -644,8 +662,8 @@ String _email = '';
                                                                     style: ElevatedButton
                                                                         .styleFrom(
                                                                       foregroundColor:
-                                                                          Colors
-                                                                              .blueAccent,
+                                                                      Colors
+                                                                          .blueAccent,
                                                                       backgroundColor: const Color
                                                                           .fromRGBO(
                                                                           255,
@@ -653,29 +671,29 @@ String _email = '';
                                                                           83,
                                                                           1),
                                                                       elevation:
-                                                                          3,
+                                                                      3,
                                                                       shape:
-                                                                          RoundedRectangleBorder(
+                                                                      RoundedRectangleBorder(
                                                                         borderRadius:
-                                                                            BorderRadius.circular(30.0),
+                                                                        BorderRadius.circular(30.0),
                                                                       ),
                                                                       padding: const EdgeInsets
                                                                           .symmetric(
                                                                           horizontal:
-                                                                              30,
+                                                                          30,
                                                                           vertical:
-                                                                              16),
+                                                                          16),
                                                                     ),
                                                                     child:
-                                                                        const Text(
+                                                                    const Text(
                                                                       'Yes, Delete the Agreement',
                                                                       style: TextStyle(
                                                                           fontSize:
-                                                                              16,
+                                                                          16,
                                                                           color: Colors
                                                                               .white,
                                                                           fontWeight:
-                                                                              FontWeight.w700),
+                                                                          FontWeight.w700),
                                                                     ),
                                                                   ),
                                                                   const SizedBox(
@@ -690,8 +708,8 @@ String _email = '';
                                                                     style: ElevatedButton
                                                                         .styleFrom(
                                                                       foregroundColor:
-                                                                          Colors
-                                                                              .blueAccent,
+                                                                      Colors
+                                                                          .blueAccent,
                                                                       backgroundColor: const Color
                                                                           .fromRGBO(
                                                                           0,
@@ -699,29 +717,29 @@ String _email = '';
                                                                           255,
                                                                           1),
                                                                       elevation:
-                                                                          3,
+                                                                      3,
                                                                       shape:
-                                                                          RoundedRectangleBorder(
+                                                                      RoundedRectangleBorder(
                                                                         borderRadius:
-                                                                            BorderRadius.circular(30.0),
+                                                                        BorderRadius.circular(30.0),
                                                                       ),
                                                                       padding: const EdgeInsets
                                                                           .symmetric(
                                                                           horizontal:
-                                                                              20,
+                                                                          20,
                                                                           vertical:
-                                                                              16),
+                                                                          16),
                                                                     ),
                                                                     child:
-                                                                        const Text(
+                                                                    const Text(
                                                                       'No, Don’t Delete the Agreement',
                                                                       style: TextStyle(
                                                                           fontSize:
-                                                                              15,
+                                                                          15,
                                                                           color: Colors
                                                                               .white,
                                                                           fontWeight:
-                                                                              FontWeight.w700),
+                                                                          FontWeight.w700),
                                                                     ),
                                                                   ),
                                                                   const SizedBox(
@@ -739,33 +757,63 @@ String _email = '';
                                                   },
                                                   child: const Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
+                                                    CrossAxisAlignment
+                                                        .center,
                                                     children: [
                                                       Center(
                                                           child: Text(
-                                                        'Decline',
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
+                                                            'Decline',
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color:
                                                                 Colors.white),
-                                                      )),
+                                                          )),
                                                     ],
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 6,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          RichText(
+                                                  text:  TextSpan(
+                                                    text: 'Received \t\t\t\t',
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Color(0xFF00C2FF),
+                                                        fontWeight: FontWeight.w500),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text: agreement.createdAt,
+                                                        style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Color(0xFF838788),),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                           Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 20.0),
-                                            child: Text("#${agreement.id}"),
+                                            padding: const EdgeInsets.only(right: 22),
+                                            child: Text("#${agreement.id}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Color(0xFF838788),),),
                                           ),
-                                          const Padding(
-                                            padding:
-                                                EdgeInsets.only(right: 20.0),
+
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 6,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 22),
                                             child: Text(
-                                              'Waiting',
+                                              'Pending',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: 12,
@@ -773,7 +821,15 @@ String _email = '';
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(height: 15),
+                                      ],
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 right: 15.0),
@@ -782,9 +838,7 @@ String _email = '';
                                               height: 33,
                                               child: TextButton(
                                                 onPressed: () async {
-                                                  await (agreement.id);
                                                   await signAgreement(agreement.id);
-                                                  print(agreement.id);
                                                 },
                                                 style: TextButton.styleFrom(
                                                   foregroundColor: Colors.white,
@@ -811,7 +865,6 @@ String _email = '';
                           ),
               ],
             ),
-
           ],
         ),
       ),
@@ -931,7 +984,6 @@ String _email = '';
                             color: Color(0xffFF5353)),
                       ),
                     ),
-          
                   ],
                 ),
               ),
@@ -948,8 +1000,7 @@ String _email = '';
       builder: (BuildContext context) {
         return SingleChildScrollView(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width*1,
-
+            width: MediaQuery.of(context).size.width * 1,
             child: Dialog(
               child: SizedBox(
                 width: MediaQuery.of(context).size.width *
@@ -1041,5 +1092,4 @@ String _email = '';
       },
     );
   }
-
 }

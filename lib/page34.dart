@@ -153,70 +153,67 @@ class Page34 extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30,),
-                SizedBox(
-                  width: screenSize.width-30,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SizedBox(
-                        width: screenSize.width-230,
-                        height: 47,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.black,
-                            backgroundColor: const Color(0xFF00C2FF),
-                            elevation: 3,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(35.0),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      width: screenSize.width/2-30,
+                      height: 47,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.black,
+                          backgroundColor: const Color(0xFF00C2FF),
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(35.0),
                           ),
-                          child: const Text(
-                            'Previous',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                            ),
+                          padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+                        ),
+                        child: const Text(
+                          'Previous',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
+                    ),
 
-                      GradientButton(
-                        text: 'Next',
-                        width: screenSize.width-200,
-                        height: 47,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const Page38()),
-                          );
-                        },
-                      ),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //
-                      //  Navigator.push(context, MaterialPageRoute(builder: (context)=>  Page38()));
-                      //   },
-                      //   style: ElevatedButton.styleFrom(
-                      //     foregroundColor: Colors.blueAccent,
-                      //     backgroundColor: Colors.blueAccent.shade400,
-                      //     elevation: 3,
-                      //     shape: RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(30.0),
-                      //     ),
-                      //     padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 16),
-                      //   ),
-                      //   child: const Text(
-                      //     'Next',
-                      //     style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
-                      //   ),
-                      // ),
-                    ],
-                  ),
+                    GradientButton(
+                      text: 'Next',
+                      width: screenSize.width/2-10,
+                      height: 47,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Page38()),
+                        );
+                      },
+                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //
+                    //  Navigator.push(context, MaterialPageRoute(builder: (context)=>  Page38()));
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     foregroundColor: Colors.blueAccent,
+                    //     backgroundColor: Colors.blueAccent.shade400,
+                    //     elevation: 3,
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(30.0),
+                    //     ),
+                    //     padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 16),
+                    //   ),
+                    //   child: const Text(
+                    //     'Next',
+                    //     style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
+                    //   ),
+                    // ),
+                  ],
                 ),
 
 
