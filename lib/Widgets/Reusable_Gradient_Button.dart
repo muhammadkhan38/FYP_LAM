@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 
 class GradientButton extends StatelessWidget {
   final String text;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final double width;
   final double height;
 
   const GradientButton({
     super.key,
     required this.text,
-    required this.onTap,
+    this.onTap,
     required this.width,
     required this.height,
   });
