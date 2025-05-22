@@ -213,6 +213,107 @@ class _AgreementDatailState extends State<AgreementDatail> {
       return "{}"; // Return empty JSON on error
     }
   }
+  Future<void> _sendDataToAPIs(String status, {int id = 0}) async {
+    const String apiUrl = "https://Nda.yourailist.com/api/create_agreement";
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // ✅ Capture signature as PNG bytes
+      final signatureBytes = await _controller.toPngBytes();
+
+      // ✅ If signature is missing, show a warning and return
+      if (signatureBytes == null || signatureBytes.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please provide a signature')),
+        );
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+
+      // ✅ Encode to Base64
+      final base64Signature = base64Encode(signatureBytes);
+
+      // ✅ Prepare the agreement JSON structure
+      Map<String, dynamic> jsonData = {
+        "Agreement": {
+          "title": titleController.text,
+          "parties": {
+            "Employer": {"name": party1Controller.text},
+            "Employee": {"name": party2Controller.text}
+          },
+          "date": dateController.text,
+          "Description": {}
+        }
+      };
+
+      // ✅ Add dynamic description fields
+      descriptionController.forEach((key, controller) {
+        jsonData["Agreement"]["Description"][key] = controller.text;
+      });
+
+      // ✅ Convert the Agreement Map to JSON string
+      String jsonString = jsonEncode(jsonData);
+
+      // ✅ Prepare final payload for API
+      Map<String, dynamic> createAgreement = {
+        "email": _email,
+        "slug": "slug", // Replace this with your actual slug
+        "title": titleController.text,
+        "agreement_file": jsonString,
+        "signature": base64Signature,
+        "status": status,
+        "id": id,
+      };
+
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(createAgreement),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+        print(responseData);
+
+        int agreementId = responseData['agreement_id'];
+        String message = responseData['message'];
+
+        print("Agreement ID: $agreementId");
+        print("Message: $message");
+
+        // ✅ Save agreementId to SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('agreement_id', agreementId);
+        Agreement_id = prefs.getInt('agreement_id')!;
+        print("Agreement ID saved to SharedPreferences: $Agreement_id");
+      } else {
+        print("Failed to send data. Status code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
+      }
+    } catch (e) {
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   Future<void> _sendDataToAPI(String status,{int id = 0}) async {
     const String apiUrl = "https://Nda.yourailist.com/api/create_agreement";
     try {

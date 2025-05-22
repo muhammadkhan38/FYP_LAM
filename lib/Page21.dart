@@ -146,7 +146,7 @@ class _Page21State extends State<Page21> {
   Widget build(BuildContext context) {
      final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     Size screenSize = MediaQuery.of(context).size;
-    return   Scaffold(
+    return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.transparent,

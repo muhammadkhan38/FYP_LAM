@@ -1,10 +1,17 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
+import 'Page22.dart';
 import 'Page24.dart';
+import 'Page41.dart';
 import 'Show_Single_Agreement.dart';
 import 'Widgets/Reusable_Floating_Action_Button.dart';
 
@@ -74,6 +81,18 @@ String _email = '';
         });
       }
     } catch (e) {
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
       setState(() {
         _error = e.toString();
         _loading = false;
@@ -99,8 +118,7 @@ String _email = '';
 
       if (response.statusCode == 200) {
         print({
-          response.body +
-              "1222222222222222222222222222222222222222222222222222222"
+          "${response.body}1222222222222222222222222222222222222222222222222222222"
         });
       } else {
         setState(() {
@@ -109,9 +127,21 @@ String _email = '';
           print(_error);
         });
       }
-    } catch (e) {
+     } catch (e) {
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
       setState(() {
-        print(_error);
+        _isLoading = false;
         _error = e.toString();
         _loading = false;
       });
@@ -134,8 +164,7 @@ String _email = '';
 
       if (response.statusCode == 200) {
         print({
-          response.body +
-              "1222222222222222222222222222222222222222222222222222222"
+          "${response.body}1222222222222222222222222222222222222222222222222222222"
         });
       } else {
         setState(() {
@@ -143,10 +172,22 @@ String _email = '';
           _loading = false;
         });
       }
-    } catch (e) {
+    }catch (e) {
+      print(e.toString());
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
       setState(() {
+        _isLoading = false;
         _error = e.toString();
-        _loading = false;
       });
     }
   }
