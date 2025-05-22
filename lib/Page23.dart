@@ -14,6 +14,7 @@ import 'Page24.dart';
 import 'Page41.dart';
 import 'Show_Single_Agreement.dart';
 import 'Widgets/Reusable_Floating_Action_Button.dart';
+import 'Widgets/Reusable_Gradient_Button.dart';
 
 class Page23 extends StatefulWidget {
   const Page23({super.key});
@@ -187,6 +188,7 @@ String _email = '';
       setState(() {
         _isLoading = false;
         _error = e.toString();
+
       });
     }
   }
@@ -233,8 +235,8 @@ String _email = '';
         child: Column(
           children: [
             Container(
-              height: 60,
-              width: screenSize.width - 25,
+              height: 55,
+              width: screenSize.width - 20,
               decoration: BoxDecoration(
                 color: Colors.white70,
                 borderRadius: BorderRadius.circular(40),
@@ -246,66 +248,40 @@ String _email = '';
               child: SizedBox(
                 width: screenSize.width-25,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const SizedBox(
                       width: 5,
                     ),
-
                     Expanded(
-                      child: SizedBox(
-                        child: TextButton(
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all<Color>(
-                              Color(0xFF00C2FF),
-                            ), // Background color
-                            shape:
-                                WidgetStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                                // Border radius
-                              ),
+                      child: GradientButton(text: 'My Agreement', onTap: () {},
+                        width: screenSize.width - 200, height: 47,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextButton(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all<Color>(
+                            Colors.transparent,
+                          ), // Background color
+                          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              // Border radius
                             ),
                           ),
-                          onPressed: () {},
-                          child: SizedBox(
-                              height: 30,
-                              width: screenSize.width - 200,
-                              child: const Center(
-                                child: Text("My Agreement",
-                                    style: TextStyle(color: Colors.white)),
-                              )), // Text style
                         ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Page24()));
+                        },
+                        child: const Center(
+                          child: Text("My Drafts",
+                              style: TextStyle(color: Colors.black)),
+                        ), // Text style
                       ),
-                    ),
-
-                    const SizedBox(
-                      width: 50,
-                    ),
-                    TextButton(
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(
-                          Colors.white,
-                        ), // Background color
-                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            // Border radius
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Page24()));
-                      },
-                      child: SizedBox(
-                          height: 30,
-                          width: screenSize.width - 250,
-                          child: const Center(
-                            child: Text("My Drafts",
-                                style: TextStyle(color: Colors.black)),
-                          )), // Text style
                     ),
                     //  const Text('My Draft',style: TextStyle(color: Colors.black),
                     // ),

@@ -159,7 +159,7 @@ class Page34 extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       SizedBox(
-                        width: 140,
+                        width: screenSize.width-230,
                         height: 47,
                         child: ElevatedButton(
                           onPressed: () {
@@ -187,7 +187,7 @@ class Page34 extends StatelessWidget {
 
                       GradientButton(
                         text: 'Next',
-                        width: 170,
+                        width: screenSize.width-200,
                         height: 47,
                         onTap: () {
                           Navigator.push(

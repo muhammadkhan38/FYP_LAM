@@ -13,6 +13,7 @@ import 'Page23.dart';
 import 'Page41.dart';
 import 'Show_Single_Agreement.dart';
 import 'Widgets/Reusable_Floating_Action_Button.dart';
+import 'Widgets/Reusable_Gradient_Button.dart';
 import 'getAgreementApiClass.dart';
 
 class Agreement {
@@ -126,19 +127,22 @@ class _Page24State extends State<Page24> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          'Documents',
-          style: TextStyle(
-              fontSize: 16, color: Colors.black, fontWeight: FontWeight.w500),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 45),
+          child: const Text(
+            "Documents",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          ),
         ),
-        titleSpacing: 90,
         leading: IconButton(
           icon: const Icon(Icons.menu),
           onPressed: () {
             scaffoldKey.currentState?.openDrawer();
           },
         ),
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
       ),
       drawer: const DrawerClass(),
       backgroundColor: Colors.grey.shade100,
@@ -155,72 +159,49 @@ class _Page24State extends State<Page24> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 10),
-            Center(
-              child: Container(
-                height: 55,
-                width: screenSize.width - 30,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(40),
+            Container(
+              height: 55,
+              width: screenSize.width - 20,
+              decoration: BoxDecoration(
+                color: Colors.white70,
+                borderRadius: BorderRadius.circular(40),
+                border: Border.all(
+                  color: Colors.black12, // Border color
+                  width: 0.5, // Border width
                 ),
-                child: Row(
-                  children: [
-                    const SizedBox(width: 5),
-                    Container(
-                      height: 40,
-                      width: screenSize.width - 180,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color(0xFF00C2FF),
-                            Color(0xFF1268FB),
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(25),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Page23(),
-                              ),
-                            );
-                          },
-                          child: const Center(
-                            child: Text(
-                              "My Agreement",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all<Color>(
+                          Colors.transparent,
+                        ), // Background color
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            // Border radius
                           ),
                         ),
                       ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Center(
+                        child: Text("My Agreement",
+                            style: TextStyle(color: Colors.black)),
+                      ), // Text style
                     ),
+                  ),
+                  Expanded(
+                    child: GradientButton(text: 'My Drafts', onTap: () {},
+                      width: screenSize.width - 180, height: 47,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
 
-                    const SizedBox(width: 50),
-                    const Text(
-                      'My Draft',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
+                ],
               ),
             ),
             const SizedBox(height: 10),
