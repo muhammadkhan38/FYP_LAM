@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:signature/signature.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
 import 'Page24.dart';
@@ -28,6 +30,11 @@ class _Page23State extends State<Page23> {
   String? _error;
   String _name = '';
   String _email = '';
+  final SignatureController _controller = SignatureController(
+    penStrokeWidth: 3,
+    penColor: Colors.black,
+    exportBackgroundColor: Colors.white,
+  );
 
   @override
   void initState() {
@@ -97,7 +104,7 @@ class _Page23State extends State<Page23> {
   }
 
 // delete agreement API
-  Future<void> signAgreement(int ids) async {
+  Future<void> signAgreement(int ids, SignatureController controller) async {
     final url = Uri.parse('https://nda.yourailist.com/api/signAgreement');
 
     try {
@@ -107,6 +114,7 @@ class _Page23State extends State<Page23> {
         body: jsonEncode({
           'email': _email,
           "agreement_id": ids,
+
         }),
       );
       final data = json.decode(response.body);
@@ -182,6 +190,71 @@ class _Page23State extends State<Page23> {
     } finally {
       setState(() {
         _error = e.toString();
+      });
+    }
+  }
+
+  Future<void> signAgreements(int ids, SignatureController signatureController) async {
+    final url = Uri.parse('https://nda.yourailist.com/api/signAgreement');
+
+    try {
+      setState(() {
+        _loading = true;
+      });
+
+      File? signatureFile;
+
+      // ✅ Convert signature to PNG and save as file
+      if (signatureController.isNotEmpty) {
+        final signature = await signatureController.toImage();
+        final byteData = await signature!.toByteData(format: ImageByteFormat.png);
+        final pngBytes = byteData!.buffer.asUint8List();
+        final tempDir = await getTemporaryDirectory();
+        signatureFile = await File('${tempDir.path}/signature.png').writeAsBytes(pngBytes);
+      }
+
+      // ✅ Prepare multipart request
+      var request = http.MultipartRequest("POST", url);
+
+      request.fields['email'] = _email;
+      request.fields['agreement_id'] = ids.toString();
+
+      if (signatureFile != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'signature',
+          signatureFile.path,
+          contentType: MediaType('image', 'png'),
+        ));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      final data = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        print("Response: ${response.body}");
+      } else {
+        setState(() {
+          _error = "Error: ${data['message']}";
+          print("Error: $_error");
+        });
+      }
+    } catch (e) {
+      print("Exception: ${e.toString()}");
+
+      if (e is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
+      setState(() {
+        _loading = false;
       });
     }
   }
@@ -465,8 +538,7 @@ class _Page23State extends State<Page23> {
                                                                     ElevatedButton(
                                                                       onPressed:
                                                                           () {
-                                                                        Navigator.pop(
-                                                                            context);
+                                                                            _showSignatureDialog(context);
                                                                       },
                                                                       style: ElevatedButton
                                                                           .styleFrom(
@@ -564,6 +636,8 @@ class _Page23State extends State<Page23> {
                                                 PopupMenuItem<int>(
                                                   value: 3,
                                                   onTap: () {
+                                                   // _showSignatureDialog(context);
+                                                   // _sqowAgreementDialogBox(
                                                     showDialog(
                                                       context: context,
                                                       builder: (BuildContext
@@ -839,7 +913,7 @@ class _Page23State extends State<Page23> {
                                               height: 33,
                                               child: TextButton(
                                                 onPressed: () async {
-                                                  await signAgreement(agreement.id);
+                                                //  await signAgreement(agreement.id);
                                                 },
                                                 style: TextButton.styleFrom(
                                                   foregroundColor: Colors.white,
@@ -1093,4 +1167,60 @@ class _Page23State extends State<Page23> {
       },
     );
   }
+
+
+
+  // for sending signature
+  void _showSignatureDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Signature"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: double.infinity,
+              height: 200,
+              decoration: BoxDecoration(border: Border.all()),
+              child: Signature(controller: _controller, backgroundColor: Colors.white),
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    _controller.clear();
+                  },
+                  child: Text("Clear"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    signAgreement(393, _controller);
+
+                  },
+                  child: Text("Done"),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+

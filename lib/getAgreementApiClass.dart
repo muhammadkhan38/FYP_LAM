@@ -31,6 +31,7 @@ class GetAgreementApi {
       final data = json.decode(response.body);
 
       if (response.statusCode == 200) {
+
         List<dynamic> list = data['agreements'];
         return list.map((e) => Agreement.fromJson(e)).toList();
       } else {

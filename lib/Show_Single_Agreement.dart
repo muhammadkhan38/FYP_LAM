@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -26,6 +27,8 @@ class AgreementPage extends StatefulWidget {
 }
 
 class _AgreementPageState extends State<AgreementPage> {
+
+  String? signatureUrl;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController party1Controller = TextEditingController();
   final TextEditingController party2Controller = TextEditingController();
@@ -81,7 +84,9 @@ class _AgreementPageState extends State<AgreementPage> {
       );
 
       if (response.statusCode == 200) {
+        print(response.body);
         Map<String, dynamic> responseData = jsonDecode(response.body);
+       debugPrint(response.body);
         int agreementId = responseData['agreement_id'];
         if (kDebugMode) {
           print("Agreement ID: $agreementId");
@@ -106,18 +111,27 @@ class _AgreementPageState extends State<AgreementPage> {
           "Content-Type": "application/json",
           "Accept": "application/json",
         },
-        body: jsonEncode({"id": userId}),
-      );
+        body: jsonEncode(
+            {
+              "id": userId,
+            'email': widget.email,
+            },
+        ),      );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print(data);
         final agreement = data['agreement'];
+
+        print(agreement);
         final agreementFile = jsonDecode(agreement['agreement_file']);
+        print(agreementFile);
 
         titleController.text = agreementFile['Agreement']['title'] ?? '';
         party1Controller.text = agreementFile['Agreement']['parties']['Employee']['name'] ?? '';
         party2Controller.text = agreementFile['Agreement']['parties']['Employer']['name'] ?? '';
         dateController.text = agreementFile['Agreement']['date'] ?? '';
+        signatureUrl = agreement['signature_url'] ?? '';
 
         final descriptionMap = agreementFile['Agreement']['Description'];
         descriptionMap.forEach((key, value) {
@@ -128,6 +142,7 @@ class _AgreementPageState extends State<AgreementPage> {
         setState(() {
           isLoading = false;
         });
+        print("Signature URL: $signatureUrl");
       } else {
         throw Exception("Failed to fetch agreement");
       }
@@ -275,6 +290,24 @@ class _AgreementPageState extends State<AgreementPage> {
               ),
             ),
 
+            CachedNetworkImage(
+              imageUrl: signatureUrl ?? '',
+              imageBuilder: (context, imageProvider) => Container(
+                width: size.width,
+                height: 250,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            ),
+
+
+
             // Signature
             if (showSignature)
               _signatureBlock(size, label: "Signature of Second Party", useSignaturePad: true),
@@ -287,7 +320,7 @@ class _AgreementPageState extends State<AgreementPage> {
     );
   }
 
-  Widget _signatureBlock(Size size, {required String label, bool useSignaturePad = false}) {
+  Widget _signatureBlock(Size size, {required String label, bool useSignaturePad = true}) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(

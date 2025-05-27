@@ -145,9 +145,9 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
-        child: Icon(Icons.add, color: Colors.white, size: 40),
         onPressed: _addNewFields,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        child: Icon(Icons.add, color: Colors.white, size: 40),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -250,7 +250,8 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
             ),
             TextButton(
               onPressed: () async {
-                await saveFormDataToPrefs(); // Save data before sending
+                await saveFormDataToPrefs();
+                await _sendDataToAPI();// Save data before sending
                 await Navigator.push((context),
                     MaterialPageRoute(builder: (context) => Page38()));
               },
