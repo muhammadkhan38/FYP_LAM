@@ -137,7 +137,7 @@ class _Page3State extends State<Page3> {
 
       if (e is SocketException) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('You are offline')),
+          SnackBar(content: Text('You are offline' + e.toString())),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

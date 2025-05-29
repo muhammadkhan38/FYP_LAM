@@ -80,8 +80,6 @@ class _Page24State extends State<Page24> {
         body: jsonEncode({
           'email': _email,
           'status': "draft",
-          //'status': "pending",
-         //'status': "pending",
         }),
       );
       final data = json.decode(response.body);
@@ -95,7 +93,7 @@ class _Page24State extends State<Page24> {
         });
       } else {
         setState(() {
-          _error = "Error: ${data['message']}";
+          _error = "${data['message']}";
           _loading = false;
         });
       }
@@ -208,7 +206,7 @@ class _Page24State extends State<Page24> {
             _loading
                 ? const Center(child: CircularProgressIndicator())
                 : _error != null
-                ? Center(child: Text("Error: $_error"))
+                ? Center(child: Text(": $_error",style: TextStyle(color: Colors.red),))
                 : ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),

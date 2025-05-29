@@ -26,6 +26,7 @@ class Agreement {
   final int id;
   final String title;
   final String Agreement_Creatd_date;
+  //final String status;
 
   Agreement({required this.id, required this.title, required this.Agreement_Creatd_date});
 
@@ -102,13 +103,14 @@ class _Page21State extends State<Page21> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': _email,
-          //'status': Status.complete.toString(),
           'status': "complete",
         }),
       );
       data = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        print(response.body);
+        print(response.statusCode);
 
 
         // Now extract the message
@@ -121,12 +123,16 @@ class _Page21State extends State<Page21> {
           _loading = false;
         });
 
+      } else if(response.statusCode == 422){
+        _error = "Please reload the application to get the latest data";
+        _loading = false;
       } else {
         setState(() {
 
           _error = "${data['message']}";
           _loading = false;
         });
+        print(response.statusCode);
       }
     } catch (e) {
       print(e.toString());
@@ -363,16 +369,10 @@ class _Page21State extends State<Page21> {
                                         children: [
                                           Text(agreement.Agreement_Creatd_date,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Color(0xFF838788),),),
                                           Text("Completed",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: Color(0xFF454545),),),
+                                          //Text(agreement.status!,style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: Color(0xFF454545),),),
                                         ],
                                       ),
                                     ),
-                                   // Text(agreement.id as String),
-                                    // ListTile(
-                                    //   title:  Text(" ${agreement.title}"),
-                                    //   subtitle: Text("sent  ${agreement.createdAt}"),
-                                    //
-                                    // ),
-                                   // Text(" ${agreement.id}", style: TextStyle(fontWeight: FontWeight.bold)),
 
 
                                   ],

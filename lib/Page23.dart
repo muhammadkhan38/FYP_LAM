@@ -33,7 +33,7 @@ class _Page23State extends State<Page23> {
   final SignatureController _controller = SignatureController(
     penStrokeWidth: 3,
     penColor: Colors.black,
-    exportBackgroundColor: Colors.white,
+    exportBackgroundColor: Colors.grey.shade100,
   );
 
   @override
@@ -79,7 +79,7 @@ class _Page23State extends State<Page23> {
         });
       } else {
         setState(() {
-          _error = "Error: ${data['message']}";
+          _error = "${data['message']}";
           _loading = false;
         });
       }
@@ -104,52 +104,7 @@ class _Page23State extends State<Page23> {
   }
 
 // delete agreement API
-  Future<void> signAgreement(int ids, SignatureController controller) async {
-    final url = Uri.parse('https://nda.yourailist.com/api/signAgreement');
 
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': _email,
-          "agreement_id": ids,
-
-        }),
-      );
-      final data = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        print({
-          "${response.body}1222222222222222222222222222222222222222222222222222222"
-        });
-      } else {
-        setState(() {
-          _error = "Error: ${data['message']}";
-          _loading = false;
-          print(_error);
-        });
-      }
-    } catch (e) {
-      print(e.toString());
-
-      if (e is SocketException) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('You are offline')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
-        );
-      }
-    } finally {
-      setState(() {
-        //_isLoading = false;
-        // _error = e.toString();
-        _loading = false;
-      });
-    }
-  }
 
   Future<void> declineAgreements(int id) async {
     final url = Uri.parse('https://nda.yourailist.com/api/declineAgreement');
@@ -167,7 +122,7 @@ class _Page23State extends State<Page23> {
 
       if (response.statusCode == 200) {
         print({
-          "${response.body}1222222222222222222222222222222222222222222222222222222"
+          "${response.body}155555555555555555555555555555555555"
         });
       } else {
         setState(() {
@@ -194,7 +149,7 @@ class _Page23State extends State<Page23> {
     }
   }
 
-  Future<void> signAgreements(int ids, SignatureController signatureController) async {
+  Future<void> signAgreement(int ids, SignatureController signatureController) async {
     final url = Uri.parse('https://nda.yourailist.com/api/signAgreement');
 
     try {
@@ -231,7 +186,7 @@ class _Page23State extends State<Page23> {
       var response = await http.Response.fromStream(streamedResponse);
 
       final data = json.decode(response.body);
-
+      print(data);
       if (response.statusCode == 200) {
         print("Response: ${response.body}");
       } else {
@@ -369,7 +324,7 @@ class _Page23State extends State<Page23> {
                 _loading
                     ? const Center(child: CircularProgressIndicator())
                     : _error != null
-                        ? Center(child: Text("Error: $_error"))
+                        ? Center(child: Text(_error!,style: const TextStyle(color: Colors.red),))
                         : ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -538,7 +493,7 @@ class _Page23State extends State<Page23> {
                                                                     ElevatedButton(
                                                                       onPressed:
                                                                           () {
-                                                                            _showSignatureDialog(context);
+                                                                            _showSignatureDialog(context,agreement.id);
                                                                       },
                                                                       style: ElevatedButton
                                                                           .styleFrom(
@@ -1171,7 +1126,7 @@ class _Page23State extends State<Page23> {
 
 
   // for sending signature
-  void _showSignatureDialog(BuildContext context) {
+  void _showSignatureDialog(BuildContext context, int id) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -1197,7 +1152,8 @@ class _Page23State extends State<Page23> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    signAgreement(393, _controller);
+                   await signAgreement(id, _controller);
+                   Navigator.push(context, MaterialPageRoute(builder: (context) => Page23()));
 
                   },
                   child: Text("Done"),

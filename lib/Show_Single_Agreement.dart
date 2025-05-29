@@ -11,9 +11,7 @@ import 'Template/Templeate_textfiedl.dart';
 class AgreementPage extends StatefulWidget {
   final int id;
   final String mode;
-
   final String email; // "view", "sign", "edit"
-
   const AgreementPage({
     super.key,
     required this.id,
@@ -119,6 +117,8 @@ class _AgreementPageState extends State<AgreementPage> {
         ),      );
 
       if (response.statusCode == 200) {
+        print("${response.body}this is the response");
+        print(response.statusCode);
         final data = jsonDecode(response.body);
         print(data);
         final agreement = data['agreement'];
@@ -290,21 +290,70 @@ class _AgreementPageState extends State<AgreementPage> {
               ),
             ),
 
-            CachedNetworkImage(
-              imageUrl: signatureUrl ?? '',
-              imageBuilder: (context, imageProvider) => Container(
-                width: size.width,
-                height: 250,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            ),
+            // CachedNetworkImage(
+            //   imageUrl: "https://nda.yourailist.com/storage/signatures/signature_3_397_1748372685.png" ?? '',
+            //   imageBuilder: (context, imageProvider) => Container(
+            //     width: size.width,
+            //     height: 250,
+            //     decoration: BoxDecoration(
+            //       image: DecorationImage(
+            //         image: imageProvider,
+            //         fit: BoxFit.fill,
+            //       ),
+            //     ),
+            //   ),
+            //   placeholder: (context, url) => CircularProgressIndicator(),
+            //   errorWidget: (context, url, error) => Icon(Icons.error),
+            // ),
+            // Container(
+            //   height: 123,
+            //   width: size.width - 30,// adjust height as needed
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(10),
+            //     color: Colors.white,
+            //     image: DecorationImage(
+            //       image: NetworkImage("https://nda.yourailist.com/storage/signatures/signature_3_397_1748372685.png"),
+            //       fit: BoxFit.contain, // use `contain` to keep signature aspect ratio
+            //     ),
+            //   ),
+            // ),
+            SizedBox(height: 20),
+            // Container(
+            //   height: 123,
+            //   width: size.width - 30,// adjust height as needed
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(10),
+            //     color: Colors.white,
+            //     image: DecorationImage(
+            //       image: NetworkImage("https://nda.yourailist.com/storage/signatures/signature_3_396_1748372606.png"),
+            //       fit: BoxFit.contain, // use `contain` to keep signature aspect ratio
+            //     ),
+            //   ),
+            // ),
+
+
+
+            // CachedNetworkImage(
+            //   imageUrl: "https://nda.yourailist.com/storage/signatures/signature_3_396_1748372606.png" ?? '',
+            //   imageBuilder: (context, imageProvider) => Container(
+            //     width: size.width-150,
+            //     height: 150,
+            //     child: Text("asdf"),
+            //     decoration: BoxDecoration(
+            //        color: Color(0xffA9ACB0),
+            //       image: DecorationImage(
+            //         filterQuality: FilterQuality.high,
+            //
+            //         image: imageProvider,
+            //         fit: BoxFit.contain,
+            //         alignment: Alignment.center,
+            //
+            //       ),
+            //     ),
+            //   ),
+            //   placeholder: (context, url) => CircularProgressIndicator(),
+            //   errorWidget: (context, url, error) => Icon(Icons.error),
+            // ),
 
 
 
