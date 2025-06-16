@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,8 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
 
-import 'Page23.dart';
-import 'Page41.dart';
 import 'Show_Single_Agreement.dart';
 import 'Widgets/Reusable_Floating_Action_Button.dart';
 import 'Widgets/Reusable_Gradient_Button.dart';

@@ -209,7 +209,7 @@ class _Page21State extends State<Page21> {
                         radius: 50,
                         backgroundColor: Colors.grey,
                        child: IconButton(onPressed: (){
-                         Navigator.push(context, MaterialPageRoute(builder: (context) =>  ImagePickerPage()));
+
                        }, icon: const Icon(CupertinoIcons.person,size: 35,color: Colors.white,),),
                        // child: Icon(Icons.person,size: 35,),
                       //  backgroundImage: AssetImage('assets/qasim.png'),
@@ -398,6 +398,8 @@ class _Page21State extends State<Page21> {
 
 
 
+
+
 class ImageHelper {
   static const _key = 'profile_image_base64';
 
@@ -479,14 +481,14 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 80,
-              backgroundImage:
-              _imageBytes != null ? MemoryImage(_imageBytes!) : null,
-              child: _imageBytes == null
-                  ? const Icon(Icons.person, size: 60)
-                  : null,
-            ),
+            // CircleAvatar(
+            //   radius: 80,
+            //   backgroundImage:
+            //   _imageBytes != null ? MemoryImage(_imageBytes!) : null,
+            //   child: _imageBytes == null
+            //       ? const Icon(Icons.person, size: 60)
+            //       : null,
+            // ),
             const SizedBox(height: 20),
             ElevatedButton.icon(
               icon: const Icon(Icons.photo),
