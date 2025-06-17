@@ -38,10 +38,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'Page21.dart';
+import 'Home_page.dart';
 import 'Page22.dart';
-import 'Page23.dart';
-import 'Page41.dart';
+import 'Pending_Agreement_page.dart';
+import 'Profile_Page.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;

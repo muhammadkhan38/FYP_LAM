@@ -5,7 +5,7 @@
 // import 'package:shared_preferences/shared_preferences.dart';
 //
 // import 'MainScreen.dart';
-// import 'Page21.dart';
+// import 'Home_page.dart';
 //
 // class SplishScreen extends StatefulWidget {
 //   const SplishScreen({super.key});
@@ -112,7 +112,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'MainScreen.dart';
-import 'Page21.dart';
+import 'Home_page.dart';
 
 class SplishScreen extends StatefulWidget {
   const SplishScreen({super.key});

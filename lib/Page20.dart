@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'Page21.dart';
+import 'Home_page.dart';
 
 class Page20 extends StatelessWidget {
   const Page20({super.key});

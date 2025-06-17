@@ -1,7 +1,6 @@
-import 'package:final_year_project/Page_38.dart';
+import 'package:final_year_project/Custom_Create_Display_Page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'Widgets/Reusable Date Picker.dart';
@@ -78,7 +77,12 @@ class _DynamicTextFormFieldsState extends State<DynamicTextFormFields> {
   /// this function is used to clear sharedpref data
   Future<void> clearData() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.clear(); // or prefs.remove('myKey');
+    await prefs.remove('title');
+    await prefs.remove('first_party');
+    await prefs.remove('second_party');
+    await prefs.remove('date');
+    await prefs.remove('descriptions');
+
   }
 
   @override

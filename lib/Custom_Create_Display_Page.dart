@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:signature/signature.dart';
-import 'Page21.dart';
+import 'Home_page.dart';
 import 'Page_39.dart';
 import 'Page_40.dart';
 import 'package:http_parser/http_parser.dart';
@@ -26,8 +26,8 @@ class _Page38State extends State<Page38> {
   String secondParty = '';
   String date = '';
   Map<String, String> descriptionMap = {};
-  String? _email;
   int _agreementId = 0;
+  String _email = '';
 
   // Signature
   final SignatureController _signatureController = SignatureController(
@@ -42,6 +42,7 @@ class _Page38State extends State<Page38> {
   void initState() {
     super.initState();
     _loadUserInfo();
+    print("this is email $_email");
     loadFormDataFromPrefs();
   }
 
@@ -50,13 +51,19 @@ class _Page38State extends State<Page38> {
     _signatureController.dispose();
     super.dispose();
   }
-
   Future<void> _loadUserInfo() async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _email = prefs.getString('user_email') ?? '';
     });
   }
+
+  // Future<void> _loadUserInfo() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     _email = prefs.getString('user_email') ?? '';
+  //   });
+  // }
 
   Future<void> loadFormDataFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
@@ -78,10 +85,7 @@ class _Page38State extends State<Page38> {
     }
   }
 
-  Future<void> clearData() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-  }
+
   Future<void> _sendDataToAPI(String status, {int id = 0}) async {
     const String apiUrl = "https://nda.yourailist.com/api/create_agreement";
 
@@ -155,6 +159,7 @@ class _Page38State extends State<Page38> {
         Map<String, dynamic> responseData = jsonDecode(responseBody.body);
         _agreementId = responseData['agreement_id'];
         String message = responseData['message'];
+        print(responseBody.body);
 
         print("Agreement ID: $_agreementId");
         print("Message: $message");
@@ -181,9 +186,11 @@ class _Page38State extends State<Page38> {
         throw Exception("API Error: ${response.statusCode}");
       }
     } catch (e) {
+
       print("Error: ${e.toString()}");
 
       if (e is SocketException) {
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('You are offline')),
         );
@@ -198,84 +205,7 @@ class _Page38State extends State<Page38> {
       });
     }
   }
-  // Future<void> _sendDataToAPI(String status) async {
-  //   if (_signatureController.isEmpty) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text("Please sign the agreement")),
-  //     );
-  //     return;
-  //   }
-  //
-  //   setState(() {
-  //     status == 'draft' ? _isSavingDraft = true : _isCreating = true;
-  //   });
-  //
-  //   try {
-  //     final signatureFile = await _saveSignatureImage();
-  //     final agreementJson = _buildAgreementJson();
-  //     final token = await _getUserToken();
-  //
-  //     final request = http.MultipartRequest(
-  //       "POST",
-  //       Uri.parse('https://nda.yourailist.com/api/create_agreement'),
-  //     )..headers.addAll({
-  //       'Authorization': 'Bearer $token',
-  //       'Content-Type': 'multipart/form-data',
-  //       'Accept': 'application/json',
-  //     })
-  //       ..fields.addAll({
-  //         'email': _email ?? '',
-  //         'email': 'muhammadkhan8338@gmail.com',
-  //         'slug': "agreement_slug",
-  //         'title': title,
-  //         'agreement_file': jsonEncode(agreementJson),
-  //         'status': status,
-  //       });
-  //
-  //     if (signatureFile != null) {
-  //       request.files.add(await http.MultipartFile.fromPath(
-  //         'signature',
-  //         signatureFile.path,
-  //         contentType: MediaType('image', 'png'),
-  //       ));
-  //     }
-  //
-  //     final response = await request.send();
-  //     final responseBody = await http.Response.fromStream(response);
-  //
-  //     if (response.statusCode == 200) {
-  //       print(responseBody.body);
-  //       final responseData = jsonDecode(responseBody.body);
-  //       _agreementId = responseData['agreement_id'];
-  //       await _saveAgreementId(_agreementId);
-  //
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text("Agreement ${status == 'draft' ? 'saved' : 'created'} successfully")),
-  //       );
-  //
-  //       if (status != 'draft') {
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) => Page40(agreement_ids: _agreementId),
-  //           ),
-  //         );
-  //       }
-  //     } else {
-  //       print(responseBody.body);
-  //       throw Exception("API Error: ${response.statusCode}");
-  //
-  //     }
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text("Error: ${e.toString()}")),
-  //     );
-  //   } finally {
-  //     setState(() {
-  //       status == 'draft' ? _isSavingDraft = false : _isCreating = false;
-  //     });
-  //   }
-  // }
+
 
   Future<File?> _saveSignatureImage() async {
     if (!_signatureController.isNotEmpty) return null;
@@ -320,7 +250,7 @@ class _Page38State extends State<Page38> {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () async {
-            await clearData();
+
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_ios),

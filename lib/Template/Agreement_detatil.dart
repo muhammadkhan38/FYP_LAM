@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:final_year_project/Page21.dart';
+import 'package:final_year_project/Home_page.dart';
 import 'package:final_year_project/Page_40.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
@@ -548,26 +548,29 @@ class _AgreementDatailState extends State<AgreementDatail> {
             ),
             ElevatedButton(
               onPressed: () async {
+                // Check if signature is empty
+                if (signatureController.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Please provide a signature before saving."),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return; // Stop execution
+                }
+
+                // Proceed if signature is valid
                 await _sendDataToAPI("draft");
+
                 await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => Page21(),
                   ),
                 );
-
-                //await  _saveSignature();
-
-
-
-
-                //  saveTextToJson();
-
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => const Page36()));
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.blueAccent,
-                // backgroundColor: Colors.blueAccent.shade400,
                 backgroundColor: const Color.fromRGBO(71, 70, 70, 1),
                 elevation: 3,
                 shape: RoundedRectangleBorder(
@@ -580,6 +583,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
                 style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
               ),
             ),
+
             const SizedBox(height: 30),
           ],
         ),

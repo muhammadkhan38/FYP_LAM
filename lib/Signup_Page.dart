@@ -5,8 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Page3.dart';
-import 'Page5.dart';
+import 'LoginPage.dart';
+import 'Otp_Page.dart';
 import 'Widgets/Reusable Date Picker.dart';
 import 'CustomTextFormField.dart';
 
@@ -448,7 +448,7 @@ class _Page4State extends State<Page4> {
                               TextButton(
                                 onPressed: () => Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const Page3()),
+                                  MaterialPageRoute(builder: (context) => const LoginPage()),
                                 ),
                                 child: const Text('Sign in', style: TextStyle(fontSize: 15)),
                               ),

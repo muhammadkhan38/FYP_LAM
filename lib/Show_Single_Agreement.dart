@@ -1,23 +1,32 @@
 import 'dart:convert';
-import 'dart:typed_data';
+import 'dart:io';
+import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
+import 'package:final_year_project/Home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http_parser/http_parser.dart';
 
 import 'Template/Templeate_textfiedl.dart';
+import 'Page_40.dart';
 
 class AgreementPage extends StatefulWidget {
   final int id;
   final String mode; // "view", "sign", or "edit"
   final String email;
+  final bool fromPage23; // New flag to identify navigation from page23
+  final bool fromPage24; // New flag to identify navigation from page24
 
   const AgreementPage({
     super.key,
     required this.id,
     required this.mode,
     required this.email,
+    this.fromPage23 = false,
+    this.fromPage24 = false,
   });
 
   @override
@@ -27,6 +36,8 @@ class AgreementPage extends StatefulWidget {
 class _AgreementPageState extends State<AgreementPage> {
   String? signature_url1;
   String? signature_url2;
+  bool _loading = true;
+  String? _error;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController party1Controller = TextEditingController();
   final TextEditingController party2Controller = TextEditingController();
@@ -40,11 +51,90 @@ class _AgreementPageState extends State<AgreementPage> {
   );
   bool isLoading = true;
   bool isSubmitting = false;
+  int _agreementId = 0;
+  bool _showFirstPartySignature = false;
+  bool _showSignaturePad = false;
+  bool _allowEditing = false;
 
   @override
   void initState() {
     super.initState();
+    _determineViewMode();
     _fetchAgreementData();
+  }
+
+  void _determineViewMode() {
+    if (widget.fromPage23) {
+      // From page23: Show first party signature and signature pad
+      _showFirstPartySignature = true;
+      _showSignaturePad = true;
+      _allowEditing = false;
+    } else if (widget.fromPage24) {
+      // From page24: Show both signatures and allow editing
+      _showFirstPartySignature = true;
+      _showSignaturePad = false;
+      _allowEditing = true;
+    } else {
+      // Default behavior based on original mode
+      _showFirstPartySignature = true;
+      _showSignaturePad = widget.mode == "sign";
+      _allowEditing = widget.mode == "edit";
+    }
+  }
+
+  Future<void> signAgreement(int ids, SignatureController signatureController) async {
+    final url = Uri.parse('https://nda.yourailist.com/api/signAgreement');
+
+    try {
+      setState(() {
+        _loading = true;
+      });
+
+      File? signatureFile;
+
+      if (signatureController.isNotEmpty) {
+        final signature = await signatureController.toImage();
+        final byteData = await signature!.toByteData(format: ImageByteFormat.png);
+        final pngBytes = byteData!.buffer.asUint8List();
+        final tempDir = await getTemporaryDirectory();
+        signatureFile = await File('${tempDir.path}/signature.png').writeAsBytes(pngBytes);
+      }
+
+      var request = http.MultipartRequest("POST", url);
+      request.fields['email'] = widget.email;
+      request.fields['agreement_id'] = ids.toString();
+
+      if (signatureFile != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'signature',
+          signatureFile.path,
+          contentType: MediaType('image', 'png'),
+        ));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      final data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Page21()));
+      } else {
+        setState(() {
+          _error = "Error: ${data['message']}";
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(_error!)),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    } finally {
+      setState(() {
+        _loading = false;
+      });
+    }
   }
 
   Future<void> _fetchAgreementData() async {
@@ -67,6 +157,7 @@ class _AgreementPageState extends State<AgreementPage> {
           dateController.text = agreementFile['Agreement']['date'] ?? '';
           signature_url1 = agreement['signature_url1'];
           signature_url2 = agreement['signature_url2'];
+          _agreementId = widget.id;
 
           descriptionController.clear();
           descriptionKeyController.clear();
@@ -88,18 +179,33 @@ class _AgreementPageState extends State<AgreementPage> {
     }
   }
 
-  Future<void> _submitAgreement() async {
-    if (widget.mode == "sign" && _signatureController.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please sign the agreement")),
-      );
-      return;
-    }
+  Future<String?> _getUserToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_token');
+  }
 
-    setState(() => isSubmitting = true);
+  Future<void> _saveAgreementId(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('agreement_id', id);
+  }
+
+  Future<void> _sendDataToAPI() async {
+    final status = widget.mode == "sign" ? "complete" : "draft";
 
     try {
-      final agreementJson = {
+      setState(() => isSubmitting = true);
+
+      File? signatureFile;
+
+      if (_showSignaturePad && _signatureController.isNotEmpty) {
+        final signature = await _signatureController.toImage();
+        final byteData = await signature!.toByteData(format: ImageByteFormat.png);
+        final pngBytes = byteData!.buffer.asUint8List();
+        final tempDir = await getTemporaryDirectory();
+        signatureFile = await File('${tempDir.path}/signature.png').writeAsBytes(pngBytes);
+      }
+
+      Map<String, dynamic> jsonData = {
         "Agreement": {
           "title": titleController.text,
           "parties": {
@@ -113,27 +219,63 @@ class _AgreementPageState extends State<AgreementPage> {
         }
       };
 
-      final response = await http.post(
-        Uri.parse("https://nda.yourailist.com/api/create_agreement"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "email": widget.email,
-          "slug": "agreement_slug",
-          "title": titleController.text,
-          "agreement_file": jsonEncode(agreementJson),
-          "signature": widget.mode == "sign" ? "true" : "false",
-          "id": widget.id,
-        }),
+      String jsonString = jsonEncode(jsonData);
+
+      var request = http.MultipartRequest(
+          "POST",
+          Uri.parse("https://nda.yourailist.com/api/create_agreement")
       );
 
+      String? token = await _getUserToken();
+      request.headers.addAll({
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+      });
+
+      request.fields['email'] = widget.email;
+      request.fields['slug'] = "agreement_slug";
+      request.fields['title'] = titleController.text;
+      request.fields['agreement_file'] = jsonString;
+      request.fields['status'] = status;
+      request.fields['id'] = widget.id.toString();
+
+      if (signatureFile != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'signature',
+          signatureFile.path,
+          contentType: MediaType('image', 'png'),
+        ));
+      }
+
+      var response = await request.send();
+      var responseBody = await http.Response.fromStream(response);
+
       if (response.statusCode == 200) {
-        Navigator.pop(context, true); // Return success
+        Map<String, dynamic> responseData = jsonDecode(responseBody.body);
+        _agreementId = responseData['agreement_id'];
+        String message = responseData['message'];
+
+        await _saveAgreementId(_agreementId);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Agreement ${status == 'draft' ? 'saved' : 'created'} successfully")),
+        );
+
+        if (status == 'draft') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Page40(agreement_ids: _agreementId),
+            ),
+          );
+        }
       } else {
-        throw Exception("Failed to submit agreement");
+        throw Exception("API Error: ${response.statusCode}");
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: ${e.toString()}")),
+        SnackBar(content: Text('Error: ${e.toString()}')),
       );
     } finally {
       setState(() => isSubmitting = false);
@@ -176,7 +318,7 @@ class _AgreementPageState extends State<AgreementPage> {
                         color: Colors.white,
                         txtsize: 16.0,
                         maxLines: 3,
-                        readOnly: widget.mode == "view",
+                        readOnly: !_allowEditing,
                       ),
                     ),
                     const Divider(color: Colors.grey, thickness: 1),
@@ -190,7 +332,7 @@ class _AgreementPageState extends State<AgreementPage> {
                               color: const Color(0xff00C2FF),
                               hintText: "Employee's Name",
                               maxLines: 3,
-                              readOnly: widget.mode == "view",
+                              readOnly: !_allowEditing,
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -200,7 +342,7 @@ class _AgreementPageState extends State<AgreementPage> {
                               hintText: "Employer's Name",
                               color: const Color(0xff00C2FF),
                               maxLines: 3,
-                              readOnly: widget.mode == "view",
+                              readOnly: !_allowEditing,
                             ),
                           ),
                         ],
@@ -212,8 +354,8 @@ class _AgreementPageState extends State<AgreementPage> {
                         controller: dateController,
                         hintText: "Date",
                         color: Colors.white,
-                        readOnly: true,
-                        onTap: widget.mode == "edit"
+                        readOnly: !_allowEditing,
+                        onTap: _allowEditing
                             ? () => showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
@@ -264,7 +406,7 @@ class _AgreementPageState extends State<AgreementPage> {
                             controller: entry.value,
                             txtsize: 12.0,
                             Fontweight: FontWeight.w400,
-                            readOnly: widget.mode == "view",
+                            readOnly: !_allowEditing,
                           ),
                         ],
                       ),
@@ -276,36 +418,37 @@ class _AgreementPageState extends State<AgreementPage> {
 
             const SizedBox(height: 20),
 
-            // First Party Signature
-            const Text("Signature of First Party"),
-            CachedNetworkImage(
-              imageUrl: signature_url1 ?? '',
-              height: 150,
-              imageBuilder: (context, imageProvider) => Container(
-                width: size.width - 20,
+            // First Party Signature (conditionally shown)
+            if (_showFirstPartySignature) ...[
+              const Text("Signature of First Party"),
+              CachedNetworkImage(
+                imageUrl: signature_url1 ?? '',
                 height: 150,
-                decoration: BoxDecoration(
-                  color: Colors.white38,
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.contain,
-                    alignment: Alignment.center,
+                imageBuilder: (context, imageProvider) => Container(
+                  width: size.width - 20,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.white38,
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.contain,
+                      alignment: Alignment.center,
+                    ),
                   ),
                 ),
+                placeholder: (context, url) => SizedBox(
+                  height: 150,
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.red),
               ),
-              placeholder: (context, url) => SizedBox(
-                height: 150,
-                child: const Center(child: CircularProgressIndicator()),
-              ),
-              errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.red),
-            ),
-
-            const SizedBox(height: 30),
+              const SizedBox(height: 30),
+            ],
 
             // Second Party Signature or Signature Pad
-            if (widget.mode == "sign")
+            if (_showSignaturePad)
               _buildSignaturePad(size)
-            else
+            else if (signature_url2 != null && signature_url2!.isNotEmpty)
               Column(
                 children: [
                   const Text("Signature of Second Party"),
@@ -332,8 +475,8 @@ class _AgreementPageState extends State<AgreementPage> {
 
             const SizedBox(height: 20),
 
-            // Submit Button
-            if (widget.mode != "view")
+            // Action Buttons
+            if (_showSignaturePad || _allowEditing)
               _buildActionButtons(size),
           ],
         ),
@@ -376,7 +519,13 @@ class _AgreementPageState extends State<AgreementPage> {
     return Column(
       children: [
         ElevatedButton(
-          onPressed: isSubmitting ? null : _submitAgreement,
+          onPressed: isSubmitting ? null : () {
+            if (_showSignaturePad) {
+              signAgreement(_agreementId, _signatureController);
+            } else {
+              _sendDataToAPI();
+            }
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
@@ -385,7 +534,7 @@ class _AgreementPageState extends State<AgreementPage> {
           child: isSubmitting
               ? const CircularProgressIndicator(color: Colors.white)
               : Text(
-              widget.mode == "edit" ? 'Update' : 'Sign',
+              _showSignaturePad ? 'Sign & Share' : 'Update & Share',
               style: const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
         ),
         const SizedBox(height: 20),
@@ -405,9 +554,6 @@ class _AgreementPageState extends State<AgreementPage> {
     super.dispose();
   }
 }
-
-
-
 
 
 
@@ -871,458 +1017,3 @@ class _AgreementPageState extends State<AgreementPage> {
 //   }
 // }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import 'dart:convert';
-// import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:signature/signature.dart';
-//
-// import 'Page_40.dart';
-// import 'Template/Templeate_textfiedl.dart'; // If you're using a signature package
-//
-// class AgreementPage extends StatefulWidget {
-//
-//   final id; //this is user id
-//   const AgreementPage( {super.key, this.id,});
-//
-//   @override
-//   State<AgreementPage> createState() => _AgreementPageState();
-// }
-//
-// class _AgreementPageState extends State<AgreementPage> {
-//   final TextEditingController titleController = TextEditingController();
-//   final TextEditingController party1Controller = TextEditingController();
-//   final TextEditingController party2Controller = TextEditingController();
-//   final TextEditingController dateController = TextEditingController();
-//
-//   final Map<String, TextEditingController> descriptionController = {};
-//   Map<String, TextEditingController> descriptionkeyController = {};
-//   final SignatureController _controller = SignatureController();
-//
-//   bool isLoading = true;
-//
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     fetchAgreement(widget.id); // Replace with actual ID
-//   }
-//
-//
-//   Future<void> _sendDataToAPI({int id = 0}) async {
-//     const String apiUrl = "https://Nda.yourailist.com/api/create_agreement";
-//     try {
-//       // Prepare the agreement JSON structure
-//       Map<String, dynamic> jsonData = {
-//         "Agreement": {
-//           "title": titleController.text,
-//           "parties": {
-//             "Employer": {"name": party1Controller.text},
-//             "Employee": {"name": party2Controller.text}
-//           },
-//           "date": dateController.text,
-//           "Description": {}
-//         }
-//       };
-//
-//       // Add dynamic description fields
-//       descriptionController.forEach((key, controller) {
-//         jsonData["Agreement"]["Description"][key] = controller.text;
-//       });
-//
-//       // Convert the Agreement Map to JSON string
-//       String jsonString = jsonEncode(jsonData);
-//
-//       // Prepare final payload for API
-//       Map<String, dynamic> createAgreement = {
-//         "email":  "muhammadkhan8338@gmail.com",
-//         "slug": "slug",
-//         "title": titleController.text,
-//         "agreement_file": jsonString,
-//         //"signature": base64Signature,
-//          "signature": "true",
-//         "id": widget.id,
-//       };
-//
-//       final response = await http.post(
-//         Uri.parse(apiUrl),
-//         headers: {"Content-Type": "application/json"},
-//         body: jsonEncode(createAgreement),
-//       );
-//
-//       if (response.statusCode == 200) {
-//         Map<String, dynamic> responseData = jsonDecode(response.body);
-//         print(responseData);
-//         print(widget.id +" \t this is the id" );
-//
-//         int agreementId = responseData['agreement_id'];
-//         String message = responseData['message'];
-//
-//         print("Agreement ID: $agreementId");
-//         print("Message: $message");
-//
-//
-//         // ✅ Save agreementId to SharedPreferences
-//         // SharedPreferences prefs = await SharedPreferences.getInstance();
-//         // await prefs.setInt('agreement_id', agreementId);
-//         // Agreement_id = prefs.getInt('agreement_id')!;
-//         // print("$Agreement_id the is the share perfersnce is dis ");
-//
-//         print("Agreement ID saved to SharedPreferences!");
-//       } else {
-//         print("Failed to send data. Status code: ${response.statusCode}");
-//         print("Response Body: ${response.body}");
-//       }
-//     } catch (e) {
-//       print("Error sending data: $e");
-//     }
-//   }
-//
-//   Future<void> fetchAgreement(int userId) async {
-//     try {
-//       final response = await http.post(
-//         Uri.parse("https://nda.yourailist.com/api/getSingleAgreement"),
-//         headers: {
-//           "Content-Type": "application/json",
-//           "Accept": "application/json",
-//         },
-//         body: jsonEncode({"id": userId}),
-//       );
-//
-//       if (response.statusCode == 200) {
-//         final data = jsonDecode(response.body);
-//         final agreement = data['agreement'];
-//         final agreementFile = jsonDecode(agreement['agreement_file']);
-//
-//         titleController.text = agreementFile['Agreement']['title'] ?? '';
-//         party1Controller.text = agreementFile['Agreement']['parties']['Employee']['name'] ?? '';
-//         party2Controller.text = agreementFile['Agreement']['parties']['Employer']['name'] ?? '';
-//         dateController.text = agreementFile['Agreement']['date'] ?? '';
-//
-//         final descriptionMap = agreementFile['Agreement']['Description'];
-//
-//         descriptionMap.forEach((key, value) {
-//
-//           descriptionController[key] = TextEditingController(text: value);
-//           descriptionkeyController[value] = TextEditingController(text: value);
-//         });
-//
-//         setState(() {
-//           isLoading = false;
-//         });
-//       } else {
-//         throw Exception("Failed to fetch agreement");
-//       }
-//     } catch (e) {
-//       print("Error fetching agreement: $e");
-//       setState(() {
-//         isLoading = false;
-//       });
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final size = MediaQuery.of(context).size;
-//
-//     return Scaffold(
-//       appBar: AppBar( title: Text("Agreement (NDA)")),
-//       body: isLoading
-//           ? const Center(child: CircularProgressIndicator())
-//           : SingleChildScrollView(
-//         child: Column(
-//           children: [
-//             // Header Container
-//             Padding(
-//               padding: const EdgeInsets.all(5),
-//               child: Container(
-//                 width: size.width - 15,
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(15),
-//                   color: Colors.black87,
-//                 ),
-//                 child: Column(
-//                   children: [
-//                     const SizedBox(height: 10),
-//                     Padding(
-//                       padding: const EdgeInsets.symmetric(horizontal: 30),
-//                       child: CustomTextField(
-//                         controller: titleController,
-//                         hintText: "Agreement Title",
-//                         color: Colors.white,
-//                         txtsize: 16.0,
-//                         maxLines: 3,
-//                       ),
-//                     ),
-//                     Divider(
-//                       color: Colors.grey.shade600,
-//                       thickness: 1,
-//                       indent: 25,
-//                       endIndent: 25,
-//                     ),
-//                     const Padding(
-//                       padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 5.0),
-//                       child: Row(
-//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                         children: [
-//                           Text('Party 1',
-//                               style: TextStyle(
-//                                   fontSize: 10,
-//                                   fontWeight: FontWeight.w500,
-//                                   color: Colors.grey)),
-//                           Text('Party 2',
-//                               style: TextStyle(
-//                                   fontSize: 10,
-//                                   fontWeight: FontWeight.w500,
-//                                   color: Colors.grey)),
-//                         ],
-//                       ),
-//                     ),
-//                     Padding(
-//                       padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 10.0),
-//                       child: Row(
-//                         children: [
-//                           Expanded(
-//                             child: CustomTextField(
-//                               controller: party1Controller,
-//                               color: const Color(0xff00C2FF),
-//                               hintText: "Employee's Name",
-//                               maxLines: 3,
-//                             ),
-//                           ),
-//                           const SizedBox(width: 10),
-//                           Expanded(
-//                             child: CustomTextField(
-//                               controller: party2Controller,
-//                               hintText: "Employer's Name",
-//                               color: const Color(0xff00C2FF),
-//                               maxLines: 3,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     Align(
-//                       alignment: Alignment.bottomRight,
-//                       child: Padding(
-//                         padding: const EdgeInsets.symmetric(horizontal: 100),
-//                         child: CustomTextField(
-//                           readOnly: true,
-//                           onTap: () => showDatePicker(
-//                             context: context,
-//                             initialDate: DateTime.now(),
-//                             firstDate: DateTime(2000),
-//                             lastDate: DateTime(2100),
-//                           ).then((pickedDate) {
-//                             if (pickedDate != null) {
-//                               dateController.text =
-//                               "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
-//                             }
-//                           }),
-//                           controller: dateController,
-//                           hintText: "Date",
-//                           color: Colors.white,
-//                         ),
-//                       ),
-//                     ),
-//                     const SizedBox(height: 5),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//             const SizedBox(height: 30),
-//
-//             Padding(
-//               padding: const EdgeInsets.only(left: 0.0,right: 0.0),
-//               child: Container(
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(15.0),
-//                   color: Colors.white,
-//                 ),
-//                 padding: EdgeInsets.all(15),
-//
-//                 child: SizedBox(
-//                     height: 600,
-//                     child: ListView(
-//                       children: descriptionController.entries.map((entry) {
-//                         return Padding(
-//                           padding: const EdgeInsets.only(bottom: 10),
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               CustomTextField(
-//                                 controller: descriptionkeyController[entry.key] ??
-//                                     TextEditingController(text: entry.key),
-//                                 txtsize: 14.0,
-//                                 Fontweight:FontWeight.w700,
-//                               ),
-//                               CustomTextField(
-//                                 controller: entry.value,
-//                                 txtsize: 12.0,
-//                                 Fontweight:FontWeight.w400,
-//
-//
-//                               ),
-//
-//
-//                               SizedBox(height: 40,),
-//                             ],
-//                           ),
-//                         );
-//                       }).toList(),
-//                     )),
-//               ),
-//             ),
-//
-//
-//             const SizedBox(height: 60),
-//             // Signature Area - First Party
-//
-//             const SizedBox(height: 30),
-//             // Signature Area - Second Party
-//             _signatureBlock(size, label: "Signature of Second Party", useSignaturePad: true),
-//             const SizedBox(height: 20),
-//             // Buttons
-//             _actionButtons(size),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _signatureBlock(Size size, {required String label, bool useSignaturePad = false}) {
-//     return Padding(
-//       padding: const EdgeInsets.all(10.0),
-//       child: Container(
-//         height: 123,
-//         width: size.width - 30,
-//         decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(10),
-//           color: Colors.grey.shade300,
-//         ),
-//         child: Column(
-//           children: [
-//             if (!useSignaturePad)
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.end,
-//                 children: [
-//                   Padding(
-//                     padding: const EdgeInsets.only(top: 10.0, right: 10),
-//                     child: CircleAvatar(
-//                       backgroundColor: const Color(0xff474646),
-//                       child: IconButton(
-//                         onPressed: () {},
-//                         icon: const Icon(Icons.qr_code_scanner, color: Colors.lightBlueAccent),
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             const SizedBox(height: 20),
-//             if (useSignaturePad)
-//               Signature(
-//                 controller: _controller,
-//                 height: 60,
-//                 backgroundColor: Colors.grey.shade300,
-//               ),
-//             Padding(
-//               padding: const EdgeInsets.all(8.0),
-//               child: Text(
-//                 label,
-//                 style: const TextStyle(fontSize: 12, color: Color(0xffA9ACB0)),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _actionButtons(Size size) {
-//     return Column(
-//       children: [
-//         ElevatedButton(
-//           onPressed: () async {
-//            await _sendDataToAPI();
-//
-//             print("Create tapped");
-//             // just for testing
-//            await Navigator.push(
-//              context,
-//              MaterialPageRoute(
-//                builder: (context) => Page40(agreement_ids:widget.id),
-//              ),
-//            );
-//             //Navigator.push(context, MaterialPageRoute(builder: (context)=>Page21()));
-//           },
-//           style: ElevatedButton.styleFrom(
-//             backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
-//             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-//             padding: const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
-//           ),
-//           child: const Text('Create',
-//               style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
-//         ),
-//         const SizedBox(height: 20),
-//
-//         const SizedBox(height: 30),
-//       ],
-//     );
-//   }
-// }

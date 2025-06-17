@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'Page21.dart';
-// import 'Page24.dart';
+import 'Home_page.dart';
+// import 'MyDraft_Agreement.dart';
  // replace with your actual model file
 
 class GetAgreementApi {
