@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final bool? obsrevetext;
   final FontWeight? Fontweight;
   final int maxLines;
+  final bool enabled;
   final TextStyle? textStyle;
   final InputBorder? border;
   final TextStyle? hintStyle;
@@ -27,6 +28,7 @@ class CustomTextField extends StatelessWidget {
     this.readOnly,
     this.obsrevetext,
     this.Fontweight,
+    this.enabled=true,
   }) : super(key: key);
 
   @override

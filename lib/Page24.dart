@@ -21,7 +21,6 @@ class Agreement {
   final String title;
   final String createdAt;
 
-
   Agreement({required this.id, required this.title, required this.createdAt});
 
   factory Agreement.fromJson(Map<String, dynamic> json) {
@@ -81,7 +80,7 @@ class _Page24State extends State<Page24> {
           'email': _email,
           'status': "draft",
           //'status': "pending",
-         //'status': "pending",
+          //'status': "pending",
         }),
       );
       final data = json.decode(response.body);
@@ -111,12 +110,13 @@ class _Page24State extends State<Page24> {
           SnackBar(content: Text('Error: ${e.toString()}')),
         );
       }
-    }  finally {
+    } finally {
       setState(() {
         _isLoading = false;
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -163,7 +163,7 @@ class _Page24State extends State<Page24> {
               height: 55,
               width: screenSize.width - 20,
               decoration: BoxDecoration(
-                color: Colors.white70,
+                color: Color(0xFFFFFFFF),
                 borderRadius: BorderRadius.circular(40),
                 border: Border.all(
                   color: Colors.black12, // Border color
@@ -195,12 +195,14 @@ class _Page24State extends State<Page24> {
                     ),
                   ),
                   Expanded(
-                    child: GradientButton(text: 'My Drafts', onTap: () {},
-                      width: screenSize.width - 180, height: 47,
+                    child: GradientButton(
+                      text: 'My Drafts',
+                      onTap: () {},
+                      width: screenSize.width - 180,
+                      height: 47,
                     ),
                   ),
                   const SizedBox(width: 10),
-
                 ],
               ),
             ),
@@ -208,57 +210,114 @@ class _Page24State extends State<Page24> {
             _loading
                 ? const Center(child: CircularProgressIndicator())
                 : _error != null
-                ? Center(child: Text("Error: $_error"))
-                : ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _agreements.length,
-              itemBuilder: (context, index) {
-                final agreement = _agreements[index];
-                return GestureDetector(
-                  onTap: ()async {
-
-                    print(agreement.id);
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) =>
-                          AgreementPage(id: agreement.id, mode: 'edit', email:_email,),
-                    ) );
-
-                    // await Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => Page40(agreement_ids: agreement.id,),
-                    //   ),
-                    // );
-
-
-                  },
-                  child: Container(
-                    width: screenSize.width - 10,
-                    height: 101,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 6),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(agreement.title),
-                         // Text(agreement.id.toString()),
-                          Text(agreement.createdAt),
-
-
-                        ],
+                    ? Center(child: Text("Error: $_error"))
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _agreements.length,
+                        itemBuilder: (context, index) {
+                          final agreement = _agreements[index];
+                          return Container(
+                            width: screenSize.width - 20,
+                            height: 101,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFFFFFFF),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 6),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 1,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(
+                                          child: Text(
+                                        agreement.title,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 14,
+                                          color: Color(0xFF474646),
+                                        ),
+                                      )),
+                                      Icon(Icons.more_vert)
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Created Date \t\t\t\t',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Color(0xFF00C2FF),
+                                              fontWeight: FontWeight.w500),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: agreement.createdAt,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 12,
+                                                color: Color(0xFF838788),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 5),
+                                        child: SizedBox(
+                                          width: 76,
+                                          height: 33,
+                                          child: TextButton(
+                                            onPressed: () async {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                  builder: (context) => AgreementPage(
+                                                id: agreement.id,
+                                                mode: 'edit',
+                                                email: _email,
+                                              ),
+                                                  )
+                                              );
+                                            },
+                                            style: TextButton.styleFrom(
+                                              foregroundColor: Colors.white,
+                                              backgroundColor:
+                                                  Color(0xFF474646),
+                                            ),
+                                            child: const Text(
+                                              'Resume',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                  ),
-                );
-              },
-            ),
           ],
         ),
       ),

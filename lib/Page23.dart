@@ -231,7 +231,7 @@ class _Page23State extends State<Page23> {
               height: 55,
               width: screenSize.width - 20,
               decoration: BoxDecoration(
-                color: Colors.white70,
+                color: Color(0xFFFFFFFF),
                 borderRadius: BorderRadius.circular(40),
                 border: Border.all(
                   color: Colors.black12, // Border color
@@ -843,20 +843,17 @@ class _Page23State extends State<Page23> {
                                                 },
                                                 style: TextButton.styleFrom(
                                                   foregroundColor: Colors.white,
-                                                  backgroundColor: Colors.black,
+                                                  backgroundColor: Color(0xFF474646),
                                                 ),
                                                 child: const Text(
                                                   'Sign',
                                                   style:
-                                                      TextStyle(fontSize: 12),
+                                                      TextStyle(fontSize: 12,fontWeight: FontWeight.w600),
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
                                       ),
                                     ],
                                   ),

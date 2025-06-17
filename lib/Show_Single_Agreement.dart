@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:signature/signature.dart';
 
+import 'CustomTextFormField.dart';
 import 'Page_40.dart';
 import 'Template/Templeate_textfiedl.dart';
+import 'Widgets/Reusable Date Picker.dart';
 
 class AgreementPage extends StatefulWidget {
   final int id;
@@ -179,7 +181,36 @@ class _AgreementPageState extends State<AgreementPage> {
                         readOnly: !isEditable,
                       ),
                     ),
-                    const Divider(color: Colors.grey, thickness: 1),
+                    Divider(
+                      color: Colors.grey.shade600,
+                      thickness: 1,
+                      indent: 25,
+                      endIndent: 25,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Party 1',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Text(
+                            'Party 2',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -206,27 +237,18 @@ class _AgreementPageState extends State<AgreementPage> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 100),
-                      child: CustomTextField(
-                        controller: dateController,
-                        hintText: "Date",
-                        color: Colors.white,
-                        readOnly: true,
-                        onTap: isEditable
-                            ? () => showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                        ).then((pickedDate) {
-                          if (pickedDate != null) {
-                            dateController.text =
-                            "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
-                          }
-                        })
-                            : null,
-                      ),
+                    CustomTextFormField(
+                      controller: dateController,
+                      hintText: 'Date',
+                      icon: Icons.date_range,
+                      readOnly: true, // ✅ یوزر خود کچھ نہیں لکھ سکتا
+                      onTap: () => DatePickerUtil.selectDate(context, dateController), // ✅ ری یوزایبل فنکشن کال
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a date';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 5),
                   ],
