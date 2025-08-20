@@ -108,7 +108,7 @@ class _Page24State extends State<Page24> {
       }
     }  finally {
       setState(() {
-        _isLoading = false;
+        //_isLoading = false;
       });
     }
   }
