@@ -7,21 +7,21 @@ import 'package:http/http.dart';
 import 'dart:convert'; // To parse JSON responses
 import 'package:connectivity_plus/connectivity_plus.dart'; // Connectivity package
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Page21.dart';
-import 'Page4.dart';
+import 'Home_page.dart';
+import 'Signup_Page.dart';
 
 String? userToken; // Global variable to store the token
 
-class Page3 extends StatefulWidget {
-  const Page3({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<Page3> createState() => _Page3State();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 bool _isPasswordVisible = false; // Tracks password visibility
 
-class _Page3State extends State<Page3> {
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
@@ -137,7 +137,7 @@ class _Page3State extends State<Page3> {
 
       if (e is SocketException) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('You are offline')),
+          SnackBar(content: Text('You are offline' + e.toString())),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

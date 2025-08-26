@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Page3.dart';
+import 'LoginPage.dart';
 import 'Page56.dart';
 import 'Page60.dart';
 
@@ -236,7 +236,7 @@ class _DrawerClassState extends State<DrawerClass> {
                 // Navigate and remove all previous screens
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Page3()),
+                  MaterialPageRoute(builder: (context) => LoginPage()),
                       (route) => false,
                 );
               },

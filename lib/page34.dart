@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'CutomTextField.dart';
 import 'Page67.dart';
-import 'Page_36.dart';
+import 'Custom_Create_page.dart';
 import 'Page_37.dart';
-import 'Page_38.dart';
+import 'Custom_Create_Display_Page.dart';
 import 'Widgets/Reusable_Gradient_Button.dart';
 class Page34 extends StatelessWidget {
   const Page34({super.key});

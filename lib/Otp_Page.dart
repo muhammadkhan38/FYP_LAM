@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'BigText.dart';
-import 'Page21.dart';
+import 'Home_page.dart';
 
 class Page5 extends StatefulWidget {
   final String email;
@@ -281,7 +281,7 @@ class _Page5State extends State<Page5> {
 // import 'dart:convert';
 //
 // import 'BigText.dart';
-// import 'Page21.dart';
+// import 'Home_page.dart';
 //
 // class Page5 extends StatefulWidget {
 //   final String email;
@@ -551,7 +551,7 @@ class _Page5State extends State<Page5> {
 // import 'dart:convert';
 //
 // import 'BigText.dart';
-// import 'Page21.dart';
+// import 'Home_page.dart';
 //
 // class Page5 extends StatefulWidget {
 //   final String email;
@@ -774,7 +774,7 @@ class _Page5State extends State<Page5> {
 // // import 'dart:convert';
 // //
 // // import 'BigText.dart';
-// // import 'Page21.dart';
+// // import 'Home_page.dart';
 // //
 // // class Page5 extends StatefulWidget {
 // //    // Store additional data like email

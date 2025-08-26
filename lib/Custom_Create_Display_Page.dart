@@ -1,9 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
+import 'dart:io';
+import 'dart:ui';
 
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:signature/signature.dart';
+import 'Home_page.dart';
 import 'Page_39.dart';
 import 'Page_40.dart';
+import 'package:http_parser/http_parser.dart';
 
 class Page38 extends StatefulWidget {
   const Page38({super.key});
@@ -13,19 +20,50 @@ class Page38 extends StatefulWidget {
 }
 
 class _Page38State extends State<Page38> {
+  // Form Data
   String title = '';
   String firstParty = '';
   String secondParty = '';
   String date = '';
-  // String terms = '';
-  // String remedies = '';
-  Map<String, String> descriptionMap = {}; // ✅ New variable
+  Map<String, String> descriptionMap = {};
+  int _agreementId = 0;
+  String _email = '';
+
+  // Signature
+  final SignatureController _signatureController = SignatureController(
+    penStrokeWidth: 3,
+    penColor: Colors.black,
+    exportBackgroundColor: Colors.white,
+  );
+  bool _isCreating = false;
+  bool _isSavingDraft = false;
 
   @override
   void initState() {
     super.initState();
+    _loadUserInfo();
+    print("this is email $_email");
     loadFormDataFromPrefs();
   }
+
+  @override
+  void dispose() {
+    _signatureController.dispose();
+    super.dispose();
+  }
+  Future<void> _loadUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _email = prefs.getString('user_email') ?? '';
+    });
+  }
+
+  // Future<void> _loadUserInfo() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     _email = prefs.getString('user_email') ?? '';
+  //   });
+  // }
 
   Future<void> loadFormDataFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
@@ -35,24 +73,172 @@ class _Page38State extends State<Page38> {
       firstParty = prefs.getString('first_party') ?? '';
       secondParty = prefs.getString('second_party') ?? '';
       date = prefs.getString('date') ?? '';
-      // terms = prefs.getString('terms') ?? '';
-      // remedies = prefs.getString('remedies') ?? '';
     });
 
-    // ✅ Load description key-value pairs
+    // Load description key-value pairs
     String? descJson = prefs.getString('descriptions');
     if (descJson != null) {
       Map<String, dynamic> decoded = jsonDecode(descJson);
       setState(() {
-        descriptionMap =
-            decoded.map((key, value) => MapEntry(key, value.toString()));
+        descriptionMap = decoded.map((key, value) => MapEntry(key, value.toString()));
       });
     }
   }
 
-  Future<void> clearData() async {
+
+  Future<void> _sendDataToAPI(String status, {int id = 0}) async {
+    const String apiUrl = "https://nda.yourailist.com/api/create_agreement";
+
+    try {
+      setState(() {
+        status == 'draft' ? _isSavingDraft = true : _isCreating = true;
+      });
+
+      File? signatureFile;
+
+      // Convert signature to PNG
+      if (_signatureController.isNotEmpty) {
+        final signature = await _signatureController.toImage();
+        final byteData = await signature!.toByteData(format: ImageByteFormat.png);
+        final pngBytes = byteData!.buffer.asUint8List();
+        final tempDir = await getTemporaryDirectory();
+        signatureFile = await File('${tempDir.path}/signature.png').writeAsBytes(pngBytes);
+      }
+
+      print('Signature file: $signatureFile');
+
+      // Prepare agreement JSON structure
+      Map<String, dynamic> jsonData = {
+        "Agreement": {
+          "title": title,
+          "parties": {
+            "Employer": {"name": firstParty},
+            "Employee": {"name": secondParty}
+          },
+          "date": date,
+          "Description": descriptionMap
+        }
+      };
+
+      // Convert to JSON string
+      String jsonString = jsonEncode(jsonData);
+
+      // Create multipart request
+      var request = http.MultipartRequest("POST", Uri.parse(apiUrl));
+
+      String? token = await _getUserToken();
+      print('Token: $token');
+
+      request.headers.addAll({
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+      });
+
+      request.fields['email'] = _email ?? '';
+      request.fields['slug'] = "agreement_slug";
+      request.fields['title'] = title;
+      request.fields['agreement_file'] = jsonString;
+      request.fields['status'] = status;
+      print("Agreement ID: $id");
+
+      // Attach signature if available
+      if (signatureFile != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'signature',
+          signatureFile.path,
+          contentType: MediaType('image', 'png'),
+        ));
+      }
+
+      // Send request
+      var response = await request.send();
+      var responseBody = await http.Response.fromStream(response);
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseData = jsonDecode(responseBody.body);
+        _agreementId = responseData['agreement_id'];
+        String message = responseData['message'];
+        print(responseBody.body);
+
+        print("Agreement ID: $_agreementId");
+        print("Message: $message");
+
+        // Save to SharedPreferences
+        await _saveAgreementId(_agreementId);
+        print("Agreement ID saved to SharedPreferences!");
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Agreement ${status == 'draft' ? 'saved' : 'created'} successfully")),
+        );
+
+        if (status != 'draft') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Page40(agreement_ids: _agreementId),
+            ),
+          );
+        }
+      } else {
+        print("Failed to send data. Status code: ${response.statusCode}");
+        print("Response Body: ${responseBody.body}");
+        throw Exception("API Error: ${response.statusCode}");
+      }
+    } catch (e) {
+
+      print("Error: ${e.toString()}");
+
+      if (e is SocketException) {
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are offline')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
+      setState(() {
+        status == 'draft' ? _isSavingDraft = false : _isCreating = false;
+      });
+    }
+  }
+
+
+  Future<File?> _saveSignatureImage() async {
+    if (!_signatureController.isNotEmpty) return null;
+
+    final signature = await _signatureController.toImage();
+    final byteData = await signature!.toByteData(format: ImageByteFormat.png);
+    final pngBytes = byteData!.buffer.asUint8List();
+    final tempDir = await getTemporaryDirectory();
+    return File('${tempDir.path}/signature.png').writeAsBytes(pngBytes);
+  }
+
+  Map<String, dynamic> _buildAgreementJson() {
+    return {
+      "Agreement": {
+        "title": title,
+        "parties": {
+          "Employer": {"name": firstParty},
+          "Employee": {"name": secondParty}
+        },
+        "date": date,
+        "Description": descriptionMap,
+      }
+    };
+  }
+
+  Future<String> _getUserToken() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.clear(); // or prefs.remove('myKey');
+    return prefs.getString('user_token') ?? '';
+  }
+
+  Future<void> _saveAgreementId(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('agreement_id', id);
   }
 
   @override
@@ -64,7 +250,7 @@ class _Page38State extends State<Page38> {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () async {
-            await clearData();
+
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_ios),
@@ -77,8 +263,10 @@ class _Page38State extends State<Page38> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Page39()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Page39()),
+              );
             },
             icon: const Icon(
               Icons.edit_calendar_sharp,
@@ -201,46 +389,6 @@ class _Page38State extends State<Page38> {
                       ),
                     ),
                   ),
-                  // const Padding(
-                  //   padding: EdgeInsets.all(8.0),
-                  //   child: Text(
-                  //     'Terms and Condition',
-                  //     style: TextStyle(
-                  //       fontSize: 16,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding:  EdgeInsets.all(8.0),
-                  //   child: Text(
-                  //     terms,
-                  //     style: const TextStyle(
-                  //       fontSize: 14,
-                  //       color: Colors.black,
-                  //     ),
-                  //   ),
-                  // ),
-                  // const Padding(
-                  //   padding: EdgeInsets.all(8.0),
-                  //   child: Text(
-                  //     'Remedies for Bridge',
-                  //     style: TextStyle(
-                  //       fontSize: 16,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: Text(
-                  //     remedies,
-                  //     style: const TextStyle(
-                  //       fontSize: 14,
-                  //       color: Colors.black,
-                  //     ),
-                  //   ),
-                  // ),
                   if (descriptionMap.isNotEmpty) ...[
                     ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
@@ -258,59 +406,579 @@ class _Page38State extends State<Page38> {
                         );
                       },
                     ),
-                  ]
+                  ],
+
                 ],
               ),
             ),
             const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => const Page40(agreement_ids: null,)));
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                padding:
-                const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
+            Row(children: [
+              const Spacer(),
+              const Text(
+                "First Party",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
               ),
-              child: const Text(
-                'Create',
+              const Spacer(flex: 3),
+              const Text(
+                '00-00-0000',
                 style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700),
+                  fontSize: 10,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey,
+                ),
+              ),
+              const Spacer(),
+            ]),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Container(
+                width: size.width - 30,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.grey.shade300,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const SizedBox(height: 5),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Signature(
+                        controller: _signatureController, // Define a second controller for Party 2
+                        height: 123,
+                        backgroundColor: Colors.grey.shade300,
+                        dynamicPressureSupported: true,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Signature of Second party',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xffA9ACB0),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 30),
             ElevatedButton(
-              onPressed: () {
-                // Implement save as draft functionality
+              onPressed: () async {
+
+
+                setState(() {
+                  _isCreating = true;
+                });
+
+                try {
+                  await _sendDataToAPI(Status.draft.toString());
+
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Data submitted successfully")),
+                  );
+
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Page40(agreement_ids: _agreementId),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Error: ${e.toString()}")),
+                  );
+                } finally {
+                  setState(() {
+                    _isCreating = false;
+                  });
+                }
               },
               style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                padding: const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
+              ),
+              child: _isCreating
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Text('Create', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
+            ),
+
+            const SizedBox(
+              height: 30,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await _sendDataToAPI("draft");
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Page21(),
+                  ),
+                );
+
+                //await  _saveSignature();
+
+
+
+
+                //  saveTextToJson();
+
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => const Page36()));
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.blueAccent,
+                // backgroundColor: Colors.blueAccent.shade400,
                 backgroundColor: const Color.fromRGBO(71, 70, 70, 1),
                 elevation: 3,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                padding:
-                const EdgeInsets.symmetric(horizontal: 90, vertical: 19),
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 19),
               ),
               child: const Text(
                 'Save as Draft',
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
               ),
             ),
+            const SizedBox(height: 30),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildSignatureSection(Size size) {
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        const Text(
+          "Sign Below",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          width: size.width - 30,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.grey.shade200,
+          ),
+          child: Column(
+            children: [
+              Signature(
+                controller: _signatureController,
+                height: 150,
+                backgroundColor: Colors.grey.shade200,
+              ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Signature',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import 'package:flutter/material.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import 'dart:convert';
+//
+// import 'Page_39.dart';
+//
+// class Page38 extends StatefulWidget {
+//   const Page38({super.key});
+//
+//   @override
+//   State<Page38> createState() => _Page38State();
+// }
+//
+// class _Page38State extends State<Page38> {
+//   String title = '';
+//   String firstParty = '';
+//   String secondParty = '';
+//   String date = '';
+//   // String terms = '';
+//   // String remedies = '';
+//   Map<String, String> descriptionMap = {};
+//
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     loadFormDataFromPrefs();
+//   }
+//
+//   Future<void> loadFormDataFromPrefs() async {
+//     final prefs = await SharedPreferences.getInstance();
+//
+//     setState(() {
+//       title = prefs.getString('title') ?? '';
+//       firstParty = prefs.getString('first_party') ?? '';
+//       secondParty = prefs.getString('second_party') ?? '';
+//       date = prefs.getString('date') ?? '';
+//       // terms = prefs.getString('terms') ?? '';
+//       // remedies = prefs.getString('remedies') ?? '';
+//     });
+//
+//     // ✅ Load description key-value pairs
+//     String? descJson = prefs.getString('descriptions');
+//     if (descJson != null) {
+//       Map<String, dynamic> decoded = jsonDecode(descJson);
+//       setState(() {
+//         descriptionMap =
+//             decoded.map((key, value) => MapEntry(key, value.toString()));
+//       });
+//     }
+//   }
+//
+//   Future<void> clearData() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     await prefs.clear(); // or prefs.remove('myKey');
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     Size size = MediaQuery.of(context).size;
+//
+//     return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: Colors.white,
+//         leading: IconButton(
+//           onPressed: () async {
+//             await clearData();
+//             Navigator.pop(context);
+//           },
+//           icon: const Icon(Icons.arrow_back_ios),
+//         ),
+//         title: const Text(
+//           'Agreement (NDA)',
+//           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+//         ),
+//         toolbarHeight: 100,
+//         actions: [
+//           IconButton(
+//             onPressed: () {
+//               Navigator.push(context,
+//                   MaterialPageRoute(builder: (context) => const Page39()));
+//             },
+//             icon: const Icon(
+//               Icons.edit_calendar_sharp,
+//               color: Colors.lightBlueAccent,
+//             ),
+//           ),
+//         ],
+//       ),
+//       body: SingleChildScrollView(
+//         child: Column(
+//           children: [
+//             const SizedBox(height: 15),
+//             Container(
+//               width: size.width - 5,
+//               decoration: BoxDecoration(
+//                 borderRadius: BorderRadius.circular(10),
+//                 color: Colors.white,
+//               ),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   const SizedBox(height: 10),
+//                   Padding(
+//                     padding: const EdgeInsets.all(5),
+//                     child: Container(
+//                       width: size.width,
+//                       decoration: BoxDecoration(
+//                         borderRadius: BorderRadius.circular(15),
+//                         color: Colors.black87,
+//                       ),
+//                       child: Column(
+//                         children: [
+//                           const SizedBox(height: 10),
+//                           Text(
+//                             title,
+//                             style: const TextStyle(
+//                               fontSize: 16,
+//                               fontWeight: FontWeight.w700,
+//                               color: Colors.white,
+//                             ),
+//                           ),
+//                           Divider(
+//                             color: Colors.grey.shade600,
+//                             thickness: 1,
+//                             indent: 25,
+//                             endIndent: 25,
+//                           ),
+//                           const Padding(
+//                             padding: EdgeInsets.only(
+//                                 left: 8.0, right: 8.0, bottom: 5.0),
+//                             child: Row(
+//                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                               children: [
+//                                 Text(
+//                                   'Party 1',
+//                                   style: TextStyle(
+//                                     fontSize: 10,
+//                                     fontWeight: FontWeight.w500,
+//                                     color: Colors.grey,
+//                                   ),
+//                                 ),
+//                                 Text(
+//                                   'Party 2',
+//                                   style: TextStyle(
+//                                     fontSize: 10,
+//                                     fontWeight: FontWeight.w500,
+//                                     color: Colors.grey,
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           Padding(
+//                             padding: const EdgeInsets.only(
+//                                 left: 8.0, right: 8.0, bottom: 10.0),
+//                             child: Row(
+//                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                               children: [
+//                                 Text(
+//                                   firstParty,
+//                                   style: const TextStyle(
+//                                     fontSize: 14,
+//                                     fontWeight: FontWeight.w500,
+//                                     color: Color(0xff00C2FF),
+//                                   ),
+//                                 ),
+//                                 Text(
+//                                   secondParty,
+//                                   style: const TextStyle(
+//                                     fontSize: 14,
+//                                     fontWeight: FontWeight.w500,
+//                                     color: Color(0xff00C2FF),
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           RichText(
+//                             text: TextSpan(
+//                               text: 'Date: ',
+//                               style: const TextStyle(
+//                                 fontSize: 10,
+//                                 fontWeight: FontWeight.w400,
+//                                 color: Colors.grey,
+//                               ),
+//                               children: [
+//                                 TextSpan(
+//                                   text: date,
+//                                   style: const TextStyle(
+//                                     fontSize: 10,
+//                                     fontWeight: FontWeight.w500,
+//                                     color: Colors.white,
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           const SizedBox(height: 5),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                   // const Padding(
+//                   //   padding: EdgeInsets.all(8.0),
+//                   //   child: Text(
+//                   //     'Terms and Condition',
+//                   //     style: TextStyle(
+//                   //       fontSize: 16,
+//                   //       fontWeight: FontWeight.bold,
+//                   //     ),
+//                   //   ),
+//                   // ),
+//                   // Padding(
+//                   //   padding:  EdgeInsets.all(8.0),
+//                   //   child: Text(
+//                   //     terms,
+//                   //     style: const TextStyle(
+//                   //       fontSize: 14,
+//                   //       color: Colors.black,
+//                   //     ),
+//                   //   ),
+//                   // ),
+//                   // const Padding(
+//                   //   padding: EdgeInsets.all(8.0),
+//                   //   child: Text(
+//                   //     'Remedies for Bridge',
+//                   //     style: TextStyle(
+//                   //       fontSize: 16,
+//                   //       fontWeight: FontWeight.bold,
+//                   //     ),
+//                   //   ),
+//                   // ),
+//                   // Padding(
+//                   //   padding: const EdgeInsets.all(8.0),
+//                   //   child: Text(
+//                   //     remedies,
+//                   //     style: const TextStyle(
+//                   //       fontSize: 14,
+//                   //       color: Colors.black,
+//                   //     ),
+//                   //   ),
+//                   // ),
+//                   if (descriptionMap.isNotEmpty) ...[
+//                     ListView.builder(
+//                       physics: const NeverScrollableScrollPhysics(),
+//                       shrinkWrap: true,
+//                       itemCount: descriptionMap.length,
+//                       itemBuilder: (context, index) {
+//                         final key = descriptionMap.keys.elementAt(index);
+//                         final value = descriptionMap[key]!;
+//                         return ListTile(
+//                           title: Text(
+//                             key,
+//                             style: const TextStyle(fontWeight: FontWeight.bold),
+//                           ),
+//                           subtitle: Text(value),
+//                         );
+//                       },
+//                     ),
+//                   ]
+//                 ],
+//               ),
+//             ),
+//             const SizedBox(height: 30),
+//             ElevatedButton(
+//               onPressed: () {
+//                 // Navigator.push(context,
+//                 //     MaterialPageRoute(builder: (context) => const Page40(agreement_ids: null,)));
+//               },
+//               style: ElevatedButton.styleFrom(
+//                 backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
+//                 elevation: 3,
+//                 shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(30.0)),
+//                 padding:
+//                 const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
+//               ),
+//               child: const Text(
+//                 'Create',
+//                 style: TextStyle(
+//                     fontSize: 14,
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.w700),
+//               ),
+//             ),
+//             const SizedBox(height: 30),
+//             ElevatedButton(
+//               onPressed: () {
+//                 // Implement save as draft functionality
+//               },
+//               style: ElevatedButton.styleFrom(
+//                 backgroundColor: const Color.fromRGBO(71, 70, 70, 1),
+//                 elevation: 3,
+//                 shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(30.0)),
+//                 padding:
+//                 const EdgeInsets.symmetric(horizontal: 90, vertical: 19),
+//               ),
+//               child: const Text(
+//                 'Save as Draft',
+//                 style: TextStyle(
+//                     fontSize: 14,
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.w700),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

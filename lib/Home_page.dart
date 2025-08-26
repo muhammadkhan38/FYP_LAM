@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:final_year_project/store_signature_locally.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
@@ -9,8 +10,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
 import 'Show_Single_Agreement.dart';
+import 'package:image_picker/image_picker.dart';
 import 'SmallText.dart';
 import 'Widgets/Reusable_Floating_Action_Button.dart';
+import 'dart:io' as io;
+
 
 
 enum Status {
@@ -22,6 +26,7 @@ class Agreement {
   final int id;
   final String title;
   final String Agreement_Creatd_date;
+  //final String status;
 
   Agreement({required this.id, required this.title, required this.Agreement_Creatd_date});
 
@@ -98,13 +103,14 @@ class _Page21State extends State<Page21> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': _email,
-          //'status': Status.complete.toString(),
           'status': "complete",
         }),
       );
       data = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        print(response.body);
+        print(response.statusCode);
 
 
         // Now extract the message
@@ -117,17 +123,22 @@ class _Page21State extends State<Page21> {
           _loading = false;
         });
 
+      } else if(response.statusCode == 422){
+        _error = "Please reload the application to get the latest data";
+        _loading = false;
       } else {
         setState(() {
 
           _error = "${data['message']}";
           _loading = false;
         });
+        print(response.statusCode);
       }
     } catch (e) {
       print(e.toString());
 
       if (e is SocketException) {
+        _loading = false;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('You are offline')),
         );
@@ -138,6 +149,7 @@ class _Page21State extends State<Page21> {
       }
     } finally {
       setState(() {
+        _loading = false;
       });
     }
   }
@@ -175,73 +187,12 @@ class _Page21State extends State<Page21> {
           });
         },
       ),
-    // bottomNavigationBar:
-    //     ClipRRect(
-    //       borderRadius: const BorderRadius.only(topRight: Radius.circular(30),topLeft:Radius.circular(30)),
-    //       child: BottomAppBar(
-    //         height:75,
-    //         color: Colors.black87,
-    //         notchMargin: 8,
-    //         elevation: 40,
-    //         shape: const CircularNotchedRectangle(),
-    //         child: Column(
-    //           children: [
-    //             Row(
-    //               mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //               children: [
-    //                 BottomNavigationBarClass(
-    //                   icon: CupertinoIcons.house_alt,
-    //                   label: 'Home',
-    //                   color: _selectedIndex == 0 ? Colors.grey : Color(0xFF00C2FF),
-    //                   onTap: () {
-    //                     setState(() {
-    //                       _selectedIndex = 0;
-    //                     });
-    //                   },
-    //                 ),
-    //                 BottomNavigationBarClass(
-    //                   icon: CupertinoIcons.doc_text,
-    //                   label: 'Agreements',
-    //                   color: _selectedIndex == 0 ? Color(0xFF00C2FF) : Colors.grey,
-    //                   onTap: () {
-    //                     setState(() {
-    //                       _selectedIndex = 1;
-    //                     });
-    //                     Navigator.push(context, MaterialPageRoute(builder: (context) => const Page23()));
-    //                   },
-    //                 ),
-    //                 BottomNavigationBarClass(
-    //                   icon: CupertinoIcons.bookmark,
-    //                   label: 'Saved',
-    //                   color: _selectedIndex == 0 ? Color(0xFF00C2FF) : Colors.grey,
-    //                   onTap: () {
-    //                     setState(() {
-    //                       _selectedIndex = 1;
-    //                     });
-    //                     Navigator.push(context, MaterialPageRoute(builder: (context) => const Page22()));
-    //                   },
-    //                 ),
-    //                 BottomNavigationBarClass(
-    //                   icon: CupertinoIcons.person,
-    //                   label: 'Profile',
-    //                   color: _selectedIndex == 0 ? Color(0xFF00C2FF) : Colors.grey,
-    //                   onTap: () {
-    //                     setState(() {
-    //                       _selectedIndex = 1;
-    //                     });
-    //                     Navigator.push(context, MaterialPageRoute(builder: (context) => const Page41()));
-    //                   },
-    //                 ),
-    //               ],
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
+
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+
               Center(
                 child: Container(
                   width: screenSize.width-25,
@@ -251,13 +202,16 @@ class _Page21State extends State<Page21> {
 
                   ),
                   child: ListTile(
-                    leading: const SizedBox(
+                    leading: SizedBox(
                       width: 50,
                       height: 50,
                       child: CircleAvatar(
                         radius: 50,
                         backgroundColor: Colors.grey,
-                        child: Icon(Icons.person,size: 35,),
+                       child: IconButton(onPressed: (){
+
+                       }, icon: const Icon(CupertinoIcons.person,size: 35,color: Colors.white,),),
+                       // child: Icon(Icons.person,size: 35,),
                       //  backgroundImage: AssetImage('assets/qasim.png'),
                       ),
                     ),
@@ -268,7 +222,13 @@ class _Page21State extends State<Page21> {
                         const Icon(Icons.waving_hand,color: Colors.yellow,size: 12,)
                       ],
                     ),
-                    trailing: const Icon(CupertinoIcons.bell),
+                   trailing: IconButton(onPressed: (){
+                     Navigator.push(
+                       context,
+                       MaterialPageRoute(builder: (context) => const SignaturePadPage()),
+                     );
+                   }, icon: Icon(Icons.notifications,color: Colors.grey.shade400,size: 25,),),
+                   // trailing: const Icon(CupertinoIcons.bell),
                     subtitle:  Text(_name, style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.black),)
                   ),
                 ),
@@ -409,16 +369,10 @@ class _Page21State extends State<Page21> {
                                         children: [
                                           Text(agreement.Agreement_Creatd_date,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Color(0xFF838788),),),
                                           Text("Completed",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: Color(0xFF454545),),),
+                                          //Text(agreement.status!,style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: Color(0xFF454545),),),
                                         ],
                                       ),
                                     ),
-                                   // Text(agreement.id as String),
-                                    // ListTile(
-                                    //   title:  Text(" ${agreement.title}"),
-                                    //   subtitle: Text("sent  ${agreement.createdAt}"),
-                                    //
-                                    // ),
-                                   // Text(" ${agreement.id}", style: TextStyle(fontWeight: FontWeight.bold)),
 
 
                                   ],
@@ -431,43 +385,6 @@ class _Page21State extends State<Page21> {
                         ),
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                   ],
                 ),
               ),
@@ -477,6 +394,265 @@ class _Page21State extends State<Page21> {
     );
   }
 }
+
+
+
+
+
+
+class ImageHelper {
+  static const _key = 'profile_image_base64';
+
+  // Save picked image as base64 string
+  static Future<void> saveImage(Uint8List imageBytes) async {
+    final prefs = await SharedPreferences.getInstance();
+    final base64 = base64Encode(imageBytes);
+    await prefs.setString(_key, base64);
+  }
+
+  // Load image bytes from SharedPreferences
+  static Future<Uint8List?> loadImage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final base64 = prefs.getString(_key);
+    if (base64 == null) return null;
+    return base64Decode(base64);
+  }
+
+  // Optional: Clear the saved image
+  static Future<void> clearImage() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_key);
+  }
+}
+
+
+
+
+
+class ImagePickerPage extends StatefulWidget {
+  const ImagePickerPage({super.key});
+
+  @override
+  State<ImagePickerPage> createState() => _ImagePickerPageState();
+}
+
+class _ImagePickerPageState extends State<ImagePickerPage> {
+  Uint8List? _imageBytes;
+
+  Future<void> _pickImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: source);
+    if (pickedFile != null) {
+      Uint8List bytes;
+
+      if (kIsWeb) {
+        bytes = await pickedFile.readAsBytes();
+      } else {
+        bytes = await io.File(pickedFile.path).readAsBytes();
+      }
+
+      await ImageHelper.saveImage(bytes);
+      setState(() {
+        _imageBytes = bytes;
+      });
+    }
+  }
+
+  Future<void> _loadImage() async {
+    final image = await ImageHelper.loadImage();
+    setState(() {
+      _imageBytes = image;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Pick Profile Imagesjhkg"),
+        backgroundColor: Colors.pink,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // CircleAvatar(
+            //   radius: 80,
+            //   backgroundImage:
+            //   _imageBytes != null ? MemoryImage(_imageBytes!) : null,
+            //   child: _imageBytes == null
+            //       ? const Icon(Icons.person, size: 60)
+            //       : null,
+            // ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.photo),
+              label: const Text("Pick from Gallery"),
+              onPressed: () => _pickImage(ImageSource.gallery),
+            ),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.camera_alt),
+              label: const Text("Take Photo"),
+              onPressed: () => _pickImage(ImageSource.camera),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+class ProfileDisplayPage extends StatefulWidget {
+  const ProfileDisplayPage({super.key});
+
+  @override
+  State<ProfileDisplayPage> createState() => _ProfileDisplayPageState();
+}
+
+class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
+  Uint8List? _imageBytes;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  Future<void> _loadImage() async {
+    final image = await ImageHelper.loadImage();
+    setState(() {
+      _imageBytes = image;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Profile Display")),
+      body: Center(
+        child: CircleAvatar(
+          radius: 60,
+          backgroundImage:
+          _imageBytes != null ? MemoryImage(_imageBytes!) : null,
+          child: _imageBytes == null
+              ? const Icon(Icons.person, size: 50)
+              : null,
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// class ImagePickerPage extends StatefulWidget {
+//   const ImagePickerPage({super.key});
+//
+//   @override
+//   State<ImagePickerPage> createState() => _ImagePickerPageState();
+// }
+//
+// class _ImagePickerPageState extends State<ImagePickerPage> {
+//   File? _imageFile;
+//   final ImagePicker _picker = ImagePicker();
+//
+//   Future<void> _pickImage(ImageSource source) async {
+//     final XFile? pickedFile = await _picker.pickImage(source: source);
+//     if (pickedFile != null) {
+//       setState(() {
+//         _imageFile = File(pickedFile.path);
+//       });
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text("Image Picker")),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             _imageFile != null
+//                 ? Image.file(_imageFile!, height: 300)
+//                 : const Text("No image selected."),
+//             const SizedBox(height: 20),
+//             ElevatedButton.icon(
+//               icon: const Icon(Icons.photo),
+//               label: const Text("Pick from Gallery"),
+//               onPressed: () => _pickImage(ImageSource.gallery),
+//             ),
+//             ElevatedButton.icon(
+//               icon: const Icon(Icons.camera_alt),
+//               label: const Text("Take a Photo"),
+//               onPressed: () => _pickImage(ImageSource.camera),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+//}
 
 
 

@@ -1,10 +1,10 @@
-import 'package:final_year_project/Page21.dart';
-import 'package:final_year_project/page3.dart';
+import 'package:final_year_project/Home_page.dart';
+import 'package:final_year_project/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Page4.dart';
+import 'Signup_Page.dart';
 import 'SmallText.dart';
 
 class MainScreen extends StatefulWidget {
@@ -140,7 +140,7 @@ class _MainScreenState extends State<MainScreen> {
                     onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const Page3(),
+                        builder: (context) => const LoginPage(),
                       ),
                     ),
                     style: ButtonStyle(

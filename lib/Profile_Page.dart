@@ -80,11 +80,19 @@ class _Page41State extends State<Page41> {
                       Column(
                         children: [
                           const SizedBox(height: 10,),
-                          const CircleAvatar(
-                            //radius: 20,
-                         backgroundColor: Colors.white60,
-                         child: Icon(Icons.person,size: 35,),
-                           // backgroundImage: AssetImage('assets/qasim.png'),
+                          Stack(
+                            children: [
+                              IconButton(onPressed: (){
+                                debugPrint('edit');
+                              }, icon: Icon(Icons.edit,color: Colors.pink,size: 50,),),
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.white60,
+                                child: Icon(Icons.person,size: 35,),
+                                // backgroundImage: AssetImage('assets/qasim.png'),
+                              ),
+
+                            ]
                           ),
                           SizedBox(height: 10,),
 
@@ -270,6 +278,15 @@ class _Page41State extends State<Page41> {
       ),
     );
   }
+
+
+
+
+
+
+
+
+
 }
 
 
