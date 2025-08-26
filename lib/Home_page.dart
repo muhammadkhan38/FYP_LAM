@@ -15,20 +15,22 @@ import 'SmallText.dart';
 import 'Widgets/Reusable_Floating_Action_Button.dart';
 import 'dart:io' as io;
 
-
-
 enum Status {
   complete,
   draft,
   pending,
 }
+
 class Agreement {
   final int id;
   final String title;
   final String Agreement_Creatd_date;
   //final String status;
 
-  Agreement({required this.id, required this.title, required this.Agreement_Creatd_date});
+  Agreement(
+      {required this.id,
+      required this.title,
+      required this.Agreement_Creatd_date});
 
   factory Agreement.fromJson(Map<String, dynamic> json) {
     return Agreement(
@@ -40,8 +42,9 @@ class Agreement {
 }
 
 class Page21 extends StatefulWidget {
-
-  const Page21({super.key,});
+  const Page21({
+    super.key,
+  });
 
   @override
   State<Page21> createState() => _Page21State();
@@ -50,7 +53,6 @@ class Page21 extends StatefulWidget {
 class _Page21State extends State<Page21> {
   int _selectedIndex = 0;
 
-
   List<Agreement> _agreements = [];
   bool _loading = true;
   String? _error;
@@ -58,22 +60,20 @@ class _Page21State extends State<Page21> {
   String _email = '';
 //  final GetAgreementApi _userService = GetAgreementApi();
 
-
-
   @override
   void initState() {
     super.initState();
     _initialize();
-
   }
+
   Future<void> _initialize() async {
     await _loadUserInfo();
     if (kDebugMode) {
       print("$_email this is the init email ");
     }
 
-   // await _userService.fetchAgreements( _email, status: "pending");
-   await _fetchAgreements();
+    // await _userService.fetchAgreements( _email, status: "pending");
+    await _fetchAgreements();
   }
 
   Future<void> _loadUserInfo() async {
@@ -84,10 +84,8 @@ class _Page21State extends State<Page21> {
       if (kDebugMode) {
         print("$_email  This is Load user info email funciton ");
       }
-
     });
   }
-
 
   Future<void> _fetchAgreements() async {
     final url = Uri.parse('https://nda.yourailist.com/api/getAgreements');
@@ -112,23 +110,18 @@ class _Page21State extends State<Page21> {
         print(response.body);
         print(response.statusCode);
 
-
         // Now extract the message
-
-
 
         List<dynamic> list = data['agreements'];
         setState(() {
           _agreements = list.map((e) => Agreement.fromJson(e)).toList();
           _loading = false;
         });
-
-      } else if(response.statusCode == 422){
+      } else if (response.statusCode == 422) {
         _error = "Please reload the application to get the latest data";
         _loading = false;
       } else {
         setState(() {
-
           _error = "${data['message']}";
           _loading = false;
         });
@@ -156,14 +149,14 @@ class _Page21State extends State<Page21> {
 
   @override
   Widget build(BuildContext context) {
-     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title:  SvgPicture.asset('assets/page 21 image.svg'),
+        title: SvgPicture.asset('assets/page 21 image.svg'),
         titleSpacing: 90,
         leading: IconButton(
           icon: const Icon(Icons.menu),
@@ -175,9 +168,9 @@ class _Page21State extends State<Page21> {
           color: Colors.black,
         ),
       ),
-        drawer:  const DrawerClass(),
+      drawer: const DrawerClass(),
       backgroundColor: Colors.grey.shade100,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: const CustomFloatingActionButton(),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
@@ -187,218 +180,332 @@ class _Page21State extends State<Page21> {
           });
         },
       ),
-
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-
-              Center(
-                child: Container(
-                  width: screenSize.width-25,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-
-                  ),
-                  child: ListTile(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Container(
+                width: screenSize.width - 25,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: ListTile(
                     leading: SizedBox(
                       width: 50,
                       height: 50,
                       child: CircleAvatar(
                         radius: 50,
                         backgroundColor: Colors.grey,
-                       child: IconButton(onPressed: (){
-
-                       }, icon: const Icon(CupertinoIcons.person,size: 35,color: Colors.white,),),
-                       // child: Icon(Icons.person,size: 35,),
-                      //  backgroundImage: AssetImage('assets/qasim.png'),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            CupertinoIcons.person,
+                            size: 35,
+                            color: Colors.white,
+                          ),
+                        ),
+                        // child: Icon(Icons.person,size: 35,),
+                        //  backgroundImage: AssetImage('assets/qasim.png'),
                       ),
                     ),
                     title: Row(
                       children: [
-                        SmallText(text: 'Good Morning', color: Colors.grey,size: 12,),
-                        const SizedBox(width: 5,),
-                        const Icon(Icons.waving_hand,color: Colors.yellow,size: 12,)
+                        SmallText(
+                          text: 'muhammad khan',
+                          color: Colors.grey,
+                          size: 12,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        const Icon(
+                          Icons.waving_hand,
+                          color: Colors.yellow,
+                          size: 12,
+                        )
                       ],
                     ),
-                   trailing: IconButton(onPressed: (){
-                     Navigator.push(
-                       context,
-                       MaterialPageRoute(builder: (context) => const SignaturePadPage()),
-                     );
-                   }, icon: Icon(Icons.notifications,color: Colors.grey.shade400,size: 25,),),
-                   // trailing: const Icon(CupertinoIcons.bell),
-                    subtitle:  Text(_name, style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.black),)
-                  ),
-                ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignaturePadPage()),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.notifications,
+                        color: Colors.grey.shade400,
+                        size: 25,
+                      ),
+                    ),
+                    // trailing: const Icon(CupertinoIcons.bell),
+                    subtitle: Text(
+                      _name,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    )),
               ),
-              const SizedBox(height: 20,),
-              Container(
-                width: screenSize.width-25,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: TextFormField(
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              width: screenSize.width - 25,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: TextFormField(
+                cursorColor: Colors.black,
+                decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 0, color: Colors.grey.shade100),
+                      borderSide:
+                          BorderSide(width: 0, color: Colors.grey.shade100),
                       borderRadius: BorderRadius.circular(15),
                       // Rounded border
                     ),
-                    prefixIcon: Icon(CupertinoIcons.search,color: Colors.grey.shade400,),
-                    hintText: 'Search',hintStyle: TextStyle(
-                    color: Colors.grey.shade500,
-                  )
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20,),
-              Container(
-                width: screenSize.width-25,
-                height: 160,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Text("By using APP NDA, you've saved",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700,color: Color(0xFF474646),),),
+                    prefixIcon: Icon(
+                      CupertinoIcons.search,
+                      color: Colors.grey.shade400,
                     ),
-                    const SizedBox(height: 40,),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                       CircleAvatar(
-                         radius: 33,
-                         backgroundColor: Colors.black87,
-                         child: Icon(CupertinoIcons.time_solid,color: Color(0xFF00C2FF),),
-                       ) ,
-                        CircleAvatar(
-                          radius: 33,
-                         backgroundColor: Colors.black87,
-                         child: Icon(CupertinoIcons.film_fill,color: Color(0xFF00C2FF),),
-                       ) ,
-                        CircleAvatar(
-                          radius: 33,
-                         backgroundColor: Colors.black87,
-                         child: Icon(CupertinoIcons.doc_plaintext,color: Color(0xFF00C2FF),),
-                       )
-                      ],
-                    ),
-                  ],
-                ),
+                    hintText: 'Search',
+                    hintStyle: TextStyle(
+                      color: Colors.grey.shade500,
+                    )),
               ),
-              const SizedBox(height: 20,),
-              Container(
-               // height: 330,
-                width: screenSize.width-10,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(height: 15,),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10,right: 10),
-                      child: Row(
-
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text("My Agreements",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700,color: Colors.black),),
-                          const SizedBox(width: 120,),
-                          Text("View All",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500,color: Color(0xFF00C2FF)),),
-                        ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              width: screenSize.width - 25,
+              height: 160,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Text(
+                      "By using APP NDA, you've saved",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF474646),
                       ),
                     ),
-                    const SizedBox(height: 10,),
-                    _loading
-                        ? const Center(child: CircularProgressIndicator())
-                        : _error != null
-                        ? Center(child: Text(" $_error",style: TextStyle(color: Colors.red),))
-                        : SizedBox(
-                        height: 220,
-                          // height: 800,
-                          child: ListView.builder(
-                            itemCount: _agreements.length,
-                            itemBuilder: (context, index) {
-                          final agreement = _agreements[index];
-                          return GestureDetector(
-                            onTap: (){
-                              if (kDebugMode) {
-                                print(" tap ");
-                              }
-                              if (kDebugMode) {
-                                print(agreement.id);
-                              }
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>AgreementPage(id: agreement.id, mode: 'view',email:_email,)));
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CircleAvatar(
+                        radius: 33,
+                        backgroundColor: Colors.black87,
+                        child: Icon(
+                          CupertinoIcons.time_solid,
+                          color: Color(0xFF00C2FF),
+                        ),
+                      ),
+                      CircleAvatar(
+                        radius: 33,
+                        backgroundColor: Colors.black87,
+                        child: Icon(
+                          CupertinoIcons.film_fill,
+                          color: Color(0xFF00C2FF),
+                        ),
+                      ),
+                      CircleAvatar(
+                        radius: 33,
+                        backgroundColor: Colors.black87,
+                        child: Icon(
+                          CupertinoIcons.doc_plaintext,
+                          color: Color(0xFF00C2FF),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              // height: 330,
+              width: screenSize.width - 10,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          "My Agreements",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black),
+                        ),
+                        const SizedBox(
+                          width: 120,
+                        ),
+                        Text(
+                          "View All",
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF00C2FF)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  _loading
+                      ? const Center(child: CircularProgressIndicator())
+                      : _error != null
+                          ? Center(
+                              child: Text(
+                              " $_error",
+                              style: TextStyle(color: Colors.red),
+                            ))
+                          : SizedBox(
+                              height: 220,
+                              // height: 800,
+                              child: ListView.builder(
+                                itemCount: _agreements.length,
+                                itemBuilder: (context, index) {
+                                  final agreement = _agreements[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      if (kDebugMode) {
+                                        print(" tap ");
+                                      }
+                                      if (kDebugMode) {
+                                        print(agreement.id);
+                                      }
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AgreementPage(
+                                                    id: agreement.id,
+                                                    mode: 'view',
+                                                    email: _email,
+                                                  )));
 
-                              //AgreementService.fetchAgreement(agreement.id);
-                            },
-                            child: Container(
-                              height: 70,
-
-                              decoration: BoxDecoration(
-                                  color: Color(0xFFF7F7F7),
-                                  borderRadius: BorderRadius.circular(15)
-                              ),
-                              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Flexible(child: Text(agreement.title, maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,style: TextStyle(fontWeight: FontWeight.w700,fontSize: 14,color: Color(0xFF474646),),)),
-                                          Text("#${agreement.id}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Color(0xFF838788),),),
-                                        ],
+                                      //AgreementService.fetchAgreement(agreement.id);
+                                    },
+                                    child: Container(
+                                      height: 70,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFF7F7F7),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 6),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Flexible(
+                                                      child: Text(
+                                                    agreement.title,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14,
+                                                      color: Color(0xFF474646),
+                                                    ),
+                                                  )),
+                                                  Text(
+                                                    "#${agreement.id}",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 12,
+                                                      color: Color(0xFF838788),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    agreement
+                                                        .Agreement_Creatd_date,
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 12,
+                                                      color: Color(0xFF838788),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "Completed",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 12,
+                                                      color: Color(0xFF454545),
+                                                    ),
+                                                  ),
+                                                  //Text(agreement.status!,style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: Color(0xFF454545),),),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                    Expanded(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(agreement.Agreement_Creatd_date,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Color(0xFF838788),),),
-                                          Text("Completed",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: Color(0xFF454545),),),
-                                          //Text(agreement.status!,style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: Color(0xFF454545),),),
-                                        ],
-                                      ),
-                                    ),
-
-
-                                  ],
-                                ),
+                                  );
+                                },
                               ),
                             ),
-                          );
-                                                },
-                                              ),
-                        ),
-
-
-                  ],
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
     );
   }
 }
-
-
-
-
-
 
 class ImageHelper {
   static const _key = 'profile_image_base64';
@@ -424,10 +531,6 @@ class ImageHelper {
     await prefs.remove(_key);
   }
 }
-
-
-
-
 
 class ImagePickerPage extends StatefulWidget {
   const ImagePickerPage({super.key});
@@ -474,7 +577,8 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Pick Profile Imagesjhkg"),
+      appBar: AppBar(
+        title: const Text("Pick Profile Imagesjhkg"),
         backgroundColor: Colors.pink,
       ),
       body: Center(
@@ -507,11 +611,6 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   }
 }
 
-
-
-
-
-
 class ProfileDisplayPage extends StatefulWidget {
   const ProfileDisplayPage({super.key});
 
@@ -543,10 +642,9 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
         child: CircleAvatar(
           radius: 60,
           backgroundImage:
-          _imageBytes != null ? MemoryImage(_imageBytes!) : null,
-          child: _imageBytes == null
-              ? const Icon(Icons.person, size: 50)
-              : null,
+              _imageBytes != null ? MemoryImage(_imageBytes!) : null,
+          child:
+              _imageBytes == null ? const Icon(Icons.person, size: 50) : null,
         ),
       ),
     );
