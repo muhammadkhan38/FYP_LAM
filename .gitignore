@@ -9,7 +9,11 @@
 .history
 .svn/
 migrate_working_dir/
-
+*.metadata
+*.tmp
+*.bak
+*.orig
+*.swp
 # IntelliJ related
 *.iml
 *.ipr
@@ -59,3 +63,4 @@ android/app/.cxx/
 
 pubspec.lock
 /pubspec.lock
+.android/cache/

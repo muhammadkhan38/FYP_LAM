@@ -1,11 +1,10 @@
-import 'package:final_year_project/Page21.dart';
-import 'package:final_year_project/page3.dart';
+import 'package:final_year_project/Home_page.dart';
+import 'package:final_year_project/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Page4.dart';
-import 'SmallText.dart';
+import 'Signup_Page.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -98,11 +97,14 @@ class _MainScreenState extends State<MainScreen> {
               Padding(
                 padding:  const EdgeInsets.only(top: 20),
                 child: Center(
-                  child: SmallText(
-                      text:
-                          'Lorem ipsum is simply dummy text of the \n       printing and typesetting industry.',
-                      size: 14,
-                      color: Colors.white),
+                  child: Text(
+                    'Lorem ipsum is simply dummy text of the \n       printing and typesetting industry.',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                  )
+
                 ),
               ),
               const SizedBox(
@@ -133,19 +135,19 @@ class _MainScreenState extends State<MainScreen> {
                         width: screenSize.width/2-35,
                         child: const Center(
                           child: Text('SIGN UP',
-                              style: TextStyle(fontSize: 16,color: Colors.lightBlueAccent),),
+                              style: TextStyle(fontSize: 16,color: Color(0xFF00C2FF)),),
                         )), // Text style
                   ),
                   TextButton(
                     onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const Page3(),
+                        builder: (context) => const LoginPage(),
                       ),
                     ),
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all<Color>(
-                          Colors.lightBlueAccent), // Background color
+                          Color(0xFF00C2FF)), // Background color
                       shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius:

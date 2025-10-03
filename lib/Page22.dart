@@ -1,15 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
-import 'Page21.dart';
-import 'Page23.dart';
-import 'Page41.dart';
-import 'Page67.dart';
-import 'Page_48.dart';
+import 'Search_Templement.dart';
+import 'Widgets/Reusable_Floating_Action_Button.dart';
 
-class Page22 extends StatelessWidget {
+class Page22 extends StatefulWidget {
   const Page22({super.key});
 
+  @override
+  State<Page22> createState() => _Page22State();
+}
+int _selectedIndex = 0;
+class _Page22State extends State<Page22> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -33,57 +37,14 @@ class Page22 extends StatelessWidget {
       drawer:  const DrawerClass(),
       backgroundColor: Colors.grey.shade100,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-        backgroundColor: Colors.blue,
-        onPressed: () {},
-        child: const Icon(Icons.add,size: 35,color: Colors.white,),
-      ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-        child: BottomAppBar(
-          height: 70,
-          color: Colors.black87,
-          notchMargin: 8,
-          elevation: 40,
-          shape: const CircularNotchedRectangle(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder:(context)=>  const Page21()));
-                },
-                icon: const Icon(CupertinoIcons.house_alt),
-                splashColor: Colors.lightBlue,
-                color: Colors.lightBlueAccent,
-              ),
-              IconButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder:(context)=>  const Page23()));
-                },
-                icon: const Icon(CupertinoIcons.doc_text),
-                splashColor: Colors.lightBlue,
-                color: Colors.lightBlueAccent,
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(CupertinoIcons.bookmark),
-                splashColor: Colors.lightBlue,
-                color: Colors.lightBlueAccent,
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder:(context)=>  const Page41()));
-                },
-                icon: const Icon(CupertinoIcons.person),
-                splashColor: Colors.lightBlue,
-                color: Colors.lightBlueAccent,
-              )
-            ],
-          ),
-        ),
+      floatingActionButton: const CustomFloatingActionButton(),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -109,7 +70,7 @@ class Page22 extends StatelessWidget {
                       ),
                       prefixIcon: const Icon(
                         CupertinoIcons.search,
-                        color: Colors.lightBlueAccent,
+                        color: Color(0xFF00C2FF),
                       ),
                       hintText: 'Search templates',
                       hintStyle: TextStyle(
@@ -133,7 +94,7 @@ class Page22 extends StatelessWidget {
                   leading: SizedBox(
                       width: 50,
                       height: 50,
-                      child: Icon(Icons.book_online_outlined,size: 60,color: Colors.lightBlue,)),
+                      child: Icon(Icons.book_online_outlined,size: 60,color: Color(0xFF00C2FF),)),
                   title: const Text(
                     'Template Library',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
@@ -142,7 +103,7 @@ class Page22 extends StatelessWidget {
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const Page67(),
+                          builder: (context) => const SearchTemplates(),
                         ),
                       ),
                       icon: const Icon(
@@ -164,7 +125,7 @@ class Page22 extends StatelessWidget {
               width: screenSize.width - 25,
               height: 80,
               decoration: BoxDecoration(
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
@@ -172,18 +133,18 @@ class Page22 extends StatelessWidget {
                   leading: SizedBox(
                       width: 50,
                       height: 50,
-                      child: Image.asset('assets/page22pic.png')),
+                      child: SvgPicture.asset(
+                        'assets/Ai image.svg', // Path to your SVG file
+                        fit: BoxFit.contain, // Adjust the fit as needed
+                      ),
+
+                  ),
                   title:  const Text(
                     'Legal Ai Assistant',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                   trailing: IconButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Page48(),
-                        ),
-                      ),
+                      onPressed: (){},
                       icon: const Icon(
                         Icons.navigate_next,
                         color: Colors.black,
@@ -229,7 +190,7 @@ class Page22 extends StatelessWidget {
                            style: TextStyle(
                                fontWeight: FontWeight.bold,
                                fontSize: 14,
-                               color: Colors.lightBlueAccent),
+                               color: Color(0xFF00C2FF)),
                          ),
                        ],
                      ),

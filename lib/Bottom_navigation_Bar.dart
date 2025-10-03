@@ -1,71 +1,78 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'Home_page.dart';
 import 'Page22.dart';
+import 'Pending_Agreement_page.dart';
+import 'Profile_Page.dart';
 
-class BottomnavigationbarClass extends StatefulWidget {
-  const BottomnavigationbarClass({super.key});
+class CustomBottomNavigationBar extends StatelessWidget {
+  final int selectedIndex;
+  final Function(int) onItemTapped;
 
-  @override
-  State<BottomnavigationbarClass> createState() => _BottomnavigationbarClassState();
-}
+  const CustomBottomNavigationBar({
+    super.key,
+    required this.selectedIndex,
+    required this.onItemTapped,
+  });
 
-class _BottomnavigationbarClassState extends State<BottomnavigationbarClass> {
   @override
   Widget build(BuildContext context) {
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 8,),
-      child: BottomNavigationBar(
-        elevation: 9,
-        selectedItemColor: Colors.orangeAccent,
-        unselectedItemColor: Colors.indigo,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        unselectedLabelStyle: const TextStyle(color: Colors.indigo),
-        selectedLabelStyle: const TextStyle(color: Colors.orangeAccent),
-        type: BottomNavigationBarType.fixed,
-        items: const<BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.square_grid_2x2_fill,),
-            label: 'Application',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.compass_fill,),
-            label: 'Discover',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.comment_rounded,),
-            label: 'Community',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bookmarks_rounded,),
-            label: 'Bookmarks',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings,),
-            label: 'Setting',
-          ),
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topRight: Radius.circular(25),
+        topLeft: Radius.circular(25),
+      ),
+      child: BottomAppBar(
+        height: 79,
+        color: Color(0xFF474646),
+        notchMargin: 8,
+        elevation: 40,
+        shape: const CircularNotchedRectangle(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(context, CupertinoIcons.house_alt, 'Home', 0),
+            _buildNavItem(context, CupertinoIcons.doc_text, 'Document', 1),
+            _buildNavItem(context, CupertinoIcons.bookmark, 'Template', 2),
+            _buildNavItem(context, CupertinoIcons.person, 'Profile', 3),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(BuildContext context, IconData icon, String label, int index) {
+    final color = selectedIndex == index ? Color(0xFF00C2FF) : Colors.grey;
+
+    return InkWell(
+      onTap: () {
+        onItemTapped(index);
+
+        switch (index) {
+          case 0:
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const Page21()));
+            break;
+          case 1:
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const Page23()));
+            break;
+          case 2:
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const Page22()));
+            break;
+          case 3:
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const Page41()));
+            break;
+          default:
+            break;
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color),
+          Text(label, style: TextStyle(color: color, fontSize: 12)),
         ],
-        currentIndex: 0,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.push(context, MaterialPageRoute(builder:(context)=> const Page22()));
-          } else if (index == 1) {
-            // Handle Discover icon tap
-          } else if (index == 2) {
-            // Handle Community icon tap
-          } else if (index == 3) {
-            // Handle Bookmarks icon tap
-          } else if (index == 4) {
-            // Handle Setting icon tap
-          }
-        },
-        // backgroundColor: Colors.white54,
       ),
     );
   }
 }
+

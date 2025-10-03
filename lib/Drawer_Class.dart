@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Page3.dart';
-import 'Page56.dart';
-import 'Page60.dart';
+import 'LoginPage.dart';
+import 'Membership.dart';
+import 'PaymentMethod.dart';
 
 class DrawerClass extends StatefulWidget {
   const DrawerClass({super.key});
@@ -37,23 +37,32 @@ class _DrawerClassState extends State<DrawerClass> {
     Size screenSize = MediaQuery.of(context).size;
     return ClipRRect(
       borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
+          topRight: Radius.circular(30), bottomRight: Radius.circular(30)),
       child: Drawer(
-        width: screenSize.width,
+        width: screenSize.width-30,
+
         backgroundColor: Colors.white,
         child: ListView(
           children: [
             DrawerHeader(
-              decoration:  BoxDecoration(
-                color: Colors.blueAccent,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF00C2FF),
+                    Color(0xFF1268FB),
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  // transform: GradientRotation(40),
+                ),
               ),
               child: Row(
                 children: [
                   Container(
-                    height: 50,
-                    width: 50,
+                    height: 65,
+                    width: 65,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(40),
                       border: Border.all(
                         color: Colors.white, // Border color
                         width: 2, // Border width
@@ -67,27 +76,47 @@ class _DrawerClassState extends State<DrawerClass> {
                         ),
                   ),
 
-                   Padding(
-                    padding: EdgeInsets.only(
-                      top: 50,
-                      left: 10,
-                    ),
+                  const SizedBox(width: 10),
+                  Expanded(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(_name, style: TextStyle(fontSize: 16,color: Colors.white)),
-                        Text(_email, style: TextStyle(fontSize: 12,color: Colors.white)),
-
+                        Text(
+                          _name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _email,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  // IconButton(onPressed: (){}, icon: const Icon(Icons.edit_calendar_sharp,color: Colors.white,)),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.edit_calendar_sharp, color: Colors.white),
+                  ),
                 ],
               ),
             ),
             ListTile(
               leading: const Icon(
                 CupertinoIcons.person,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Profile'),
               onTap: () {
@@ -97,7 +126,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.doc_plaintext,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('My Agreements'),
               onTap: () {
@@ -107,7 +136,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.bell,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Notifications'),
               onTap: () {
@@ -117,7 +146,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.heart,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Saved'),
               onTap: () {
@@ -127,23 +156,23 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.circle_grid_hex_fill,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Membership'),
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Page56()));
+                    context, MaterialPageRoute(builder: (context) => MemberShip()));
               },
             ),
             ListTile(
               leading: const Icon(
                 CupertinoIcons.bag_fill,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Payment Methods'),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Page60()));
+                    MaterialPageRoute(builder: (context) => const PaymentMethod()));
               },
             ),
             Padding(
@@ -153,7 +182,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.question_circle,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('FAQs'),
               onTap: () {
@@ -163,7 +192,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.headphones,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Help Center'),
               onTap: () {
@@ -173,7 +202,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 Icons.settings,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Settings'),
               onTap: () {
@@ -183,7 +212,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.person_2,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Refer a Friend'),
               onTap: () {
@@ -193,7 +222,7 @@ class _DrawerClassState extends State<DrawerClass> {
             ListTile(
               leading: const Icon(
                 CupertinoIcons.square_arrow_right,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF00C2FF),
               ),
               title: const Text('Logout'),
               onTap: () async {
@@ -207,7 +236,7 @@ class _DrawerClassState extends State<DrawerClass> {
                 // Navigate and remove all previous screens
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Page3()),
+                  MaterialPageRoute(builder: (context) => LoginPage()),
                       (route) => false,
                 );
               },
