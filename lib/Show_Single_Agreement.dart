@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http_parser/http_parser.dart';
 
 import 'Template/Templeate_textfiedl.dart';
-import 'Page_40.dart';
+import 'SendAgreement.dart';
 
 class AgreementPage extends StatefulWidget {
   final int id;
@@ -266,7 +266,7 @@ class _AgreementPageState extends State<AgreementPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Page40(agreement_ids: _agreementId),
+              builder: (context) => SendAgreement(agreement_ids: _agreementId),
             ),
           );
         }
@@ -604,7 +604,7 @@ class _AgreementPageState extends State<AgreementPage> {
 // import 'package:http/http.dart' as http;
 // import 'package:signature/signature.dart';
 //
-// import 'Page_40.dart';
+// import 'SendAgreement.dart';
 // import 'Template/Templeate_textfiedl.dart';
 //
 // class AgreementPage extends StatefulWidget {

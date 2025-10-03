@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'Page6.dart';
-
-class Page56 extends StatefulWidget {
-  const Page56({super.key});
+class MemberShip extends StatefulWidget {
+  const MemberShip({super.key});
 
   @override
-  State<Page56> createState() => _Page56State();
+  State<MemberShip> createState() => _MemberShipState();
 
 }
 
-class _Page56State extends State<Page56> {
+class _MemberShipState extends State<MemberShip> {
   bool isYearly = false;
   @override
   Widget build(BuildContext context) {

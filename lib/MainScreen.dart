@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Signup_Page.dart';
-import 'SmallText.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -98,11 +97,14 @@ class _MainScreenState extends State<MainScreen> {
               Padding(
                 padding:  const EdgeInsets.only(top: 20),
                 child: Center(
-                  child: SmallText(
-                      text:
-                          'Lorem ipsum is simply dummy text of the \n       printing and typesetting industry.',
-                      size: 14,
-                      color: Colors.white),
+                  child: Text(
+                    'Lorem ipsum is simply dummy text of the \n       printing and typesetting industry.',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                  )
+
                 ),
               ),
               const SizedBox(

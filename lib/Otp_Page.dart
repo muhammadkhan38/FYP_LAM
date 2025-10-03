@@ -6,19 +6,18 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'BigText.dart';
 import 'Home_page.dart';
 
-class Page5 extends StatefulWidget {
+class OTP_Page extends StatefulWidget {
   final String email;
 
-  const Page5({super.key, required this.email});
+  const OTP_Page({super.key, required this.email});
 
   @override
-  State<Page5> createState() => _Page5State();
+  State<OTP_Page> createState() => _OTP_PageState();
 }
 
-class _Page5State extends State<Page5> {
+class _OTP_PageState extends State<OTP_Page> {
   final TextEditingController _otpController = TextEditingController();
   bool _isSubmitting = false;
 
@@ -83,6 +82,7 @@ class _Page5State extends State<Page5> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to verify OTP. Please try again.')),
+
         );
       }
     } catch (e) {
@@ -99,6 +99,7 @@ class _Page5State extends State<Page5> {
       }
     } finally {
       setState(() {
+        _isSubmitting = false;
       });
     }
   }
@@ -174,8 +175,9 @@ class _Page5State extends State<Page5> {
               ),
             ),
             const SizedBox(height: 15),
-            BigText(text: 'OTP Verification', size: 25, color: Colors.black),
-            const SizedBox(height: 10),
+            Text('OTP Verification', style: TextStyle(fontSize: 25, color: Colors.black),),
+
+             SizedBox(height: 10),
             RichText(
               text: TextSpan(
                 style: const TextStyle(fontSize: 12, color: Colors.black),
@@ -224,12 +226,15 @@ class _Page5State extends State<Page5> {
               ),
             ),
             const SizedBox(height: 15),
-            BigText(
-                text: _canResend
-                    ? "00:00"
-                    : "00:${_secondsRemaining.toString().padLeft(2, '0')}",
-                size: 16,
-                color: Colors.black),
+            Text(
+              _canResend
+                  ? "00:00"
+                  : "00:${_secondsRemaining.toString().padLeft(2, '0')}",
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
             const SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

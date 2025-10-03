@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class DatePickerUtil {
+class DatePickerUtil{
   static Future<void> selectDate(BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -10,7 +10,7 @@ class DatePickerUtil {
     );
 
     if (picked != null) {
-      controller.text = "${picked.day}/${picked.month}/${picked.year}";
+      controller.text = "${picked.month}/${picked.day}/${picked.year}";
     }
   }
 }

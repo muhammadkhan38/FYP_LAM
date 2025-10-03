@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:final_year_project/Home_page.dart';
-import 'package:final_year_project/Page_40.dart';
+import 'package:final_year_project/SendAgreement.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ class AgreementDatail extends StatefulWidget {
   final istemplet;
   final filename;
 
-  AgreementDatail(this.istemplet, this.filename, {super.key});
+  const AgreementDatail(this.istemplet, this.filename, {super.key});
 
   @override
   _AgreementDatailState createState() => _AgreementDatailState();
@@ -265,6 +265,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
 
         print("Agreement ID: $agreementId");
         print("Message: $message");
+        print(" this is the api response $responseData");
 
         // ✅ Save to SharedPreferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -520,7 +521,7 @@ class _AgreementDatailState extends State<AgreementDatail> {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Page40(agreement_ids: Agreement_id),
+                      builder: (context) => SendAgreement(agreement_ids: Agreement_id),
                     ),
                   );
                 } catch (e) {

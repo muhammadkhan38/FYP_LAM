@@ -18,7 +18,7 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     this.color,
     this.hintText = "",
-    this.maxLines = 1,
+   this.maxLines = 1,
     this.textStyle,
     this.border,
     this.hintStyle,

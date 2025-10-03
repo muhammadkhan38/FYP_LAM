@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'CutomTextField.dart';
-import 'Page67.dart';
+import 'Search_Templement.dart';
 import 'Custom_Create_page.dart';
-import 'Page_37.dart';
 import 'Custom_Create_Display_Page.dart';
 import 'Widgets/Reusable_Gradient_Button.dart';
 class Page34 extends StatelessWidget {
@@ -79,7 +77,7 @@ class Page34 extends StatelessWidget {
                                   children: [
                                     IconButton(onPressed: (){
 
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const Page67()));
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const SearchTemplates()));
                                      // Navigator.push(context, MaterialPageRoute(builder: (context)=> EmploymentAgreement ()));
                                     },
                                         icon: const Icon(Icons.library_music_outlined,size: 70,color: Colors.lightBlueAccent,)),
@@ -103,7 +101,7 @@ class Page34 extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     IconButton(onPressed: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const Page37()));
+                                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>const Page37()));
                                     }, icon: const Icon(Icons.library_books,size: 70,color: Colors.lightBlueAccent,)),
                                     const Text('Ai Assistant',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w700),),
                                     const Text('Create a document with help ',style: TextStyle(fontSize: 10,color: Color(0xff838788)),),

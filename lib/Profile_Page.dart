@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
-import 'Page56.dart';
+import 'Membership.dart';
 import 'Widgets/Reusable_Floating_Action_Button.dart';
 import 'Widgets/Reusable_Gradient_Button.dart';
 class Page41 extends StatefulWidget {
@@ -211,7 +211,7 @@ class _Page41State extends State<Page41> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Page56()),
+                  MaterialPageRoute(builder: (context) => const MemberShip()),
                 );
               },
             ),

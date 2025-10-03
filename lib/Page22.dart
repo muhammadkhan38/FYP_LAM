@@ -1,15 +1,9 @@
-import 'package:final_year_project/page27.dart';
-import 'package:final_year_project/page34.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'Bottom_navigation_Bar.dart';
 import 'Drawer_Class.dart';
-import 'Home_page.dart';
-import 'Pending_Agreement_page.dart';
-import 'Profile_Page.dart';
-import 'Page67.dart';
-import 'Page_48.dart';
+import 'Search_Templement.dart';
 import 'Widgets/Reusable_Floating_Action_Button.dart';
 
 class Page22 extends StatefulWidget {
@@ -109,7 +103,7 @@ class _Page22State extends State<Page22> {
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const Page67(),
+                          builder: (context) => const SearchTemplates(),
                         ),
                       ),
                       icon: const Icon(
@@ -150,12 +144,7 @@ class _Page22State extends State<Page22> {
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                   trailing: IconButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Page48(),
-                        ),
-                      ),
+                      onPressed: (){},
                       icon: const Icon(
                         Icons.navigate_next,
                         color: Colors.black,

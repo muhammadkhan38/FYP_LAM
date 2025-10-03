@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,8 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:signature/signature.dart';
 import 'Home_page.dart';
-import 'Page_39.dart';
-import 'Page_40.dart';
+import 'SendAgreement.dart';
 import 'package:http_parser/http_parser.dart';
 
 class Page38 extends StatefulWidget {
@@ -51,6 +49,7 @@ class _Page38State extends State<Page38> {
     _signatureController.dispose();
     super.dispose();
   }
+
   Future<void> _loadUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -80,11 +79,11 @@ class _Page38State extends State<Page38> {
     if (descJson != null) {
       Map<String, dynamic> decoded = jsonDecode(descJson);
       setState(() {
-        descriptionMap = decoded.map((key, value) => MapEntry(key, value.toString()));
+        descriptionMap =
+            decoded.map((key, value) => MapEntry(key, value.toString()));
       });
     }
   }
-
 
   Future<void> _sendDataToAPI(String status, {int id = 0}) async {
     const String apiUrl = "https://nda.yourailist.com/api/create_agreement";
@@ -99,10 +98,12 @@ class _Page38State extends State<Page38> {
       // Convert signature to PNG
       if (_signatureController.isNotEmpty) {
         final signature = await _signatureController.toImage();
-        final byteData = await signature!.toByteData(format: ImageByteFormat.png);
+        final byteData =
+            await signature!.toByteData(format: ImageByteFormat.png);
         final pngBytes = byteData!.buffer.asUint8List();
         final tempDir = await getTemporaryDirectory();
-        signatureFile = await File('${tempDir.path}/signature.png').writeAsBytes(pngBytes);
+        signatureFile =
+            await File('${tempDir.path}/signature.png').writeAsBytes(pngBytes);
       }
 
       print('Signature file: $signatureFile');
@@ -135,7 +136,7 @@ class _Page38State extends State<Page38> {
         'Accept': 'application/json',
       });
 
-     // request.fields['email'] = _email ?? '';
+      // request.fields['email'] = _email ?? '';
       request.fields['email'] = 'muhammadkhan8338@gmail.com';
       request.fields['slug'] = "agreement_slug";
       request.fields['title'] = title;
@@ -170,14 +171,16 @@ class _Page38State extends State<Page38> {
         print("Agreement ID saved to SharedPreferences!");
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Agreement ${status == 'draft' ? 'saved' : 'created'} successfully")),
+          SnackBar(
+              content: Text(
+                  "Agreement ${status == 'draft' ? 'saved' : 'created'} successfully")),
         );
 
         if (status != 'draft') {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Page40(agreement_ids: _agreementId),
+              builder: (context) => SendAgreement(agreement_ids: _agreementId),
             ),
           );
         }
@@ -187,11 +190,9 @@ class _Page38State extends State<Page38> {
         throw Exception("API Error: ${response.statusCode}");
       }
     } catch (e) {
-
       print("Error: ${e.toString()}");
 
       if (e is SocketException) {
-
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('You are offline')),
         );
@@ -206,7 +207,6 @@ class _Page38State extends State<Page38> {
       });
     }
   }
-
 
   Future<File?> _saveSignatureImage() async {
     if (!_signatureController.isNotEmpty) return null;
@@ -251,7 +251,6 @@ class _Page38State extends State<Page38> {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () async {
-
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_ios),
@@ -264,10 +263,10 @@ class _Page38State extends State<Page38> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Page39()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const Page39()),
+              // );
             },
             icon: const Icon(
               Icons.edit_calendar_sharp,
@@ -408,7 +407,6 @@ class _Page38State extends State<Page38> {
                       },
                     ),
                   ],
-
                 ],
               ),
             ),
@@ -447,7 +445,8 @@ class _Page38State extends State<Page38> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Signature(
-                        controller: _signatureController, // Define a second controller for Party 2
+                        controller:
+                            _signatureController, // Define a second controller for Party 2
                         height: 123,
                         backgroundColor: Colors.grey.shade300,
                         dynamicPressureSupported: true,
@@ -471,8 +470,6 @@ class _Page38State extends State<Page38> {
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () async {
-
-
                 setState(() {
                   _isCreating = true;
                 });
@@ -480,15 +477,15 @@ class _Page38State extends State<Page38> {
                 try {
                   await _sendDataToAPI(Status.draft.toString());
 
-
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Data submitted successfully")),
+                    const SnackBar(
+                        content: Text("Data submitted successfully")),
                   );
 
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Page40(agreement_ids: _agreementId),
+                      builder: (context) => SendAgreement(agreement_ids: _agreementId),
                     ),
                   );
                 } catch (e) {
@@ -503,14 +500,19 @@ class _Page38State extends State<Page38> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromRGBO(15, 104, 251, 1),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-                padding: const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
               ),
               child: _isCreating
                   ? const CircularProgressIndicator(color: Colors.white)
-                  : const Text('Create', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
+                  : const Text('Create',
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700)),
             ),
-
             const SizedBox(
               height: 30,
             ),
@@ -526,9 +528,6 @@ class _Page38State extends State<Page38> {
 
                 //await  _saveSignature();
 
-
-
-
                 //  saveTextToJson();
 
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => const Page36()));
@@ -541,11 +540,15 @@ class _Page38State extends State<Page38> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 19),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 90, vertical: 19),
               ),
               child: const Text(
                 'Save as Draft',
-                style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700),
               ),
             ),
             const SizedBox(height: 30),
@@ -988,7 +991,7 @@ class _Page38State extends State<Page38> {
 // import 'package:signature/signature.dart';
 //
 // import 'Page_39.dart';
-// import 'Page_40.dart';
+// import 'SendAgreement.dart';
 //
 // class Page38 extends StatefulWidget {
 //

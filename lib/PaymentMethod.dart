@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Page60 extends StatefulWidget {
-  const Page60({super.key});
+class PaymentMethod extends StatefulWidget {
+  const PaymentMethod({super.key});
 
   @override
-  State<Page60> createState() => _Page60State();
+  State<PaymentMethod> createState() => _PaymentMethodState();
 }
 
-class _Page60State extends State<Page60> {
+class _PaymentMethodState extends State<PaymentMethod> {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -141,7 +141,6 @@ class _Page60State extends State<Page60> {
 
                 //bottom sheet code start
 
-
                 Container(
                   height: 24,
                   width: 24,
@@ -149,125 +148,155 @@ class _Page60State extends State<Page60> {
                       borderRadius: BorderRadius.circular(5),
                       color: Colors.grey.shade400),
                   child: FittedBox(
-                    alignment: Alignment.center,
-                    child: IconButton(onPressed: (){
-
-                      showModalBottomSheet<void>(
-                        context: context,backgroundColor: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                topRight: Radius.circular(30))),
-                        builder: (BuildContext context) {
-                          return
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      const SizedBox(width: 20,),
-                                      IconButton(onPressed: (){
+                      alignment: Alignment.center,
+                      child: IconButton(
+                        onPressed: () {
+                          showModalBottomSheet<void>(
+                            context: context,
+                            backgroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30))),
+                            builder: (BuildContext context) {
+                              return Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            size: 20,
+                                          ),
+                                          color: Colors.lightBlueAccent,
+                                        )
+                                      ],
+                                    ),
+                                    const Text(
+                                      'Add new Card',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                        labelText: 'Card number',
+                                        hintText: '0000 0000 0000 0000',
+                                        prefixIcon:
+                                            const Icon(Icons.credit_card),
+                                        fillColor: Colors.grey.shade100,
+                                        filled: true,
+                                        suffixIcon: Icon(Icons.bubble_chart),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey.shade100),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          // Rounded border
+                                        ),
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextFormField(
+                                            decoration: InputDecoration(
+                                              labelText: 'Expiry date',
+                                              hintText: '02/26',
+                                              fillColor: Colors.grey.shade100,
+                                              filled: true,
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    width: 1,
+                                                    color:
+                                                        Colors.grey.shade100),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                // Rounded border
+                                              ),
+                                            ),
+                                            keyboardType:
+                                                TextInputType.datetime,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: TextFormField(
+                                            decoration: InputDecoration(
+                                              hintText: '...',
+                                              labelText: 'CVC/CVV',
+                                              fillColor: Colors.grey.shade100,
+                                              filled: true,
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    width: 1,
+                                                    color:
+                                                        Colors.grey.shade100),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                // Rounded border
+                                              ),
+                                            ),
+                                            keyboardType: TextInputType.number,
+                                            obscureText: true,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                        labelText: 'Name on card',
+                                        hintText: 'Jacob Jones',
+                                        fillColor: Colors.grey.shade100,
+                                        filled: true,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey.shade100),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          // Rounded border
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    ElevatedButton(
+                                      onPressed: () {
                                         Navigator.pop(context);
-                                      }, icon: const Icon(Icons.close,size: 20,),color: Colors.lightBlueAccent,)
-                                    ],
-                                  ),
-                                  const Text(
-                                    'Add new Card',
-                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  TextFormField(
-                                    decoration:  InputDecoration(
-                                       labelText: 'Card number',
-                                      hintText: '0000 0000 0000 0000' ,
-                                      prefixIcon: const Icon(Icons.credit_card),
-                                      fillColor: Colors.grey.shade100,
-                                      filled: true,
-                                      suffixIcon: Icon(Icons.bubble_chart),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(width: 1, color: Colors.grey.shade100),
-                                        borderRadius: BorderRadius.circular(10),
-                                        // Rounded border
-                                      ),
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blue,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 100, vertical: 15),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(30))),
+                                      child: const Text('Save'),
                                     ),
-                                    keyboardType: TextInputType.number,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextFormField(
-                                          decoration:  InputDecoration(
-                                            labelText: 'Expiry date',
-                                            hintText: '02/26',
-                                            fillColor: Colors.grey.shade100,
-                                            filled: true,
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(width: 1, color: Colors.grey.shade100),
-                                              borderRadius: BorderRadius.circular(10),
-                                              // Rounded border
-                                            ),
-                                          ),
-                                          keyboardType: TextInputType.datetime,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: TextFormField(
-                                          decoration:  InputDecoration(
-                                            hintText: '...',
-                                            labelText: 'CVC/CVV',
-                                            fillColor: Colors.grey.shade100,
-                                            filled: true,
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(width: 1, color: Colors.grey.shade100),
-                                              borderRadius: BorderRadius.circular(10),
-                                              // Rounded border
-                                            ),
-                                          ),
-                                          keyboardType: TextInputType.number,
-                                          obscureText: true,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
-                                  TextFormField(
-                                    decoration:  InputDecoration(
-                                      labelText: 'Name on card',
-                                      hintText: 'Jacob Jones',
-                                      fillColor: Colors.grey.shade100,
-                                      filled: true,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(width: 1, color: Colors.grey.shade100),
-                                        borderRadius: BorderRadius.circular(10),
-                                        // Rounded border
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue,
-                                      padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))
-                                    ),
-                                    child: const Text('Save'),
-                                  ),
-                                ],
-                              ),
-                            );
+                                  ],
+                                ),
+                              );
+                            },
+                          );
                         },
-                      );                    }, icon: const Icon(Icons.add),
-                    )
+                        icon: const Icon(Icons.add),
+                      )),
                 ),
-                  ),
 
                 //bottom sheet code end
               ],
@@ -296,8 +325,7 @@ class _Page60State extends State<Page60> {
                         color: Colors.pink),
                     child: const Image(
                         image: AssetImage('assets/card 1.png'),
-                        fit: BoxFit.fill
-                    ),
+                        fit: BoxFit.fill),
                   ),
                   const SizedBox(
                     width: 20,
@@ -333,7 +361,6 @@ class _Page60State extends State<Page60> {
             ),
 
             // smooth page container code end
-
 
             const SizedBox(
               height: 20,

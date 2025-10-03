@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'LoginPage.dart';
-import 'Page56.dart';
-import 'Page60.dart';
+import 'Membership.dart';
+import 'PaymentMethod.dart';
 
 class DrawerClass extends StatefulWidget {
   const DrawerClass({super.key});
@@ -161,7 +161,7 @@ class _DrawerClassState extends State<DrawerClass> {
               title: const Text('Membership'),
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Page56()));
+                    context, MaterialPageRoute(builder: (context) => MemberShip()));
               },
             ),
             ListTile(
@@ -172,7 +172,7 @@ class _DrawerClassState extends State<DrawerClass> {
               title: const Text('Payment Methods'),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Page60()));
+                    MaterialPageRoute(builder: (context) => const PaymentMethod()));
               },
             ),
             Padding(

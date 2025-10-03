@@ -9,17 +9,17 @@ import 'CustomTextFormField.dart';
 import 'Home_page.dart';
 
 
-class Page40 extends StatefulWidget {
+class SendAgreement extends StatefulWidget {
 
 
   final dynamic agreement_ids;
-  const Page40({super.key, required this.agreement_ids,});
+  const SendAgreement({super.key, required this.agreement_ids,});
 
   @override
-  State<Page40> createState() => _Page40State();
+  State<SendAgreement> createState() => _SendAgreementState();
 }
 
-class _Page40State extends State<Page40> {
+class _SendAgreementState extends State<SendAgreement> {
   final TextEditingController emailController = TextEditingController();
   bool isLoading = false;
   bool Loading = false;

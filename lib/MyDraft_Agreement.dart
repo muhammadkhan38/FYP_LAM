@@ -11,7 +11,6 @@ import 'Drawer_Class.dart';
 import 'Show_Single_Agreement.dart';
 import 'Widgets/Reusable_Floating_Action_Button.dart';
 import 'Widgets/Reusable_Gradient_Button.dart';
-import 'getAgreementApiClass.dart';
 
 class Agreement {
   final int id;
@@ -46,7 +45,6 @@ class _Page24State extends State<Page24> {
   String _email = '';
   int _selectedIndex = 0;
 
-  final GetAgreementApi _userService = GetAgreementApi();
 
   @override
   void initState() {

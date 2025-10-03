@@ -7,6 +7,8 @@ import 'Widgets/Reusable Date Picker.dart';
 import 'Widgets/reausable_text_form_field..dart';
 
 class DynamicTextFormFields extends StatefulWidget {
+  const DynamicTextFormFields({super.key});
+
   @override
   _DynamicTextFormFieldsState createState() => _DynamicTextFormFieldsState();
 }
